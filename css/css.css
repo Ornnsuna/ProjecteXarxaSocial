@@ -51,7 +51,7 @@ header {
     font-weight: bold;
 }
 .categories-links a::after, .action-links a::after {
-    content: '';
+    content: 'a';
     position: absolute;
     bottom: -3px;
     left: 50%;
@@ -61,6 +61,7 @@ header {
     transition: all 0.3s ease-out;
     transform: translateX(-50%);
 }
+
 .categories-links a:hover::after, .action-links a:hover::after {
     width: 100%;
     opacity: 1;
