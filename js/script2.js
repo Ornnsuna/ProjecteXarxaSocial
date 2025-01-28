@@ -31,7 +31,7 @@ const createCard = () => {
   card.style.backgroundImage = `url(${randomCard})`;
 
   // Añade la carta al contenedor
-  const container = document.querySelector(".animation-card");
+  const container = document.querySelector("body");
   container.appendChild(card);
 
   // Elimina la carta al terminar la animación
