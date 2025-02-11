@@ -12,6 +12,7 @@
             border-radius: 10px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
             text-align: center;
+            height: 18em;
             z-index: 2;
         }
 
@@ -110,6 +111,7 @@ form
     padding: 20px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
     z-index: 2;
+    height: 40em;
 }
 
 
@@ -119,9 +121,13 @@ form
     z-index: 2;
 
 }
-
+.container h2 {
+    text-align: center;
+    color: #D4A24A;
+    z-index: 2;
+}
 .form-group {
-    margin-bottom: 15px;
+    margin-bottom: 5px;
 }
 
 .form-group label {

@@ -6,7 +6,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = trim($_POST["username"]);
     $password = $_POST["password"];
 
-    // Buscar usuario en la base de datos
+    
     $sql = "SELECT id_user, passHash, userFirstName, userLastName FROM Usuari WHERE username = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("s", $username);
@@ -19,9 +19,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $_SESSION["username"] = $username;
         $_SESSION["full_name"] = $user["userFirstName"] . " " . $user["userLastName"];
 
-        echo "Inicio de sesión exitoso. <a href='dashboard.php'>Ir al panel</a>";
+        header("Location: ../index.php");
+        exit();
+    
     } else {
-        echo "Error: Usuario o contraseña incorrectos.";
+
+        echo "<script>
+                alert('Error: Usuario o contraseña incorrectos.');
+                window.location.href = '../sesion/InicioSesion.html';
+              </script>";
+        exit(); 
     }
+    
 }
 ?>

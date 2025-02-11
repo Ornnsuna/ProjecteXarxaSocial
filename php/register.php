@@ -1,25 +1,46 @@
 <?php
-require 'db.php'; // Conexión a la base de datos
+session_start(); 
+require 'db.php'; 
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $firstName = trim($_POST["firstName"]);
     $lastName = trim($_POST["lastName"]);
     $email = trim($_POST["email"]);
     $username = trim($_POST["username"]);
-    $password = password_hash($_POST["password"], PASSWORD_BCRYPT); // Encriptar contraseña
+    $password = password_hash($_POST["password"], PASSWORD_BCRYPT); 
 
-    // Insertar usuario en la base de datos
-    $sql = "INSERT INTO Usuari (mail, username, passHash, userFirstName, userLastName, creationDate) VALUES (?, ?, ?, ?, ?, NOW())";
+    $checkSql = "SELECT mail FROM Usuari WHERE mail = ?";
+    $checkStmt = $conn->prepare($checkSql);
+    $checkStmt->bind_param("s", $email);
+    $checkStmt->execute();
+    $checkStmt->store_result();
+
+    if ($checkStmt->num_rows > 0) {
+        echo "<script>
+                alert('⚠️ Este correo ya está registrado. Intenta con otro.');
+                window.location.href = '../sesion/registro.html';
+              </script>";
+        exit();
+    }
+
+    $checkStmt->close();
+
+    $sql = "INSERT INTO Usuari (mail, username, passHash, userFirstName, userLastName, creationDate) 
+            VALUES (?, ?, ?, ?, ?, NOW())";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("sssss", $email, $username, $password, $firstName, $lastName);
 
     if ($stmt->execute()) {
-        header("Location: ../sesion/InicioSesion.html");
+        $_SESSION["username"] = $username;
+        header("Location: ../index.php"); 
         exit();
-    }     
-    else {
-        echo "<script>alert('⚠️ Error de registro: " . $stmt->error . "');</script>";
+    } else {
+        echo "<script>
+                alert('⚠️ Error de registro: " . $stmt->error . "');
+                window.location.href = '../sesion/registro.html';
+              </script>";
     }
+
     $stmt->close();
 }
 ?>
