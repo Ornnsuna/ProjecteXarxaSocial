@@ -18,7 +18,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($checkStmt->num_rows > 0) {
         echo "<script>
                 alert('⚠️ Este correo ya está registrado. Intenta con otro.');
-                window.location.href = '../sesion/registro.html';
+                window.location.href = '../sesion/Registro.html';
               </script>";
         exit();
     }
@@ -32,12 +32,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($stmt->execute()) {
         $_SESSION["username"] = $username;
-        header("Location: ../index.php"); 
+        header("Location: ../sesion/InicioSesion.html"); 
+        
         exit();
     } else {
         echo "<script>
                 alert('⚠️ Error de registro: " . $stmt->error . "');
-                window.location.href = '../sesion/registro.html';
+                window.location.href = '../sesion/Registro.html';
               </script>";
     }
 

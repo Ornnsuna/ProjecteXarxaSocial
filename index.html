@@ -1,59 +1,44 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CardCapture</title>
-    <link rel="stylesheet" href="./css/css.css">
-</head>
-<body>
-    <header>
-        <h1>CardCapture</h1>
-        <input type="text" class="search-bar" placeholder="Busca una carta en específico">
-    </header>
-    
-    <nav>
-        <ul>
-            <li>MTG</li>
-            <li>Pokemon</li>
-            <li>One Piece</li>
-            <li>Yu-Gi-Oh!</li>
-            <li>Comprar</li>
-            <li>Vender</li>
-        </ul>
-    </nav>
-    
-    <main>
-        <section class="tabla">
-            <table>
-                <tr>
-                    <th>Título</th>
-                    <th>Descripción</th>
-                    <th>Anunciante</th>
-                </tr>
-                <tr>
-                    <td>Ejemplo 1</td>
-                    <td>Descripción 1</td>
-                    <td>Anunciante 1</td>
-                </tr>
-                <tr>
-                    <td>Ejemplo 2</td>
-                    <td>Descripción 2</td>
-                    <td>Anunciante 2</td>
-                </tr>
-            </table>
-        </section>
-        
-        <section class="anuncios">
-            <div class="anuncio">Título Anuncio<br>Descripción del Anuncio<br>Nombre Anunciante</div>
-            <div class="anuncio">Título Anuncio<br>Descripción del Anuncio<br>Nombre Anunciante</div>
-            <div class="anuncio">Título Anuncio<br>Descripción del Anuncio<br>Nombre Anunciante</div>
-            <div class="anuncio">Título Anuncio<br>Descripción del Anuncio<br>Nombre Anunciante</div>
-        </section>
-    </main>
-    
-    <footer>
-        <p>&copy; 2025 CardCapture</p>
-    </footer>
-</body>
+    <head>
+        <meta charset="utf-8">
+        <title>Xarxa Social</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="./css/main2.css">
+        <link rel="stylesheet" href="./css/cssHeader.css">
+    </head>
+    <body>
+        <header class="header">
+            <div class="logo">CARDCAPTURE</div>
+            <div class="user-menu">
+                <div class="icon" id="userIcon">
+                    <span class="user-icon">👤</span>
+                    <span class="arrow">▼</span>
+                </div>
+                <ul class="dropdown" id="dropdownMenu">
+                    <li><a href="./html/InicioSesion.html">Iniciar Sessió</a></li>
+                </ul>
+            </div>
+            <script src="./js/navbar.js"></script>
+        </header>
+        <script src="./js/scriptHeader.js"></script>
+        <div class="content">
+          <h1>Bienvenido a mi página de cartas</h1>
+          <p>Explora las cartas más icónicas de Magic, Pokémon, Yu-Gi-Oh! y One Piece.</p>
+        </div>
+        <div class="card-container"></div>
+        <script src="./js/script2.js"></script>
+        <div class="card-container2">
+            <a href="./html/index.html" class="card" id="magic"></a>
+            <a href="./html/webs/cartas_pokemon.html" class="card" id="pokemon"></a>
+            <a href="./html/webs/cartas_onepiece.html" class="card" id="onepiece"></a>
+            <a href="./html/webs/cartas_yugioh.html" class="card" id="yugioh"></a>
+        </div>
+        <div class="card-container2">
+            <a href="./html/webs/cartas_mytillepony.html" class="card" id="mylittlepony"></a>
+            <a href="./html/webs/cartas_invizimals.html" class="card" id="invizimals"></a>
+        </div>
+        <div class="card-animation "></div>
+        <script src="./js/script2.js"></script>
+    </body>
 </html>

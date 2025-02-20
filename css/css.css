@@ -2,7 +2,7 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #e5d4a2;
+    background-color: #DE9929;
     display: flex;
     flex-direction: column;
     min-height: 100vh;
@@ -25,6 +25,7 @@ header {
     display: block;
     margin: 20px auto;
     text-align: center;
+margin-bottom: 2em;
 }
 
 h1 {
@@ -32,51 +33,39 @@ h1 {
 }
 
 nav {
-    background-color: #c4b08c;
+    background-color: #000000;
     padding: 10px;
     text-align: center;
     display: flex;
     flex-direction: column;
     align-items: center;
 }
-
-.nav-main {
+.search-bar{
+    margin-top: -2.5em;
+}
+.botones {
     display: flex;
-    justify-content: center;
-    gap: 15px;
+    justify-content: space-between;
+    align-items: center;
+    width: 90%;
+    margin-top: -1.5em;
+    margin-left: 5em;
+    margin-bottom: -1.5em;
+    z-index: 3;
 }
 
-.nav-extra {
-    margin-top: 10px;
-}
-
-nav ul {
-    list-style: none;
-    padding: 0;
-    display: flex;
-    gap: 15px;
-}
-
-.nav-main ul {
-    display: flex;
-    gap: 15px;
-}
-
-.nav-extra ul {
-    display: flex;
-    gap: 15px;
-}
-
-nav ul li {
-    padding: 10px;
-    cursor: pointer;
+.btnCartas button, .btnCompraVenta button {
+    all: unset;
+    background-color: #858585;
+    background: #808080;
+    padding: 10px 15px;
+    margin: 1em;
     transition: all 0.3s ease-in-out;
     border-radius: 5px;
-    background: #a89070;
 }
 
-nav ul li:hover {
-    background-color: #8c7359;
+.btnCartas button:hover, .btnCompraVenta button:hover {
+    background-color: #c8c5c2;
     transform: scale(1.2);
     color: white;
 }

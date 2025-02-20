@@ -1,0 +1,335 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.login-container {
+    background-color: #000; /* Fondo negro */
+    color: #fff; /* Texto blanco */
+    width: 300px;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    height: 18em;
+    z-index: 2;
+}
+
+p a {
+    color: #f5a623;
+    text-decoration: none;
+}
+
+p a:hover {
+    text-decoration: underline;
+}
+
+.login-container h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.input-group {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+.input-group label {
+    font-size: 14px;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.button-group {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.button-group button {
+    width: 48%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.button-group .cancel-button {
+    background-color: #888; /* Botón gris */
+    color: #fff;
+}
+
+.button-group .submit-button {
+    background-color: #f5a623; /* Botón naranja */
+    color: #fff;
+}
+
+.button-group button:hover {
+    opacity: 0.9;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #DE9929;
+    overflow: hidden; /* Evita el desplazamiento de la página */
+    position: relative; /* Necesario para que las cartas se posicionen correctamente */
+    height: 100vh; /* Asegura que ocupe toda la altura de la ventana */
+}
+
+
+
+form
+{
+    height: 25em;
+    position: relative;
+    z-index: 2; /* Asegura que el texto esté por encima de las cartas */
+   
+}
+
+
+.container {
+    background-color: #000;
+    color: #fff;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 400px;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    z-index: 2;
+    height: 40em;
+}
+
+.botones{
+    background-color: #DE9929;
+    color: white;
+  }
+.botones:hover{
+    background-color: #b37a20;
+}
+.botonCancelar{
+    background-color: #777;
+    color: #000;
+}
+.botonCancelar:hover{
+    background-color: #4e4e4e;
+}
+.container h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    z-index: 2;
+
+}
+.container h2 {
+    text-align: center;
+    color: #DE9929;
+    z-index: 2;
+}
+.form-group {
+    margin-bottom: 5px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 0.9rem;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+.form-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 70px;
+
+}
+
+.form-buttons button {
+    width: 48%;
+    padding: 10px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.cancel-btn {
+    background-color: #888;
+    color: #fff;
+}
+
+.submit-btn {
+    background-color: #F9A825;
+    color: #000;
+}
+
+.cancel-btn:hover {
+    background-color: #777;
+}
+
+.submit-btn:hover {
+    background-color: #FFA726;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        padding: 15px;
+    }
+
+    .form-buttons button {
+        font-size: 0.9rem;
+    }
+}
+
+
+.card-animation {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1; /* Las cartas estarán detrás del texto */
+    pointer-events: none; /* Evita que las cartas interfieran con los clics */
+}
+
+.falling-card {
+    position: absolute;
+    width: 100px;
+    height: 140px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    animation: fall linear infinite, spin linear infinite;
+}
+
+@keyframes fall {
+    from {
+    top: -150px;
+    left: calc(100vw * var(--start-x));
+    }
+    to {
+    top: 100vh;
+    left: calc(100vw * var(--end-x));
+    }
+}
+
+@keyframes spin {
+    from {
+    transform: rotate(0deg);
+    }
+    to {
+    transform: rotate(360deg);
+    }
+}
+
+.col-1 {width: 8.33%;}
+.col-2 {width: 16.66%;}
+.col-3 {width: 25%;}
+.col-4 {width: 33.33%;}
+.col-5 {width: 41.66%;}
+.col-6 {width: 50%;}
+.col-7 {width: 58.33%;}
+.col-8 {width: 66.66%;}
+.col-9 {width: 75%;}
+.col-10 {width: 83.33%;}
+.col-11 {width: 91.66%;}
+.col-12 {width: 100%;}
+
+/* Small devices (portrait tablets and large phones, 576px and up) */
+@media only screen and (min-width: 576px){
+    .col-sm-1 {width: 8.33%;}
+    .col-sm-2 {width: 16.66%;}
+    .col-sm-3 {width: 25%;}
+    .col-sm-4 {width: 33.33%;}
+    .col-sm-5 {width: 41.66%;}
+    .col-sm-6 {width: 50%;}
+    .col-sm-7 {width: 58.33%;}
+    .col-sm-8 {width: 66.66%;}
+    .col-sm-9 {width: 75%;}
+    .col-sm-10 {width: 83.33%;}
+    .col-sm-11 {width: 91.66%;}
+    .col-sm-12 {width: 100%;}
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
+    .col-md-1 {width: 8.33%;}
+    .col-md-2 {width: 16.66%;}
+    .col-md-3 {width: 25%;}
+    .col-md-4 {width: 33.33%;}
+    .col-md-5 {width: 41.66%;}
+    .col-md-6 {width: 50%;}
+    .col-md-7 {width: 58.33%;}
+    .col-md-8 {width: 66.66%;}
+    .col-md-9 {width: 75%;}
+    .col-md-10 {width: 83.33%;}
+    .col-md-11 {width: 91.66%;}
+    .col-md-12 {width: 100%;}
+}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) {
+    .col-lg-1 {width: 8.33%;}
+    .col-lg-2 {width: 16.66%;}
+    .col-lg-3 {width: 25%;}
+    .col-lg-4 {width: 33.33%;}
+    .col-lg-5 {width: 41.66%;}
+    .col-lg-6 {width: 50%;}
+    .col-lg-7 {width: 58.33%;}
+    .col-lg-8 {width: 66.66%;}
+    .col-lg-9 {width: 75%;}
+    .col-lg-10 {width: 83.33%;}
+    .col-lg-11 {width: 91.66%;}
+    .col-lg-12 {width: 100%;}
+}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1200px){
+  .col-xl-1 {width: 8.33%;}
+  .col-xl-2 {width: 16.66%;}
+  .col-xl-3 {width: 25%;}
+  .col-xl-4 {width: 33.33%;}
+  .col-xl-5 {width: 41.66%;}
+  .col-xl-6 {width: 50%;}
+  .col-xl-7 {width: 58.33%;}
+  .col-xl-8 {width: 66.66%;}
+  .col-xl-9 {width: 75%;}
+  .col-xl-10 {width: 83.33%;}
+  .col-xl-11 {width: 91.66%;}
+  .col-xl-12 {width: 100%;}
+}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1400px){
+    .col-xxl-1 {width: 8.33%;}
+    .col-xxl-2 {width: 16.66%;}
+    .col-xxl-3 {width: 25%;}
+    .col-xxl-4 {width: 33.33%;}
+    .col-xxl-5 {width: 41.66%;}
+    .col-xxl-6 {width: 50%;}
+    .col-xxl-7 {width: 58.33%;}
+    .col-xxl-8 {width: 66.66%;}
+    .col-xxl-9 {width: 75%;}
+    .col-xxl-10 {width: 83.33%;}
+    .col-xxl-11 {width: 91.66%;}
+    .col-xxl-12 {width: 100%;}
+}

@@ -2,7 +2,7 @@
 $host = "localhost";
 $user = "root"; 
 $password = ""; 
-$database = "cardCapture"; 
+$database = "CardCapture"; 
 
 $conn = new mysqli($host, $user, $password, $database);
 

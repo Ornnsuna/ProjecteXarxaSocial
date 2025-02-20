@@ -1,6 +1,5 @@
 <?php
 session_start();
-session_destroy(); 
-header("Location: index.php"); 
-exit();
+session_destroy();
+echo json_encode(["success" => true]);
 ?>
