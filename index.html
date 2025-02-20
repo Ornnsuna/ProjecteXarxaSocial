@@ -1,121 +1,44 @@
 <!DOCTYPE html>
-<html lang="ca">
+<html lang="es">
     <head>
         <meta charset="utf-8">
         <title>Xarxa Social</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="./css/css.css">
+        <link rel="stylesheet" href="./css/main2.css">
+        <link rel="stylesheet" href="./css/cssHeader.css">
     </head>
     <body>
-        <div class="struct">
-            <header>
-                <div class="logo">CardCapture</div>
-                <div class="user-icon">
-                    <img src="./img/user.png" alt="user" height="33em" width="33em">
-                    <div class="user-menu">
-                        <a href="./sesion/InicioSesion.html">Iniciar sesión</a>
-                        <a href="#">Salir</a>
-                    </div>
+        <header class="header">
+            <div class="logo">CARDCAPTURE</div>
+            <div class="user-menu">
+                <div class="icon" id="userIcon">
+                    <span class="user-icon">👤</span>
+                    <span class="arrow">▼</span>
                 </div>
-            </header>
-        
-            <div class="search-bar">
-                <input type="text" placeholder="Busca una carta en específico"> 
-                <img src="./img/images.png" alt="lupa" height="20em" width="20em">
+                <ul class="dropdown" id="dropdownMenu">
+                    <li><a href="./html/InicioSesion.html">Iniciar Sessió</a></li>
+                </ul>
             </div>
-        
-            <div class="categories">
-                <div class="categories-links">
-                    <a href="#">MTG</a>
-                    <a href="#">Pokemon</a>
-                    <a href="#">One Piece</a>
-                    <a href="#">Yu-Gi-Oh!</a>
-                </div>
-                <div class="action-links">
-                    <a href="#">Comprar</a>
-                    <a href="#">Vender</a>
-                </div>
-            </div>
-        
-            <div class="main-content">
-                <div class="table-container">
-                    <table>
-                        <tr>
-                            <th>Título</th>
-                            <th>Descripción</th>
-                            <th>Anunciante</th>
-                        </tr>
-                        <tr>
-                            <td>Ejemplo 1</td>
-                            <td>Descripción 1</td>
-                            <td>Anunciante 1</td>
-                        </tr>
-                        <tr>
-                            <td>Ejemplo 2</td>
-                            <td>Descripción 2</td>
-                            <td>Anunciante 2</td>
-                        </tr>
-                    </table>
-                </div>
-                <div class="card-container">
-                    <div class="card">
-                        <p>Título Anuncio</p>
-                        <p>Descripción del Anuncio</p>
-                        <p>Nombre Anunciante</p>
-                    </div>
-                    <div class="card">
-                        <p>Título Anuncio</p>
-                        <p>Descripción del Anuncio</p>
-                        <p>Nombre Anunciante</p>
-                    </div>
-                    <div class="card">
-                        <p>Título Anuncio</p>
-                        <p>Descripción del Anuncio</p>
-                        <p>Nombre Anunciante</p>
-                    </div>
-                    <div class="card">
-                        <p>Título Anuncio</p>
-                        <p>Descripción del Anuncio</p>
-                        <p>Nombre Anunciante</p>
-                    </div>
-                    <div class="card">
-                        <p>Título Anuncio</p>
-                        <p>Descripción del Anuncio</p>
-                        <p>Nombre Anunciante</p>
-                    </div>
-                    <div class="card">
-                        <p>Título Anuncio</p>
-                        <p>Descripción del Anuncio</p>
-                        <p>Nombre Anunciante</p>
-                    </div>
-                    <div class="card">
-                        <p>Título Anuncio</p>
-                        <p>Descripción del Anuncio</p>
-                        <p>Nombre Anunciante</p>
-                    </div>
-                    <div class="card">
-                        <p>Título Anuncio</p>
-                        <p>Descripción del Anuncio</p>
-                        <p>Nombre Anunciante</p>
-                    </div>
-                    <div class="card">
-                        <p>Título Anuncio</p>
-                        <p>Descripción del Anuncio</p>
-                        <p>Nombre Anunciante</p>
-                    </div>
-                    <div class="card">
-                        <p>Título Anuncio</p>
-                        <p>Descripción del Anuncio</p>
-                        <p>Nombre Anunciante</p>
-                    </div>
-                </div>
-            </div>
-        
-            <footer>
-                <p>&copy; 2025 CardCapture</p>
-            </footer>
+            <script src="./js/navbar.js"></script>
+        </header>
+        <script src="./js/scriptHeader.js"></script>
+        <div class="content">
+          <h1>Bienvenido a mi página de cartas</h1>
+          <p>Explora las cartas más icónicas de Magic, Pokémon, Yu-Gi-Oh! y One Piece.</p>
         </div>
-        <div class="card-animation"></div>
+        <div class="card-container"></div>
+        <script src="./js/script2.js"></script>
+        <div class="card-container2">
+            <a href="./html/index.html" class="card" id="magic"></a>
+            <a href="./html/webs/cartas_pokemon.html" class="card" id="pokemon"></a>
+            <a href="./html/webs/cartas_onepiece.html" class="card" id="onepiece"></a>
+            <a href="./html/webs/cartas_yugioh.html" class="card" id="yugioh"></a>
+        </div>
+        <div class="card-container2">
+            <a href="./html/webs/cartas_mytillepony.html" class="card" id="mylittlepony"></a>
+            <a href="./html/webs/cartas_invizimals.html" class="card" id="invizimals"></a>
+        </div>
+        <div class="card-animation "></div>
         <script src="./js/script2.js"></script>
     </body>
 </html>

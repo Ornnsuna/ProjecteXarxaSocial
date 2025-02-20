@@ -1,9 +1,10 @@
 const cardImages = [
-  "../img/reverseMLP.png",
-  "../img/reversePKMN.png",
-  "../img/reverseOP.png",
-  "../img/reverseYu.png",
-  "../img/reverseMTG.png"
+  "./../img/reverseMTG.png",
+  "./../img/reversePKMN.png",
+  "./../img/reverseOP.png",
+  "./../img/reverseYu.png",
+  "./../img/reverseMLP.png",
+  "./../img/reverseINV.png"
 ];
 
 const createCard = () => {
@@ -23,7 +24,7 @@ const createCard = () => {
 
   // Duración y retraso aleatorios
   card.style.animationDuration = `${Math.random() * 5 + 5}s`;
-  card.style.animationDelay = `${Math.random() * 2}s`;
+  card.style.animationDelay = `${Math.random() * 30}s`;
 
   // Imagen aleatoria
   const randomCard = cardImages[Math.floor(Math.random() * cardImages.length)];
@@ -41,4 +42,4 @@ const createCard = () => {
 };
 
 // Crea una nueva carta cada 3 segundos
-setInterval(createCard, 3000);
+setInterval(createCard, 4000);

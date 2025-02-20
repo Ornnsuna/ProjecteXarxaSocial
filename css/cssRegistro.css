@@ -4,79 +4,79 @@
     box-sizing: border-box;
 }
 
-        .login-container {
-            background-color: #000; /* Fondo negro */
-            color: #fff; /* Texto blanco */
-            width: 300px;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-            text-align: center;
-            height: 18em;
-            z-index: 2;
-        }
+.login-container {
+    background-color: #000; /* Fondo negro */
+    color: #fff; /* Texto blanco */
+    width: 300px;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    height: 18em;
+    z-index: 2;
+}
 
-        p a {
-            color: #f5a623;
-            text-decoration: none;
-        }
+p a {
+    color: #f5a623;
+    text-decoration: none;
+}
 
-        p a:hover {
-            text-decoration: underline;
-        }
+p a:hover {
+    text-decoration: underline;
+}
 
-        .login-container h1 {
-            font-size: 24px;
-            margin-bottom: 20px;
-        }
+.login-container h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
 
-        .input-group {
-            margin-bottom: 15px;
-            text-align: left;
-        }
+.input-group {
+    margin-bottom: 15px;
+    text-align: left;
+}
 
-        .input-group label {
-            font-size: 14px;
-            margin-bottom: 5px;
-            display: block;
-        }
+.input-group label {
+    font-size: 14px;
+    margin-bottom: 5px;
+    display: block;
+}
 
-        .input-group input {
-            width: 100%;
-            padding: 10px;
-            font-size: 14px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
+.input-group input {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
 
-        .button-group {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 20px;
-        }
+.button-group {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
 
-        .button-group button {
-            width: 48%;
-            padding: 10px;
-            border: none;
-            border-radius: 5px;
-            font-size: 14px;
-            cursor: pointer;
-        }
+.button-group button {
+    width: 48%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+}
 
-        .button-group .cancel-button {
-            background-color: #888; /* Botón gris */
-            color: #fff;
-        }
+.button-group .cancel-button {
+    background-color: #888; /* Botón gris */
+    color: #fff;
+}
 
-        .button-group .submit-button {
-            background-color: #f5a623; /* Botón naranja */
-            color: #fff;
-        }
+.button-group .submit-button {
+    background-color: #f5a623; /* Botón naranja */
+    color: #fff;
+}
 
-        .button-group button:hover {
-            opacity: 0.9;
-        }
+.button-group button:hover {
+    opacity: 0.9;
+}
 
 body {
     font-family: Arial, sans-serif;
@@ -84,11 +84,10 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-color: #D4A24A;
+    background-color: #DE9929;
     overflow: hidden; /* Evita el desplazamiento de la página */
-  position: relative; /* Necesario para que las cartas se posicionen correctamente */
-  height: 100vh; /* Asegura que ocupe toda la altura de la ventana */
-
+    position: relative; /* Necesario para que las cartas se posicionen correctamente */
+    height: 100vh; /* Asegura que ocupe toda la altura de la ventana */
 }
 
 
@@ -114,7 +113,20 @@ form
     height: 40em;
 }
 
-
+.botones{
+    background-color: #DE9929;
+    color: white;
+  }
+.botones:hover{
+    background-color: #b37a20;
+}
+.botonCancelar{
+    background-color: #777;
+    color: #000;
+}
+.botonCancelar:hover{
+    background-color: #4e4e4e;
+}
 .container h1 {
     text-align: center;
     margin-bottom: 20px;
@@ -123,7 +135,7 @@ form
 }
 .container h2 {
     text-align: center;
-    color: #D4A24A;
+    color: #DE9929;
     z-index: 2;
 }
 .form-group {
@@ -198,38 +210,38 @@ form
     height: 100%;
     z-index: 1; /* Las cartas estarán detrás del texto */
     pointer-events: none; /* Evita que las cartas interfieran con los clics */
-  }
-  
-  .falling-card {
+}
+
+.falling-card {
     position: absolute;
     width: 100px;
     height: 140px;
     background-size: cover;
     background-repeat: no-repeat;
     animation: fall linear infinite, spin linear infinite;
-  }
-  
-  @keyframes fall {
-    from {
-      top: -150px;
-      left: calc(100vw * var(--start-x));
-    }
-    to {
-      top: 100vh;
-      left: calc(100vw * var(--end-x));
-    }
-  }
-  
-  @keyframes spin {
-    from {
-      transform: rotate(0deg);
-    }
-    to {
-      transform: rotate(360deg);
-    }
-  }
+}
 
-  .col-1 {width: 8.33%;}
+@keyframes fall {
+    from {
+    top: -150px;
+    left: calc(100vw * var(--start-x));
+    }
+    to {
+    top: 100vh;
+    left: calc(100vw * var(--end-x));
+    }
+}
+
+@keyframes spin {
+    from {
+    transform: rotate(0deg);
+    }
+    to {
+    transform: rotate(360deg);
+    }
+}
+
+.col-1 {width: 8.33%;}
 .col-2 {width: 16.66%;}
 .col-3 {width: 25%;}
 .col-4 {width: 33.33%;}
