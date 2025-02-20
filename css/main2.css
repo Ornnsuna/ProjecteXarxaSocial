@@ -1,29 +1,34 @@
 /* -----------HEADER---------------------------------------------------------------------------------------- */
 
 /* -----------BODY---------------------------------------------------------------------------------------- */
+
 body {
   margin: 0;
-  overflow: hidden;
   background-color: #DE9929;
   font-family: Arial, sans-serif;
   z-index: 2;
 }
 .card-container2 {
-  display: flex;
-  justify-content: center;
-  gap: 5%;
+  display: grid;
+  align-items: center;
+  margin-left: 5em;
+  margin-right: 5em;
   padding-top: 2.5%;
-  z-index: 1;
+  justify-content: center;
+  z-index: 2;
 }
 
 .card {
-  width: 10%;
-  height: 16.6em;
+  height: 21em;
+  width: 15em;
+  margin: 2em;
   /* background-color: #333; */
   border-radius: 10px;
   perspective: 100em;
   cursor: pointer;
-  z-index: 2;
+  aspect-ratio: 3 / 4;
+  z-index: 1;
+
 }
 .card a {
   width: 100%;
@@ -133,5 +138,31 @@ body {
   }
   to {
     transform: rotate(360deg);
+  }
+}
+
+
+@media (max-width: 575px) {
+  .card-container2 {
+    grid-template-columns: repeat(1, 1fr);
+    justify-items: center; /* Centra las cartas en sus columnas */
+
+  }
+}
+
+/* Tamaño mediano: 2 columnas */
+@media (min-width: 576px) and (max-width: 991px) {
+  .card-container2 {
+    grid-template-columns: repeat(2, 1fr);
+    justify-items: center; /* Centra las cartas en sus columnas */
+
+  }
+}
+
+/* Tamaño grande: 4 columnas */
+@media (min-width: 992px) {
+  .card-container2 {
+    grid-template-columns: repeat(3, 1fr);
+    justify-items: center; /* Centra las cartas en sus columnas */
   }
 }
