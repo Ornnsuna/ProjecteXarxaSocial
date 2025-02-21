@@ -8,32 +8,38 @@
     <link rel="stylesheet" href="../css/cssHeader2.css">
 </head>
 <body>
-    <header>
-        <div class="logo"><h1>CardCapture</h1></div>
-        <input type="text" class="search-bar" placeholder="Busca una carta en específico">
-        <div class="user-menu">
-            <div class="icon" id="userIcon">
-                <span class="user-icon">👤</span>
-                <span class="arrow">▼</span>
+    <header id="header">
+        <canvas id="headerCanvas"></canvas> <!-- Fondo Animado en el Header -->
+        <div class="header-content">
+            <div class="logo"><h1>CardCapture</h1></div>
+            <input type="text" class="search-bar" placeholder="Busca una carta en específico">
+            <div class="user-menu">
+                <div class="icon-user" id="userIcon">
+                    <span class="user-icon">👤</span>
+                    <span class="arrow">▼</span>
+                </div>
+                <ul class="dropdown" id="dropdownMenu">
+                    <li><a href="./InicioSesion.html">Iniciar Sessió</a></li>
+                </ul>
             </div>
-            <ul class="dropdown" id="dropdownMenu">
-                <li><a href="./InicioSesion.html">Iniciar Sessió</a></li>
-            </ul>
-        </div>
-        <script src="../js/scriptHeader.js"></script>
-        <div class="botones">
-            <div class="btnCartas">
-                <button>MTG</button>
-                <button>Pokemon</button>
-                <button>One Piece</button>
-                <button>Yu-Gi-Oh!</button>
-            </div>
-            <div class="btnCompraVenta">
-                <button>Comprar</button>
-                <button>Vender</button>
+
+            <script src="../js/scriptHeader.js"></script>
+
+            <div class="botones">
+                <div class="btnCartas">
+                    <button>MTG</button>
+                    <button>Pokemon</button>
+                    <button>One Piece</button>
+                    <button>Yu-Gi-Oh!</button>
+                </div>
+                <div class="btnCompraVenta">
+                    <button>Comprar</button>
+                    <button>Vender</button>
+                </div>
             </div>
         </div>
     </header>
+    
     
     
     
@@ -66,8 +72,30 @@
         </section>
     </main>
     
-    <footer>
-        <p>&copy; 2025 CardCapture</p>
+    <footer id="footer" class="footer">
+        <div class="footer-container">
+            <div class="footer-logo">
+                <h2 id="footerTitle">CardCapture</h2>
+                <p>Explora, compra y vende cartas de colección fácilmente.</p>
+            </div>
+            <div class="footer-social">
+                <h3>Síguenos</h3>
+                <div class="social-icons">
+                    <img class="icon" src="../img/facebook.png" alt="Facebook" >
+                    <img class="icon" src="../img/twitter.png" alt="Twitter">
+                    <img class="icon" src="../img/instagram.png" alt="Instagram">
+                </div>
+            </div>
+        </div>
+    
+        <div class="footer-bottom">
+            <p id="footerText">&copy; 2025 CardCapture. Todos los derechos reservados.</p>
+        </div>
+    
+        <canvas id="footerCanvas"></canvas> <!-- Fondo Animado -->
+    
+        <script src="../js/footerAnimation.js"></script>
     </footer>
+
 </body>
 </html>

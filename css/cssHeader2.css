@@ -1,18 +1,31 @@
-.header {
-    position: relative;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #000;
-    color: #fff;
-    padding: 15px 30px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    z-index: 2;
-  }
+#header {
+  display: flex;
+  height: 390px; /* Ajusta según el diseño */
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: white;
+  overflow: hidden;
+  position: relative; /* Para que el texto esté sobre el canvas */
+    z-index: 1;
+}
+#headerCanvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  opacity: 0.3;
+}
   
   header {
     z-index: 2;
     padding: 2em;
+  }
+
+  .btnCompraVenta {
+    margin-right: 3em;
   }
   
   .logo {
@@ -26,16 +39,17 @@
     font-size: 1.65em;
     padding: -1em;
   }
+
+
   
   #userIcon {
-    position: absolute; 
-    right: 1%;
-    margin-top: -15em;
+    float: right;
+
+    margin-top: -13.6em;
     z-index: 1000;
   }
   #dropdownMenu{
     position: absolute; 
-    right: 1%;
     margin-top: -15em;
     z-index: 1000
   }
@@ -52,7 +66,7 @@
   }
   
   .user-icon {
-    font-size: 24px;
+    font-size: 26px;
   }
   
   .arrow {
@@ -101,4 +115,62 @@
     color: #fff;
     border-color: #ffc107;
   }
-  
+
+ 
+@media (max-width: 875px) {
+  #header { 
+    
+  }
+}
+
+  /* FOOTER */
+
+  .footer {
+    background: #1a1a1a;
+    color: white;
+    padding: 20px 0;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.social-icons {
+  display: flex;  /* Alinea los iconos en horizontal */
+  justify-content: center; /* Centra los iconos */
+  gap: 15px;  /* Espaciado entre iconos */
+  margin-top: 10px;
+}
+
+
+/* Estilos del Canvas para el fondo animado */
+#footerCanvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none; /* No interfiere con los clics */
+    opacity: 0.3;
+}
+
+/* Brillo animado en el título */
+#footerTitle {
+    font-size: 24px;
+    background: linear-gradient(45deg, #ff6b6b, #ffdd57, #48dbfb);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shine 4s infinite alternate ease-in-out;
+}
+
+/* Iconos con efecto de movimiento */
+.social-icons .icon {
+    width: 30px;
+    transition: transform 0.3s ease-in-out;
+}
+
+/* Keyframes */
+@keyframes shine {
+    0% { background-position: 0%; }
+    100% { background-position: 100%; }
+}
