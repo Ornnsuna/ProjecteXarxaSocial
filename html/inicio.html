@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CardCapture</title>
+    <link rel="stylesheet" href="../css/css.css">
+    <link rel="stylesheet" href="../css/cssHeader2.css">
+</head>
+<body>
+    <header id="header">
+        <canvas id="headerCanvas"></canvas> <!-- Fondo Animado en el Header -->
+        <div class="header-content">
+            <div class="logo"><h1>CardCapture</h1></div>
+            <input type="text" class="search-bar" placeholder="Busca una carta en específico">
+            <div class="user-menu">
+                <div class="icon-user" id="userIcon">
+                    <span class="user-icon">👤</span>
+                    <span class="arrow">▼</span>
+                </div>
+                <ul class="dropdown" id="dropdownMenu">
+                    <li><a href="./InicioSesion.html">Iniciar Sessió</a></li>
+                </ul>
+            </div>
+
+            <script src="../js/scriptHeader.js"></script>
+
+            <div class="botones">
+                <div class="btnCartas">
+                    <button>MTG</button>
+                    <button>Pokemon</button>
+                    <button>One Piece</button>
+                    <button>Yu-Gi-Oh!</button>
+                </div>
+                <div class="btnCompraVenta">
+                    <button>Comprar</button>
+                    <button>Vender</button>
+                </div>
+            </div>
+        </div>
+    </header>
+    <main>
+        <section class="tabla">
+            <table>
+                <tr>
+                    <th>Título</th>
+                    <th>Descripción</th>
+                    <th>Anunciante</th>
+                </tr>
+                <tr>
+                    <td>Ejemplo 1</td>
+                    <td>Descripción 1</td>
+                    <td>Anunciante 1</td>
+                </tr>
+                <tr>
+                    <td>Ejemplo 2</td>
+                    <td>Descripción 2</td>
+                    <td>Anunciante 2</td>
+                </tr>
+            </table>
+        </section>
+        
+        <section class="anuncios">
+            <div class="anuncio">Título Anuncio<br>Descripción del Anuncio<br>Nombre Anunciante</div>
+            <div class="anuncio">Título Anuncio<br>Descripción del Anuncio<br>Nombre Anunciante</div>
+            <div class="anuncio">Título Anuncio<br>Descripción del Anuncio<br>Nombre Anunciante</div>
+            <div class="anuncio">Título Anuncio<br>Descripción del Anuncio<br>Nombre Anunciante</div>
+        </section>
+    </main>
+    
+    <footer id="footer" class="footer">
+        <div class="footer-container">
+            <div class="footer-logo">
+                <h2 id="footerTitle">CardCapture</h2>
+                <p>Explora, compra y vende cartas de colección fácilmente.</p>
+            </div>
+            <div class="footer-social">
+                <h3>Síguenos</h3>
+                <div class="social-icons">
+                    <a href="https://www.facebook.com/" target="_blank"><img class="icon" src="../img/facebook.png" alt="Facebook" ></a>
+                    <a href="https://x.com/home?lang=es" target="_blank"><img class="icon" src="../img/twitter.png" alt="Twitter"></a>
+                    <a href="https://www.instagram.com/" target="_blank"><img class="icon" src="../img/instagram.png" alt="Instagram"></a>
+                </div>
+            </div>
+        </div>
+    
+        <div class="footer-bottom">
+            <p id="footerText">&copy; 2025 CardCapture. Todos los derechos reservados.</p>
+        </div>
+    
+        <canvas id="footerCanvas"></canvas> <!-- Fondo Animado -->
+    
+        <script src="../js/footerAnimation.js"></script>
+    </footer>
+
+</body>
+</html>
