@@ -19,14 +19,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $_SESSION["username"] = $username;
         $_SESSION["full_name"] = $user["userFirstName"] . " " . $user["userLastName"];
 
-        header("Location: ../html/index.html");
+        header("Location: ../html/inicio.html");
         exit();
     
     } else {
 
         echo "<script>
                 alert('Error: Usuario o contraseña incorrectos.');
-                window.location.href = '../sesion/InicioSesion.html';
+                window.location.href = '../html/InicioSesion.html';
               </script>";
         exit(); 
     }

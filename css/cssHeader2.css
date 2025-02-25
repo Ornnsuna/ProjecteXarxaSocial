@@ -20,9 +20,27 @@
 }
   
   header {
-    z-index: 2;
-    padding: 2em;
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #000;
+  color: #fff;
+  padding: 15px 30px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  z-index: 2;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
   }
+  
+  /* Mantiene el header con alineación normal */
+.header-content {
+  position: relative; /* Permite que .user-menu se posicione dentro del header */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  padding: 1em 0;
+}
 
   .btnCompraVenta {
     margin-right: 3em;
@@ -38,42 +56,43 @@
     font-weight: bold;
     font-size: 1.65em;
     padding: -1em;
+    z-index: 2;
   }
-
 
   
-  #userIcon {
-    float: right;
-
-    margin-top: -13.6em;
-    z-index: 1000;
-  }
+  
   #dropdownMenu{
-    position: absolute; 
-    margin-top: -15em;
-    z-index: 1000
+    position: absolute;
+    top: 3.5em; /* Ajusta la altura según sea necesario */
+    right: 0em; /* Siempre a 3em del borde derecho */
+    z-index: 1;
   }
   
   .user-menu {
-    position: relative;
-    z-index: 2;
-  }
-  
-  .icon {
+    position: absolute;
+    top: 1em; /* Ajusta la altura según sea necesario */
+    right: 1em; /* Siempre a 3em del borde derecho */
     display: flex;
     align-items: center;
-    cursor: pointer;
-  }
+}
   
-  .user-icon {
-    font-size: 26px;
-  }
+.icon-user {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 0.5em;
+  border-radius: 5px;
+}
   
-  .arrow {
-    margin-left: 5px;
-    font-size: 16px;
-  }
-  
+.user-icon {
+  font-size: 1.5em;
+}
+
+.arrow {
+  margin-left: 5px;
+}
+
   .dropdown {
     position: absolute;
     top: 50px;
