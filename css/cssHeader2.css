@@ -1,6 +1,6 @@
 #header {
   display: flex;
-  height: 370px; /* Ajusta según el diseño */
+  height: 290px; /* Ajusta según el diseño */
   align-items: center;
   justify-content: center;
   text-align: center;
@@ -49,6 +49,7 @@
   .logo {
     font-weight: bold;
     font-size: 2.5em;
+    margin-top: -.5em;
     z-index: 2;
     padding: 1%;
   }
@@ -70,7 +71,7 @@
   
   .user-menu {
     position: absolute;
-    top: 4.8em; /* Ajusta la altura según sea necesario */
+    top: 3.5em; /* Ajusta la altura según sea necesario */
     right: 1em; /* Siempre a 3em del borde derecho */
     display: flex;
     align-items: center;

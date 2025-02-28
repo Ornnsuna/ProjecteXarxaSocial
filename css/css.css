@@ -43,7 +43,6 @@ h1 {
 .main-nav {
     display: flex;
     justify-content: center;
-    margin: 10px 0;
 
 }
 .menu {
@@ -125,8 +124,9 @@ main {
 }
 
 table {
+    position: fixed;
     border-collapse: collapse;
-    width: 100%;
+    width: 26%;
     background-color: white;
 }
 
@@ -139,17 +139,49 @@ th, td {
     text-align: left;
 }
 
+
 .anuncios {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 10px;
+    grid-template-columns: repeat(auto-fit, minmax(15em, 1fr));
+    gap: 1em;
+    padding: 1em;
+}
+
+.anuncios #apiData {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(15em, 1fr));
+    gap: 1em;
+}
+
+.anuncios #apiData div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    transition: transform 0.3s ease; /* Transición para suavizar el efecto de flotar */
+    animation: float 4s ease-in-out infinite alternate; /* Animación de flotar */
+}
+
+.anuncios #apiData img {
+    display: block;
     width: 100%;
+    height: auto;
+    object-fit: cover;
+    transition: transform 0.3s ease; /* Transición para el aumento */
 }
 
-.anuncio {
-    background-color: #d9d9d9;
-    padding: 20px;
+.anuncios #apiData img:hover {
+    transform: scale(1.05); /* Aumenta el tamaño al hacer hover */
+    cursor: pointer;
+}
+
+.anuncios #apiData p {
     text-align: center;
-    border-radius: 5px;
+    grid-column: 1 / -1;
 }
 
+@keyframes float {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-8px); } /* Aumenta el movimiento vertical */
+    100% { transform: translateY(0); }
+}
