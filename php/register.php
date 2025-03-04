@@ -1,6 +1,7 @@
 <?php
-session_start(); 
-require 'db.php'; 
+session_start();
+require 'db.php'; // Conexión a la base de datos
+require 'mailConfig.php'; // Configuración de PHPMailer para enviar correos
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $firstName = trim($_POST["firstName"]);
@@ -8,7 +9,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = trim($_POST["email"]);
     $username = trim($_POST["username"]);
     $password = password_hash($_POST["password"], PASSWORD_BCRYPT); 
+    $token = bin2hex(random_bytes(32)); // Generar un token único
 
+    // 1️⃣ Verificar si el correo ya está en uso
     $checkSql = "SELECT mail FROM Usuari WHERE mail = ?";
     $checkStmt = $conn->prepare($checkSql);
     $checkStmt->bind_param("s", $email);
@@ -22,18 +25,32 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
               </script>";
         exit();
     }
-
     $checkStmt->close();
 
-    $sql = "INSERT INTO Usuari (mail, username, passHash, userFirstName, userLastName, creationDate) 
-            VALUES (?, ?, ?, ?, ?, NOW())";
+    // 2️⃣ Insertar el usuario en la tabla temporal antes de confirmar
+    $sql = "INSERT INTO UsuariosPendientes (mail, username, passHash, userFirstName, userLastName, token, creationDate) 
+            VALUES (?, ?, ?, ?, ?, ?, NOW())";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("sssss", $email, $username, $password, $firstName, $lastName);
+    $stmt->bind_param("ssssss", $email, $username, $password, $firstName, $lastName, $token);
 
     if ($stmt->execute()) {
-        $_SESSION["username"] = $username;
-        header("Location: ../html/InicioSesion.html"); 
-        
+        // 3️⃣ Enviar correo de confirmación
+        $verificationLink = "http://tudominio.com/php/verify.php?token=$token";
+        $subject = "Verifica tu cuenta en CardCapture";
+        $body = "Hola $firstName,<br><br>Haz clic en el siguiente enlace para confirmar tu cuenta: 
+                <a href='$verificationLink'>$verificationLink</a><br><br>Si no creaste esta cuenta, ignora este mensaje.";
+
+        if (sendVerificationEmail($email, $subject, $body)) {
+            echo "<script>
+                    alert('📩 Se ha enviado un correo de verificación. Revisa tu bandeja de entrada.');
+                    window.location.href = '../html/InicioSesion.html';
+                  </script>";
+        } else {
+            echo "<script>
+                    alert('⚠️ Error al enviar el correo de verificación.');
+                    window.location.href = '../html/Registro.html';
+                  </script>";
+        }
         exit();
     } else {
         echo "<script>
