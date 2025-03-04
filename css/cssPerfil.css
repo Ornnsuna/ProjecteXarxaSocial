@@ -1,0 +1,157 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #DE9929;
+    text-align: center;
+    min-height: 100vh;
+}
+
+header {
+    background-color: black;
+    color: white;
+    padding: 1em;
+    font-size: 150%;
+    font-weight: bold;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2em; 
+}
+.titol{
+    padding: 1em;
+    padding-left: 0.2em;
+    padding-bottom: 0.5em;
+    font-size: 3em;
+}
+.text{
+    padding: 1em;
+    padding-left: 0.5em;
+    font-size: 1.3em;
+}
+/* Botón Volver */
+.tornar {
+    text-decoration: none;
+    color: black;
+    font-size: 1.2em;
+    margin-bottom: 0.5em;
+    margin-left: -75%;
+}
+
+/* Perfil */
+.perfil {
+    background: black;
+    color: white;
+    padding: 40px;
+    border-radius: 3em;
+    width: 100%;
+    max-width: 40%;
+    text-align: left;
+}
+
+/* Caja de texto */
+.perfil textarea {
+    width: 100%;
+    height: 10em;
+    padding: 1em;
+    border: none;
+    border-radius: 2em;
+    margin-top: 10px;
+}
+
+/* Botón Editar */
+.edit {
+    display: block;
+    font-size: 1.2em;
+    /* margin-top: -em; */
+    margin-right: -75%;
+    text-decoration: none;
+    color: black;
+    margin-bottom: 3em;
+}
+
+/* Ajustes para móviles */
+@media (max-width: 1024px) {
+    main {
+        padding: 10px;
+    }
+
+    .perfil {
+        max-width: 80%; /* Asegura que el perfil no sea demasiado pequeño */
+    }
+}
+
+@media screen and (max-width: 720px) {
+    .coses {
+        text-align: center;
+    }
+    .titol{
+        margin-left: 0.4em;
+    }
+    .tornar{
+        margin-left: -60%;
+    }
+    .edit{
+        margin-right: -65%;
+    }
+}
+
+ /* FOOTER */
+
+ .footer {
+    background: #1a1a1a;
+    color: white;
+    padding: 20px 0;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .social-icons {
+    display: flex;  /* Alinea los iconos en horizontal */
+    justify-content: center; /* Centra los iconos */
+    gap: 15px;  /* Espaciado entre iconos */
+    margin-top: 10px;
+  }
+  
+  
+  /* Estilos del Canvas para el fondo animado */
+  #footerCanvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none; /* No interfiere con los clics */
+    opacity: 0.3;
+  }
+  
+  /* Brillo animado en el título */
+  #footerTitle {
+    font-size: 24px;
+    background: linear-gradient(45deg, #ff6b6b, #ffdd57, #48dbfb);
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shine 4s infinite alternate ease-in-out;
+  }
+  
+  /* Iconos con efecto de movimiento */
+  .social-icons .icon {
+    width: 30px;
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  /* Keyframes */
+  @keyframes shine {
+    0% { background-position: 0%; }
+    100% { background-position: 100%; }
+  }
+  

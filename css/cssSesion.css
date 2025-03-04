@@ -4,6 +4,17 @@
   box-sizing: border-box;
 }
 
+.paTras{
+  margin: 2em;
+  margin-bottom: 30em;
+}
+
+.tornar {
+  text-decoration: none;
+  color: black;
+  font-size: 1.2em;
+}
+
 .login-container {
   background-color: #000; /* Fondo negro */
   color: #fff; /* Texto blanco */
@@ -12,8 +23,9 @@
   border-radius: 10px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
   text-align: center;
-  z-index: 2;
+  z-index: 1000;
   max-height: 20em;
+  margin-left: -18em;
 }
 
 .linkCancelar{

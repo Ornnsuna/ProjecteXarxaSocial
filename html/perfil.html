@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CardCapture</title>
+    <link rel="stylesheet" href="../css/cssPerfil.css">
+</head>
+<body>
+    <header>
+        <h1>CARDCAPTURE</h1>
+    </header>
+    <main>
+        <a href="./inicio.html" class="tornar">&#8592; Volver a la página principal</a>
+        <div class="perfil">
+            <div class="coses">
+                <h1 class="titol">Username</h1>
+                <p class="text">Nom &nbsp;&nbsp; Cognom</p>
+                <p class="text">Data Neixement</p>
+                <p class="text">Localització</p>
+                <p class="text">Sobre Mi</p>
+                <textarea readonly></textarea>
+            </div>
+        </div>
+        <a href="#" class="edit">Editar perfil ✎</a>
+    </main>
+    <script src="../js/perfil.js"></script>
+     
+
+
+     <!-- FOOTER -->
+    <footer id="footer" class="footer">
+        <div class="footer-container">
+            <div class="footer-logo">
+                <h2 id="footerTitle">CardCapture</h2>
+                <p>Explora, compra y vende cartas de colección fácilmente.</p>
+            </div>
+            <div class="footer-social">
+                <h3>Síguenos</h3>
+                <div class="social-icons">
+                    <a href="https://www.facebook.com/" target="_blank"><img class="icon" src="../img/facebook.png" alt="Facebook" ></a>
+                    <a href="https://x.com/home?lang=es" target="_blank"><img class="icon" src="../img/twitter.png" alt="Twitter"></a>
+                    <a href="https://www.instagram.com/" target="_blank"><img class="icon" src="../img/instagram.png" alt="Instagram"></a>
+                </div>
+            </div>
+        </div>
+    
+        <div class="footer-bottom">
+            <p id="footerText">&copy; 2025 CardCapture. Todos los derechos reservados.</p>
+        </div>
+    
+        <canvas id="footerCanvas"></canvas> <!-- Fondo Animado -->
+    
+        <script src="../js/footerAnimation.js"></script>
+    </footer>
+    <div class="card-animation"></div>
+    <script src="./../js/script2.js"></script>
+</body>
+</html>
