@@ -118,6 +118,13 @@ main {
   }
 }
 
+<<<<<<< HEAD
+=======
+.tabla {
+  margin-bottom: 20px;
+  width: 100%;
+}
+>>>>>>> 356941dd8f6d6b42f5856c08369e140e33e9d6bc
 
 
 .table-container {
@@ -129,6 +136,7 @@ main {
   overflow-x: auto;
 }
 table {
+<<<<<<< HEAD
   width: 100%;
   border-collapse: collapse;
 }
@@ -143,6 +151,21 @@ th {
 }
 tr:hover {
   background-color: #f1f1f1;
+=======
+  position: fixed;
+  border-collapse: collapse;
+  width: 26%;
+  background-color: white;
+}
+
+table, th, td {
+  border: 1px solid black;
+}
+
+th, td {
+  padding: 10px;
+  text-align: left;
+>>>>>>> 356941dd8f6d6b42f5856c08369e140e33e9d6bc
 }
 
 
@@ -190,6 +213,7 @@ tr:hover {
   0% { transform: translateY(0); }
   50% { transform: translateY(-8px); } /* Aumenta el movimiento vertical */
   100% { transform: translateY(0); }
+<<<<<<< HEAD
 }
 
 .scrolled {
@@ -215,4 +239,6 @@ tr:hover {
   }
   
   
+=======
+>>>>>>> 356941dd8f6d6b42f5856c08369e140e33e9d6bc
 }
