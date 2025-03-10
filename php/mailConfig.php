@@ -8,12 +8,12 @@ function sendVerificationEmail($to, $subject, $body) {
     $mail = new PHPMailer(true);
 
     try {
-        // Configuración del servidor SMTP
+        // Configuración del servidor SMTP de Gmail
         $mail->isSMTP();
-        $mail->Host = 'www.cardcapture.cat';
+        $mail->Host = 'smtp.gmail.com'; // Cambiado a Gmail
         $mail->SMTPAuth = true;
         $mail->Username = 'cardcapture0@gmail.com';
-        $mail->Password = 'Educem123';
+        $mail->Password = 'ndfk dlte kaag aesa'; // Usa App Password
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port = 587;
 
@@ -26,6 +26,7 @@ function sendVerificationEmail($to, $subject, $body) {
 
         return $mail->send();
     } catch (Exception $e) {
+        error_log("Error al enviar correo: " . $mail->ErrorInfo); // Guarda errores en log
         return false;
     }
 }

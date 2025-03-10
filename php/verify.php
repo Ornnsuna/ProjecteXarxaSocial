@@ -4,8 +4,8 @@ require 'db.php';
 if (isset($_GET['token'])) {
     $token = $_GET['token'];
 
-    // Buscar usuario en la tabla temporal
-    $sql = "SELECT * FROM UsuariosPendientes WHERE token = ?";
+    // Buscar usuario en la tabla temporal `UsuariPendent`
+    $sql = "SELECT * FROM UsuariPendent WHERE token = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("s", $token);
     $stmt->execute();
@@ -13,14 +13,16 @@ if (isset($_GET['token'])) {
     
     if ($user = $result->fetch_assoc()) {
         // Insertar en la tabla final `Usuari`
-        $sqlInsert = "INSERT INTO Usuari (mail, username, passHash, userFirstName, userLastName, creationDate) 
-                      VALUES (?, ?, ?, ?, ?, NOW())";
+        $sqlInsert = "INSERT INTO Usuari (mail, username, passHash, nom, cognom, dataNaixement, localitzacio, descripcio, dataCreacio, actiu) 
+                      VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW(), 1)";
         $stmtInsert = $conn->prepare($sqlInsert);
-        $stmtInsert->bind_param("sssss", $user['mail'], $user['username'], $user['passHash'], $user['userFirstName'], $user['userLastName']);
+        $stmtInsert->bind_param("ssssssss", $user['mail'], $user['username'], $user['passHash'], 
+                                              $user['nom'], $user['cognom'], $user['dataNaixement'], 
+                                              $user['localitzacio'], $user['descripcio']);
         
         if ($stmtInsert->execute()) {
-            // Eliminar usuario de `UsuariosPendientes`
-            $sqlDelete = "DELETE FROM UsuariosPendientes WHERE token = ?";
+            // Eliminar usuario de `UsuariPendent`
+            $sqlDelete = "DELETE FROM UsuariPendent WHERE token = ?";
             $stmtDelete = $conn->prepare($sqlDelete);
             $stmtDelete->bind_param("s", $token);
             $stmtDelete->execute();
