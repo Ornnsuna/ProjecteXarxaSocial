@@ -8,13 +8,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $lastName = trim($_POST["lastName"]);
     $email = trim($_POST["email"]);
     $username = trim($_POST["username"]);
-    $password = password_hash($_POST["password"], PASSWORD_BCRYPT); 
+    $password = password_hash($_POST["password"], PASSWORD_BCRYPT);
     $token = bin2hex(random_bytes(32)); // Generar un token único
 
-    // 1️⃣ Verificar si el correo ya está en uso
-    $checkSql = "SELECT mail FROM Usuari WHERE mail = ?";
+    // Verificar si el correo ya está en uso en ambas tablas
+    $checkSql = "SELECT mail FROM Usuari WHERE mail = ? UNION SELECT mail FROM UsuariPendent WHERE mail = ?";
     $checkStmt = $conn->prepare($checkSql);
-    $checkStmt->bind_param("s", $email);
+    $checkStmt->bind_param("ss", $email, $email);
     $checkStmt->execute();
     $checkStmt->store_result();
 
@@ -27,14 +27,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
     $checkStmt->close();
 
-    // 2️⃣ Insertar el usuario en la tabla temporal antes de confirmar
-    $sql = "INSERT INTO UsuariosPendientes (mail, username, passHash, userFirstName, userLastName, token, creationDate) 
-            VALUES (?, ?, ?, ?, ?, ?, NOW())";
+    // Insertar el usuario en la tabla temporal antes de confirmar
+    $sql = "INSERT INTO UsuariPendent (mail, username, passHash, nom, cognom, token, dataCreacio, dataNaixement, localitzacio, descripcio) 
+            VALUES (?, ?, ?, ?, ?, ?, NOW(), NULL, NULL, NULL)";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("ssssss", $email, $username, $password, $firstName, $lastName, $token);
 
     if ($stmt->execute()) {
-        // 3️⃣ Enviar correo de confirmación
+        // Enviar correo de confirmación
         $verificationLink = "http://tudominio.com/php/verify.php?token=$token";
         $subject = "Verifica tu cuenta en CardCapture";
         $body = "Hola $firstName,<br><br>Haz clic en el siguiente enlace para confirmar tu cuenta: 
@@ -58,7 +58,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 window.location.href = '../html/Registro.html';
               </script>";
     }
-
     $stmt->close();
 }
 ?>

@@ -31,33 +31,61 @@
                     <li><a href="#">Pokémon</a></li>
                     <li><a href="#">One Piece</a></li>
                     <li><a href="#">Yu-Gi-Oh!</a></li>
+                    <li><a href="#">MLP</a></li>
+                    <li><a href="#">Invizimals</a></li>
                 </ul>
             </nav>
         </div>
     </header>
+    <script>
+        window.addEventListener("scroll", function () {
+            let scrollPos = window.scrollY; // Detectar la posición de desplazamiento
+            let tableContainer = document.querySelector(".table-container");
+    
+            if (scrollPos > 370) {
+                tableContainer.classList.add("scrolled");
+            } else {
+                tableContainer.classList.remove("scrolled");
+            }
+        });
+    </script>
+
     <div class="paTras">
         <a href="../index.html" class="tornar">&#8592; Volver al Inicio</a>
     </div>
     <main>
-        <section class="tabla">
+        <div class="table-container">
             <table>
-                <tr>
-                    <th>Título</th>
-                    <th>Descripción</th>
-                    <th>Anunciante</th>
-                </tr>
-                <tr>
-                    <td>Ejemplo 1</td>
-                    <td>Descripción 1</td>
-                    <td>Anunciante 1</td>
-                </tr>
-                <tr>
-                    <td>Ejemplo 2</td>
-                    <td>Descripción 2</td>
-                    <td>Anunciante 2</td>
-                </tr>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Edad</th>
+                        <th>Correo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>Juan Pérez</td>
+                        <td>30</td>
+                        <td>juan@example.com</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>María López</td>
+                        <td>25</td>
+                        <td>maria@example.com</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>Carlos Gómez</td>
+                        <td>35</td>
+                        <td>carlos@example.com</td>
+                    </tr>
+                </tbody>
             </table>
-        </section>
+        </div>
         
         <section class="anuncios">
             <div id="apiData">Cargando datos...</div>
