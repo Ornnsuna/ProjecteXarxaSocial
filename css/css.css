@@ -16,39 +16,32 @@ header {
 }
 
 .search-bar {
-  margin-top: 15px;
   padding: 15px;
   width: 60%;
   border-radius: 30px;
   border: none;
   font-size: 18px;
-  display: block;
-  margin: 20px auto;
   text-align: center;
-margin-bottom: 2em;
+  margin-bottom: 1em;
 }
 
 h1 {
   margin-top: 1.5em;
-
   font-size: 4em;
 }
 
-
-.search-bar{
-  margin-top: -2.5em;
-  margin-bottom: .2em;
-}
-
 .main-nav {
-  display: flex;
   justify-content: center;
 
 }
 .menu {
+  justify-content: center;
+  align-items: center;
+  text-align: center;
   list-style: none;
   padding: 0;
   display: flex;
+  flex-wrap: wrap;
   gap: 15px;
 }
 .menu li {
@@ -86,7 +79,25 @@ h1 {
   100% { transform: scale(1); opacity: 1; }
 }
 
+.paTras{
+  margin: 2em;
+}
+.tornar {
+  text-decoration: none;
+  color: black;
+  font-size: 1.2em;
+  margin-bottom: 0.5em;
+  margin-left: 10%;
+}
 
+@media screen and (max-width: 1024px) {
+  .paTras {
+    text-align: center;
+    margin-top: 1em;
+    margin-right: 5em;
+    margin-bottom: 1em;
+  }
+}
 
 
 main {
@@ -98,6 +109,8 @@ main {
   width: 80%;
   margin: 0 auto;
 }
+
+
 
 @media screen and (min-width: 1024px) {
   main {
@@ -114,7 +127,26 @@ main {
       flex: 2;
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
+      margin-left: 0em;
+      gap: 20px;
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .table-container {
+      position: static;
+      width: 80%;
+      height: fit-content;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+      overflow-x: auto;
+  }
+
+  .anuncios {
+      margin-top: 20px; /* Ajusta este valor según sea necesario */
+      margin-left: 0; /* Asegura que no haya margen izquierdo */
   }
 }
 
@@ -146,13 +178,7 @@ th {
   background-color: black;
   color: white;
 }
-tr:hover {
-  background-color: #f1f1f1;
-  position: fixed;
-  border-collapse: collapse;
-  width: 26%;
-  background-color: white;
-}
+
 
 table, th, td {
   border: 1px solid black;
@@ -167,8 +193,6 @@ th, td {
 .anuncios {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(15em, 1fr));
-  gap: 1em;
-  padding: 1em;
 }
 
 .anuncios #apiData {
@@ -176,6 +200,8 @@ th, td {
   grid-template-columns: repeat(auto-fit, minmax(15em, 1fr));
   gap: 1em;
 }
+
+
 
 .anuncios #apiData div {
   display: flex;
@@ -212,12 +238,10 @@ th, td {
 
 .scrolled {
   position: fixed;
-  width: 30%;
-  background: white;
-  padding: 20px;
+  top: 8.5em;
+  width: 22.7em;
+  height: fit-content;
   border-radius: 10px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-  overflow-x: auto;
 }
 
 @media screen and (max-width: 1024px) {

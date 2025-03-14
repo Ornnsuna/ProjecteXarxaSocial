@@ -1,7 +1,7 @@
 /* ------------------------HEADER----------------------------------------------------------------- */
 #header {
   display: flex;
-  height: 370px;
+  height: 450px;
   align-items: center;
   justify-content: center;
   text-align: center;
@@ -27,11 +27,9 @@ header {
   align-items: center;
   background-color: #000;
   color: #fff;
-<<<<<<< HEAD
+
   padding: 0px 30px;
-=======
   padding: 15px 30px;
->>>>>>> 356941dd8f6d6b42f5856c08369e140e33e9d6bc
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   z-index: 2;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
@@ -46,9 +44,6 @@ header {
   padding: 1em 0;
 }
 
-.btnCompraVenta {
-  margin-right: 3em;
-}
 
 .logo {
   font-weight: bold;
@@ -59,13 +54,13 @@ header {
 .logo h1 {
   font-weight: bold;
   font-size: 1.65em;
-  padding: -1em;
+
   z-index: 2;
 }
 
 #dropdownMenu {
   position: absolute;
-  top: 3.5em;
+  top: 2em;
   right: 0em;
   z-index: 1000;
 }
@@ -76,6 +71,14 @@ header {
   right: 1em; 
   display: flex;
   align-items: center;
+}
+
+#userIcon {
+  position: absolute; 
+  right: 1%;
+  margin-top: -1em;
+  margin-right: 1em;
+  z-index: 1000;
 }
 
 .icon-user {
@@ -93,11 +96,12 @@ header {
 
 .arrow {
   margin-left: 5px;
+  font-size: 16px;
 }
 
 .dropdown {
   position: absolute;
-  top: 50px;
+  top: 1.5em;
   right: 0;
   background-color: #fff;
   color: #000;
@@ -108,7 +112,7 @@ header {
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   display: none;
-  min-width: 150px; 
+  min-width: 11.5em;
 }
 
 .dropdown.visible {

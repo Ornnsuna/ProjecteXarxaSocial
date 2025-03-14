@@ -38,16 +38,23 @@
         </div>
     </header>
     <script>
-        window.addEventListener("scroll", function () {
-            let scrollPos = window.scrollY; // Detectar la posición de desplazamiento
-            let tableContainer = document.querySelector(".table-container");
-    
-            if (scrollPos > 370) {
-                tableContainer.classList.add("scrolled");
-            } else {
-                tableContainer.classList.remove("scrolled");
-            }
-        });
+       window.addEventListener("scroll", function () {
+    let scrollPos = window.scrollY;
+    let tableContainer = document.querySelector(".table-container");
+    let anuncios = document.querySelector(".anuncios");
+
+    if (scrollPos > 450) {
+        tableContainer.classList.add("scrolled");
+        if (window.innerWidth > 1024) {
+            anuncios.style.marginLeft = tableContainer.offsetWidth + 20 + "px";
+        } else {
+            anuncios.style.marginLeft = 0; // Restablece el margen izquierdo en pantallas pequeñas
+        }
+    } else {
+        tableContainer.classList.remove("scrolled");
+        anuncios.style.marginLeft = 0; // Restablece el margen izquierdo
+    }
+});
     </script>
 
     <div class="paTras">
@@ -98,7 +105,7 @@
             <div class="footer-logo">
                 <h2 id="footerTitle">CardCapture</h2>
                 <p>Explora, compra y vende cartas de colección fácilmente.</p>
-            </div>
+            </div> 
             <div class="footer-social">
                 <h3>Síguenos</h3>
                 <div class="social-icons">

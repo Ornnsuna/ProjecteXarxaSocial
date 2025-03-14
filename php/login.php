@@ -16,9 +16,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($user && password_verify($password, $user["passHash"])) {
         $_SESSION["user_id"] = $user["id_user"];
         $_SESSION["username"] = $username;
-        $_SESSION["full_name"] = $user["nom"] . " " . $user["cognom"];
 
-        header("Location: ../html/inicio.html");
+        echo "<script>
+                localStorage.setItem('userLogged', 'true');
+                window.location.href = '../html/inicio.html';
+              </script>";
         exit();
     } else {
         echo "<script>
