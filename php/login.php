@@ -19,7 +19,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         echo "<script>
                 localStorage.setItem('userLogged', 'true');
-                window.location.href = '../html/inicio.html';
+                window.location.href = '../index.php';
               </script>";
         exit();
     } else {
