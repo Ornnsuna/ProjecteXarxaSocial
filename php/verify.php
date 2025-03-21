@@ -12,13 +12,13 @@ if (isset($_GET['token'])) {
     $result = $stmt->get_result();
     
     if ($user = $result->fetch_assoc()) {
-        // Insertar en la tabla final `Usuari`
-        $sqlInsert = "INSERT INTO Usuari (mail, username, passHash, nom, cognom, dataNaixement, localitzacio, descripcio, dataCreacio, actiu) 
-                      VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW(), 1)";
+        // Insertar en la tabla final `Usuari` (incluyendo imagen_perfil)
+        $sqlInsert = "INSERT INTO Usuari (mail, username, passHash, nom, cognom, dataNaixement, localitzacio, descripcio, dataCreacio, actiu, imagen_perfil) 
+                      VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW(), 1, ?)";
         $stmtInsert = $conn->prepare($sqlInsert);
-        $stmtInsert->bind_param("ssssssss", $user['mail'], $user['username'], $user['passHash'], 
-                                              $user['nom'], $user['cognom'], $user['dataNaixement'], 
-                                              $user['localitzacio'], $user['descripcio']);
+        $stmtInsert->bind_param("sssssssss", $user['mail'], $user['username'], $user['passHash'], 
+                                             $user['nom'], $user['cognom'], $user['dataNaixement'], 
+                                             $user['localitzacio'], $user['descripcio'], $user['imagen_perfil']); // Añadido imagen_perfil
         
         if ($stmtInsert->execute()) {
             // Eliminar usuario de `UsuariPendent`
