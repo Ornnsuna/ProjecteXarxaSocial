@@ -5,153 +5,337 @@
 }
 
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Inter', sans-serif; /* Cambio de fuente para mejor lectura */
     background-color: #DE9929;
+    color: #333; /* Color de texto más oscuro para mejor contraste */
     text-align: center;
     min-height: 100vh;
+    display: flex; /* Para centrar verticalmente el contenido principal */
+    flex-direction: column;
 }
 
 header {
     background-color: black;
     color: white;
-    padding: 1em;
-    font-size: 150%;
+    padding: 1rem;
+    font-size: 1.5rem;
     font-weight: bold;
 }
 
 main {
+    flex: 1; /* El main ocupa el espacio restante */
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 2em; 
-}
-.titol{
-    padding: 1em;
-    padding-left: 0.2em;
-    padding-bottom: 0.5em;
-    font-size: 3em;
-}
-.text{
-    padding: 1em;
-    padding-left: 0.5em;
-    font-size: 1.3em;
-}
-/* Botón Volver */
-.tornar {
-    text-decoration: none;
-    color: black;
-    font-size: 1.2em;
-    margin-bottom: 0.5em;
-    margin-left: -75%;
+    padding: 2rem;
+    width: 100%; /* Asegura que el main ocupe el ancho completo */
 }
 
-/* Perfil */
-.perfil {
+.back-link {
+    text-align: left;
+    margin-bottom: 1rem;
+    width: 100%;
+    max-width: 800px; /* Limita el ancho del contenido principal */
+}
+
+.back-link a {
+    text-decoration: none;
+    color: black;
+    font-size: 1.2rem;
+    display: inline-block; /* Para poder aplicar padding y margin */
+    padding: 0.5rem 1rem;
+    /* border-radius: 0.5rem;  Se ve mejor sin borde en este caso*/
+    transition: color 0.2s ease; /* Transición suave para el color */
+}
+
+.back-link a:hover {
+    color: #555; /* Cambia el color al pasar el ratón */
+}
+
+
+.profile-container {
     background: black;
     color: white;
-    padding: 40px;
-    border-radius: 3em;
+    padding: 2rem;
+    border-radius: 1rem; /* Bordes redondeados más modernos */
     width: 100%;
-    max-width: 40%;
+    max-width: 800px; /* Ancho máximo para el contenedor del perfil */
     text-align: left;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra suave para destacar el contenedor */
+    margin-bottom: 2rem;
 }
 
+.profile-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid #444; /* Separador visual */
+}
+
+.profile-image {
+    width: 180px; /* Tamaño de la imagen de perfil */
+    height: 180px;
+    border-radius: 50%; /* Hace que la imagen sea un círculo */
+    object-fit: cover; /* Asegura que la imagen se ajuste al círculo sin distorsión */
+    margin-bottom: 1rem;
+    border: 4px solid #666; /* Borde opcional para la imagen */
+}
+
+.profile-name {
+    font-size: 2.2rem; /* Tamaño de la fuente del nombre */
+    margin-bottom: 0.5rem;
+    color: #fff;
+}
+
+.profile-fullname {
+    font-size: 1.4rem;
+    color: #eee;
+    margin-bottom: 0;
+}
+
+.profile-details {
+    margin-bottom: 1.5rem;
+}
+
+.detail-section {
+    margin-bottom: 1rem;
+}
+
+.detail-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #ddd;
+    margin-bottom: 0.5rem;
+}
+
+.detail-text {
+    font-size: 1.1rem;
+    color: #eee;
+    line-height: 1.6; /* Mejora la legibilidad del texto */
+}
+
+.detail-text.description{
+    white-space: pre-line;  /* respetamos los saltos de linea*/
+}
 /* Caja de texto */
-.perfil textarea {
+.profile-container textarea {
     width: 100%;
-    height: 10em;
-    padding: 1em;
-    border: none;
-    border-radius: 2em;
-    margin-top: 10px;
+    height: 10rem;
+    padding: 1rem;
+    border: 1px solid #555;
+    border-radius: 0.5rem;
+    margin-top: 0.5rem;
+    background-color: #222;
+    color: #eee;
+    font-family: 'Inter', sans-serif;
+    resize: none; /* Evita que el usuario redimensione el textarea */
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2); /* Sombra interna */
 }
 
-/* Botón Editar */
-.edit {
-    display: block;
-    font-size: 1.2em;
-    /* margin-top: -em; */
-    margin-right: -75%;
-    text-decoration: none;
+.profile-container textarea:focus {
+    outline: none;
+    border-color: #777; /* Cambia el color del borde al enfocar */
+    box-shadow: 0 0 0 2px rgba(128, 128, 128, 0.2); /* Añade un resplandor al enfocar */
+}
+
+
+.edit-profile-link {
+    text-align: right;
+    margin-top: 1rem;
+}
+
+.edit-profile-link a {
+    display: inline-block;
+    font-size: 1.1rem;
     color: black;
-    margin-bottom: 3em;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    background-color: #fff;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Ajustes para móviles */
-@media (max-width: 1024px) {
-    main {
-        padding: 10px;
-    }
-
-    .perfil {
-        max-width: 80%; /* Asegura que el perfil no sea demasiado pequeño */
-    }
+.edit-profile-link a:hover {
+    background-color: #ddd;
+    color: #333;
 }
 
-@media screen and (max-width: 720px) {
-    .coses {
-        text-align: center;
-    }
-    .titol{
-        margin-left: 0.4em;
-    }
-    .tornar{
-        margin-left: -60%;
-    }
-    .edit{
-        margin-right: -65%;
-    }
-}
 
- /* FOOTER */
 
- .footer {
+/* FOOTER */
+.footer {
     background: #1a1a1a;
     color: white;
-    padding: 20px 0;
+    padding: 2rem 0;
     font-family: Arial, sans-serif;
     text-align: center;
     position: relative;
     overflow: hidden;
-  }
-  
-  .social-icons {
-    display: flex;  /* Alinea los iconos en horizontal */
-    justify-content: center; /* Centra los iconos */
-    gap: 15px;  /* Espaciado entre iconos */
-    margin-top: 10px;
-  }
-  
-  
-  /* Estilos del Canvas para el fondo animado */
-  #footerCanvas {
+    margin-top: 4rem; /* Empuja el footer hacia abajo */
+}
+
+.footer-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center; /* Centra el contenido del footer */
+    width: 100%;
+    max-width: 1200px; /* Ancho máximo del contenedor del footer */
+    margin: 0 auto; /* Centra el contenedor del footer */
+    padding: 0 1rem;
+}
+
+
+.footer-logo {
+    margin-bottom: 1rem;
+}
+
+.footer-logo h2 {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.footer-logo p {
+    font-size: 0.9rem;
+    color: #ddd;
+}
+
+.footer-social {
+    margin-top: 1rem;
+}
+
+.footer-social h3 {
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+.social-icons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.social-icons .icon {
+    width: 2.5rem;
+    transition: transform 0.3s ease-in-out;
+}
+
+.social-icons .icon:hover {
+    transform: scale(1.2);
+}
+
+#footerCanvas {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    pointer-events: none; /* No interfiere con los clics */
+    pointer-events: none;
     opacity: 0.3;
-  }
-  
-  /* Brillo animado en el título */
-  #footerTitle {
-    font-size: 24px;
+}
+
+#footerTitle {
+    font-size: 2rem;
     background: linear-gradient(45deg, #ff6b6b, #ffdd57, #48dbfb);
     background-clip: text;
     -webkit-text-fill-color: transparent;
     animation: shine 4s infinite alternate ease-in-out;
-  }
-  
-  /* Iconos con efecto de movimiento */
-  .social-icons .icon {
-    width: 30px;
-    transition: transform 0.3s ease-in-out;
-  }
-  
-  /* Keyframes */
-  @keyframes shine {
-    0% { background-position: 0%; }
-    100% { background-position: 100%; }
-  }
-  
+}
+
+@keyframes shine {
+    0% {
+        background-position: 0%;
+    }
+
+    100% {
+        background-position: 100%;
+    }
+}
+
+.footer-bottom {
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid #333;
+    font-size: 0.8rem;
+    color: #aaa;
+}
+
+
+/* Ajustes para móviles */
+@media (max-width: 768px) {
+    body {
+        padding: 0;
+    }
+
+    header {
+        padding: 1rem;
+        font-size: 1.2rem;
+    }
+
+    main {
+        padding: 1rem;
+    }
+
+    .back-link {
+        margin-bottom: 1rem;
+    }
+
+    .profile-container {
+        padding: 1.5rem;
+        border-radius: 0.75rem;
+        max-width: 95%;
+    }
+
+    .profile-header {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .profile-image {
+        width: 150px;
+        height: 150px;
+        margin-bottom: 1rem;
+    }
+
+    .profile-name {
+        font-size: 1.8rem;
+    }
+
+    .profile-fullname {
+        font-size: 1.2rem;
+    }
+
+    .detail-text {
+        font-size: 1rem;
+    }
+
+    .edit-profile-link {
+        text-align: center;
+        margin-top: 1rem;
+    }
+
+    .footer-container {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .footer-logo {
+        margin-bottom: 1rem;
+    }
+
+    .footer-social {
+        margin-top: 1rem;
+    }
+
+    .footer-bottom {
+        margin-top: 1rem;
+        padding-top: 1rem;
+        font-size: 0.7rem;
+    }
+}

@@ -40,12 +40,12 @@ header {
   right: 1%;
   margin-top: -1em;
   margin-right: 1em;
-  z-index: 1000
+  z-index: 1000;
 }
 
 .user-menu {
   position: relative;
-  z-index: 2;
+  z-index: 1;
 }
 
 .icon {
@@ -121,7 +121,7 @@ body {
   margin-right: 5em;
   padding-top: 2.5%;
   justify-content: center;
-  z-index: 2;
+  z-index: 1;
 }
 
 .card {
@@ -202,7 +202,7 @@ body {
 
 .content {
   position: relative;
-  z-index: 2; /* Asegura que el texto esté por encima de las cartas */
+  z-index: 1; /* Asegura que el texto esté por encima de las cartas */
   color: black;
   text-align: center;
   margin-top: 50px;
