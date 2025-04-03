@@ -1,6 +1,13 @@
 <?php
-session_start();
-$sesionIniciada = isset($_SESSION['user_id']);
+// Incluir el archivo de conexión a la base de datos
+include '../php/db.php';
+
+// Obtener la categoría de la URL
+$categoria = $_GET['categoria'];
+
+// Consulta SQL para obtener los anuncios de la categoría seleccionada
+$sql = "SELECT * FROM publicacions WHERE categoria = '$categoria'";
+$result = $conn->query($sql);
 ?>
 
 <!DOCTYPE html>
@@ -8,13 +15,59 @@ $sesionIniciada = isset($_SESSION['user_id']);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CardCapture</title>
+    <title>CardCapture - Anuncios de <?php echo $categoria; ?></title>
     <link rel="stylesheet" href="../css/css.css">
     <link rel="stylesheet" href="../css/PAGINIcssHeaderFooter.css">
+    <style>
+        .anuncios {
+            display: grid;
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .anuncio {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+
+        .anuncio:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .anuncio img {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 15px;
+            border-radius: 4px;
+        }
+
+        .anuncio h3 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+            color: #333;
+        }
+
+        .anuncio .precio {
+            font-weight: bold;
+            color: #DE9929;
+            font-size: 1.1em;
+        }
+    </style>
 </head>
 <body>
     <header id="header">
-        <canvas id="headerCanvas"></canvas> <div class="header-content">
+        <canvas id="headerCanvas"></canvas>
+        <div class="header-content">
             <div class="logo"><h1>CardCapture</h1></div>
             <input type="text" class="search-bar" placeholder="Busca una carta en específico">
             <div class="user-menu">
@@ -23,12 +76,7 @@ $sesionIniciada = isset($_SESSION['user_id']);
                     <span class="arrow">▼</span>
                 </div>
                 <ul class="dropdown" id="dropdownMenu">
-                    <?php if (!$sesionIniciada): ?>
-                        <li><a href="InicioSesion.html">Iniciar Sesión</a></li>
-                    <?php else: ?>
-                        <li><a href="./perfil.php">Mi perfil</a></li>
-                        <li><a href="../php/logout.php">Cerrar Sesión</a></li>
-                    <?php endif; ?>
+                    <li><a href="InicioSesion.html">Iniciar Sesión</a></li>
                 </ul>
             </div>
             <script src="../js/scriptHeader.js"></script>
@@ -44,65 +92,34 @@ $sesionIniciada = isset($_SESSION['user_id']);
             </nav>
         </div>
     </header>
-    <script>
-        window.addEventListener("scroll", function () {
-            let scrollPos = window.scrollY;
-            let tableContainer = document.querySelector(".table-container");
-            let anuncios = document.querySelector(".anuncios");
-
-            if (scrollPos > 450) {
-                tableContainer.classList.add("scrolled");
-                if (window.innerWidth > 1024) {
-                    anuncios.style.marginLeft = tableContainer.offsetWidth + 20 + "px";
-                } else {
-                    anuncios.style.marginLeft = 0; // Restablece el margen izquierdo en pantallas pequeñas
-                }
-            } else {
-                tableContainer.classList.remove("scrolled");
-                anuncios.style.marginLeft = 0; // Restablece el margen izquierdo
-            }
-        });
-    </script>
     <div class="paTras">
         <a href="../index.php" class="tornar">&#8592; Volver al Inicio</a>
     </div>
     <main>
-        <div class="table-container">
-            <table>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Nombre</th>
-                        <th>Edad</th>
-                        <th>Correo</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>Juan Pérez</td>
-                        <td>30</td>
-                        <td>juan@example.com</td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>María López</td>
-                        <td>25</td>
-                        <td>maria@example.com</td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td>Carlos Gómez</td>
-                        <td>35</td>
-                        <td>carlos@example.com</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
         <section class="anuncios">
-            <div id="apiData">Cargando datos...</div>
+            <?php
+            if ($result->num_rows > 0) {
+                // Mostrar los anuncios
+                while ($row = $result->fetch_assoc()) {
+                    if (isset($row['id'])) {
+                        echo "<a href='detalle_publicacion.php?id=" . $row['id'] . "' class='anuncio'>";
+                        echo "<img src='" . $row['imagen'] . "' alt='Imagen del anuncio'>";
+                        echo "<h3>" . $row['titulo'] . "</h3>";
+                        echo "<p class='precio'>" . $row['precio'] . "€</p>";
+                        echo "</a>";
+                    } else {
+                        echo "<div class='anuncio'>";
+                        echo "<img src='" . $row['imagen'] . "' alt='Imagen del anuncio'>";
+                        echo "<h3>" . $row['titulo'] . "</h3>";
+                        echo "<p class='precio'>" . $row['precio'] . "€</p>";
+                        echo "</div>";
+                    }
+                }
+            } else {
+                echo "<p>No hay anuncios disponibles en esta categoría.</p>";
+            }
+            ?>
         </section>
-        <script src="../js/api.js"></script>
     </main>
     <footer id="footer" class="footer">
         <div class="footer-container">
@@ -126,3 +143,7 @@ $sesionIniciada = isset($_SESSION['user_id']);
     </footer>
 </body>
 </html>
+
+<?php
+$conn->close();
+?>

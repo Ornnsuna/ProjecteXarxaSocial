@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Subir Publicación</title>
+    <meta charset="UTF-8">
+
+    <link rel="stylesheet" href="../css/publicaciones.css">
+
+    
+</head>
+<body>
+    <div class="container">
+        <div class="left-side">
+            <form action="../php/publicaciones.php" method="post" enctype="multipart/form-data">
+                <label for="titulo">Título:</label><br>
+                <input type="text" id="titulo" name="titulo" required><br><br>
+
+                <label for="descripcion">Descripción:</label><br>
+                <textarea id="descripcion" name="descripcion" required></textarea><br><br>
+
+                <label for="categoria">Categoría:</label><br>
+                <select id="categoria" name="categoria" required>
+                    <option value="Magic">Magic</option>
+                    <option value="Pokemon">Pokemon</option>
+                    <option value="One Piece">One Piece</option>
+                    <option value="Yu-Gi-Oh">Yu-Gi-Oh</option>
+                    <option value="My Little Pony">My Little Pony</option>
+                    <option value="Invizimals">Invizimals</option>
+                </select><br><br>
+
+                <label for="precio">Precio (€):</label><br>
+                <input type="number" id="precio" name="precio" required><br><br>
+
+                <label for="ubicacion">Ubicación:</label><br>
+                <input type="text" id="ubicacion" name="ubicacion"><br><br>
+
+                <label for="estado">Estado:</label><br>
+                <select id="estado" name="estado" required>
+                    <option value="nuevo">Nuevo</option>
+                    <option value="como_nuevo">Como Nuevo</option>
+                    <option value="bueno">Bueno</option>
+                    <option value="regular">Regular</option>
+                    <option value="mal_estado">Mal Estado</option>
+                </select><br><br>
+
+                <label for="imagen">Imagen:</label><br>
+                <input type="file" id="imagen" name="imagen" accept="image/*" required><br><br>
+
+                <input type="submit" value="Publicar">
+            </form>
+        </div>
+        <div class="right-side">
+            <h2>Vista Previa de la Imagen</h2>
+            <img id="imagePreview" src="#" alt="Vista Previa" class="image-preview">
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('imagen').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('imagePreview').src = e.target.result;
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
+</body>
+</html>

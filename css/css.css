@@ -111,152 +111,60 @@ main {
   margin: 0 auto;
 }
 
-
-
-@media screen and (min-width: 1024px) {
-  main {
-      flex-direction: row;
-      align-items: flex-start;
-  }
-
-  .tabla {
-      flex: 1;
-      margin-right: 20px;
-  }
-
-  .anuncios {
-      flex: 2;
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      margin-left: 0em;
-      gap: 20px;
-  }
-}
-
-@media screen and (max-width: 1024px) {
-  .table-container {
-      position: static;
-      width: 80%;
-      height: fit-content;
-      background: white;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-      overflow-x: auto;
-  }
-
-  .anuncios {
-      margin-top: 20px; /* Ajusta este valor según sea necesario */
-      margin-left: 0; /* Asegura que no haya margen izquierdo */
-  }
-}
-
-
-.tabla {
-  margin-bottom: 20px;
-  width: 100%;
-}
-
-
-.table-container {
-  width: 30%;
-  background: white;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-  overflow-x: auto;
-}
-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-th, td {
-  padding: 12px;
-  text-align: left;
-  border-bottom: 1px solid #ddd;
-}
-th {
-  background-color: black;
-  color: white;
-}
-
-
-table, th, td {
-  border: 1px solid black;
-}
-
-th, td {
-  padding: 10px;
-  text-align: left;
-}
-
-
 .anuncios {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(15em, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Ajusta el ancho mínimo */
+  gap: 20px;
+  padding: 20px;
 }
 
-.anuncios #apiData {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(15em, 1fr));
-  gap: 1em;
-}
-
-
-
-.anuncios #apiData div {
+.anuncio {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
-  overflow: hidden;
-  transition: transform 0.3s ease; /* Transición para suavizar el efecto de flotar */
-  animation: float 4s ease-in-out infinite alternate; /* Animación de flotar */
-}
-
-.anuncios #apiData img {
-  display: block;
-  width: 100%;
-  height: auto;
-  object-fit: cover;
-  transition: transform 0.3s ease; /* Transición para el aumento */
-}
-
-.anuncios #apiData img:hover {
-  transform: scale(1.05); /* Aumenta el tamaño al hacer hover */
-  cursor: pointer;
-}
-
-.anuncios #apiData p {
   text-align: center;
-  grid-column: 1 / -1;
+  transition: transform 0.3s ease;
 }
 
-@keyframes float {
-  0% { transform: translateY(0); }
-  50% { transform: translateY(-8px); } /* Aumenta el movimiento vertical */
-  100% { transform: translateY(0); }
+.anuncio:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }
 
-.scrolled {
-  position: fixed;
-  top: 8.5em;
-  width: 22.7em;
-  height: fit-content;
-  border-radius: 10px;
+.anuncio img {
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 15px;
+  border-radius: 4px;
 }
 
-@media screen and (max-width: 1024px) {
-  .table-container {
-    position:static;
-    width: 80%;
-    height: fit-content;
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-    overflow-x: auto;
+.anuncio h3 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-size: 1.2em;
+  color: #333;
+}
+
+.anuncio .precio {
+  font-weight: bold;
+  color: #DE9929;
+  font-size: 1.1em;
+}
+
+/* Media query para pantallas grandes (1200px o más) */
+@media (min-width: 1200px) {
+  .anuncios {
+      grid-template-columns: repeat(5, 1fr); /* 5 columnas en pantallas grandes */
   }
-  
-  
-
 }
+
+
+
+
+
+
+  
