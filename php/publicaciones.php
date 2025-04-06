@@ -36,25 +36,37 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($check !== false) {
         $uploadOk = 1;
     } else {
-        echo "El archivo no es una imagen.";
+        echo "<script>
+                alert('El archivo no es una imagen.');
+                window.location.href = 'publicaciones.html'; // Redirige al formulario
+              </script>";
         $uploadOk = 0;
     }
 
     // Verificar el tamaño del archivo
     if ($_FILES["imagen"]["size"] > 500000) {
-        echo "El archivo es demasiado grande.";
+        echo "<script>
+                alert('El archivo es demasiado grande.');
+                window.location.href = 'publicaciones.html'; // Redirige al formulario
+              </script>";
         $uploadOk = 0;
     }
 
     // Permitir ciertos formatos de archivo
     if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg" && $imageFileType != "gif") {
-        echo "Solo se permiten archivos JPG, JPEG, PNG y GIF.";
+        echo "<script>
+                alert('Solo se permiten archivos JPG, JPEG, PNG y GIF.');
+                window.location.href = 'publicaciones.html'; // Redirige al formulario
+              </script>";
         $uploadOk = 0;
     }
 
     // Verificar si $uploadOk está establecido en 0 por un error
     if ($uploadOk == 0) {
-        echo "Tu archivo no fue subido.";
+        echo "<script>
+                alert('Tu archivo no fue subido.');
+                window.location.href = 'publicaciones.html'; // Redirige al formulario
+              </script>";
     // Si todo está bien, intenta subir el archivo
     } else {
         if (move_uploaded_file($_FILES["imagen"]["tmp_name"], $target_file)) {
@@ -62,12 +74,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $sql = "INSERT INTO publicacions (usuario_id, titulo, descripcion, categoria, precio, ubicacion, estado, imagen) VALUES ($usuario_id, '$titulo', '$descripcion', '$categoria', $precio, '$ubicacion', '$estado', '$target_file')";
 
             if ($conn->query($sql) === TRUE) {
-                echo "Publicación subida con éxito.";
+                echo "<script>
+                        alert('Publicación subida con éxito.');
+                        window.location.href = '../index.php'; // Redirige al index
+                      </script>";
+                exit(); // Importante: detener la ejecución del script después de la redirección
             } else {
-                echo "Error: " . $sql . "<br>" . $conn->error;
+                echo "<script>
+                        alert('Error al subir la publicación: " . $conn->error . "');
+                        window.location.href = 'publicaciones.html'; // Redirige al formulario
+                      </script>";
             }
         } else {
-            echo "Hubo un error al subir tu archivo.";
+            echo "<script>
+                    alert('Hubo un error al subir tu archivo.');
+                    window.location.href = 'publicaciones.html'; // Redirige al formulario
+                  </script>";
         }
     }
 }

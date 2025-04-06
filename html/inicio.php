@@ -1,4 +1,7 @@
 <?php
+session_start();
+$sesionIniciada = isset($_SESSION['user_id']);
+
 // Incluir el archivo de conexión a la base de datos
 include '../php/db.php';
 
@@ -7,6 +10,13 @@ $categoria = $_GET['categoria'];
 
 // Consulta SQL para obtener los anuncios de la categoría seleccionada
 $sql = "SELECT * FROM publicacions WHERE categoria = '$categoria'";
+
+// Si hay una sesión iniciada, filtrar los anuncios del usuario actual
+if ($sesionIniciada) {
+    $usuario_id = $_SESSION['user_id'];
+    $sql .= " AND usuario_id != $usuario_id";
+}
+
 $result = $conn->query($sql);
 ?>
 
@@ -36,6 +46,7 @@ $result = $conn->query($sql);
             text-align: center;
             transition: transform 0.3s ease;
             cursor: pointer;
+            
         }
 
         .anuncio:hover {
@@ -76,7 +87,15 @@ $result = $conn->query($sql);
                     <span class="arrow">▼</span>
                 </div>
                 <ul class="dropdown" id="dropdownMenu">
-                    <li><a href="InicioSesion.html">Iniciar Sesión</a></li>
+                    <?php if (!$sesionIniciada): ?>
+                        <li><a href="InicioSesion.html">Iniciar Sesión</a></li>
+                    <?php else: ?>
+                        <li><a href="./perfil.php">Perfil</a></li>
+                        <li><a href="../php/logout.php">Compra</a></li>
+                        <li><a href="../php/logout.php">Venda</a></li>
+                        <li><a href="./chat.php">Bústia</a></li>
+                        <li><a href="../php/logout.php">Cerrar Sesión</a></li>
+                    <?php endif; ?>
                 </ul>
             </div>
             <script src="../js/scriptHeader.js"></script>
@@ -101,19 +120,12 @@ $result = $conn->query($sql);
             if ($result->num_rows > 0) {
                 // Mostrar los anuncios
                 while ($row = $result->fetch_assoc()) {
-                    if (isset($row['id'])) {
-                        echo "<a href='detalle_publicacion.php?id=" . $row['id'] . "' class='anuncio'>";
-                        echo "<img src='" . $row['imagen'] . "' alt='Imagen del anuncio'>";
-                        echo "<h3>" . $row['titulo'] . "</h3>";
-                        echo "<p class='precio'>" . $row['precio'] . "€</p>";
-                        echo "</a>";
-                    } else {
-                        echo "<div class='anuncio'>";
-                        echo "<img src='" . $row['imagen'] . "' alt='Imagen del anuncio'>";
-                        echo "<h3>" . $row['titulo'] . "</h3>";
-                        echo "<p class='precio'>" . $row['precio'] . "€</p>";
-                        echo "</div>";
-                    }
+                    // Asegúrate de usar publicacion_id en el enlace
+                    echo "<a href='detalle_publicacion.php?id=" . $row['publicacion_id'] . "' class='anuncio'>";
+                    echo "<img src='" . $row['imagen'] . "' alt='Imagen del anuncio'>";
+                    echo "<h3>" . $row['titulo'] . "</h3>";
+                    echo "<p class='precio'>" . $row['precio'] . "€</p>";
+                    echo "</a>";
                 }
             } else {
                 echo "<p>No hay anuncios disponibles en esta categoría.</p>";

@@ -15,7 +15,7 @@ $sesionIniciada = isset($_SESSION['user_id']);
     <header class="headerx">
         <div class="logo">CARDCAPTURE</div>
         <div class="user-menu">
-            <div class="icon" id="userIcon">
+            <div class="iconx" id="userIcon">
                 <span class="user-icon">👤</span>
                 <span class="arrow">▼</span>
             </div>
@@ -23,9 +23,10 @@ $sesionIniciada = isset($_SESSION['user_id']);
                 <?php if (!$sesionIniciada): ?>
                     <li><a href="./html/InicioSesion.html">Iniciar Sesión</a></li>
                 <?php else: ?>
-                    <li><a href="./html/perfil.php">Mi perfil</a></li>
+                    <li><a href="./html/perfil.php">Perfil</a></li>
                     <li><a href="#">Compra</a></li>
                     <li><a href="./html/publicaciones.html">Venda</a></li>
+                    <li><a href="./html/chat.php">Bústia</a></li>
                     <li><a href="./php/logout.php">Cerrar Sesión</a></li>
                 <?php endif; ?>
             </ul>
