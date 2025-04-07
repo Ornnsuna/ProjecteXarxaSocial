@@ -1,0 +1,117 @@
+body {
+    background-color: #000;
+    color: #fff;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+}
+
+.chat-container {
+    margin-top: 5em;
+    display: flex;
+    width: 90%;
+    max-width: 1200px;
+    background-color: #1a1a1a;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(255, 165, 0, 0.3);
+    overflow: hidden;
+}
+
+.usuarios {
+    width: 30%;
+    border-right: 1px solid #333;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.usuario {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    text-decoration: none;
+    color: #fff;
+    border-bottom: 1px solid #333;
+}
+
+.usuario img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.usuario-info h3 {
+    margin: 0;
+    color: #DE9929;
+}
+
+.usuario-info p {
+    margin: 0;
+    font-size: 0.9em;
+}
+
+.mensajes {
+    width: 70%;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.mensaje {
+    background-color: #333;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    align-self: flex-start;
+}
+
+.mensaje-propio {
+    align-self: flex-end;
+    background-color: #DE9929;
+    color: #000;
+}
+
+.fecha {
+    font-size: 0.8em;
+    color: #888;
+    margin-top: 5px;
+}
+
+.enviar-mensaje {
+    display: flex;
+}
+
+#mensaje-input {
+    flex-grow: 1;
+    background-color: #222;
+    border: none;
+    padding: 10px;
+    border-radius: 8px;
+    color: #fff;
+    margin-right: 10px;
+}
+
+#enviar-btn {
+    background-color: #DE9929;
+    color: #000;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.paTras{
+  margin: 2em;
+  margin-top: -40em;
+}
+.tornar {
+  text-decoration: none;
+  color: white;
+  font-size: 1.2em;
+  margin-bottom: 0.5em;
+  margin-left: 10%;
+}
