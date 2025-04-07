@@ -35,7 +35,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($stmt->execute()) {
         // Enviar correo de confirmación
-        $verificationLink = "http://tudominio.com/php/verify.php?token=$token";
+        $verificationLink = "localhost/CardCapture/ProjecteXarxaSocial/php/verify.php?token=$token";
         $subject = "Verifica tu cuenta en CardCapture";
         $body = "Hola $firstName,<br><br>Haz clic en el siguiente enlace para confirmar tu cuenta: 
                 <a href='$verificationLink'>$verificationLink</a><br><br>Si no creaste esta cuenta, ignora este mensaje.";

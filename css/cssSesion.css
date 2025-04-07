@@ -7,6 +7,8 @@
 .paTras{
   margin: 2em;
   margin-bottom: 30em;
+  transition: 0.5s;
+  z-index: 999999;
 }
 
 .tornar {
@@ -36,6 +38,20 @@
 p a {
   color: #f5a623;
   text-decoration: none;
+}
+
+#forgotPasswd{
+  color: white;
+  text-decoration: none;
+  transition: 0.25s;
+}
+
+#forgotPasswd:hover{
+  color: #777;
+}
+
+.forgotPasswd{
+  margin: 1em;
 }
 
 p a:hover {
@@ -68,6 +84,7 @@ p a:hover {
 .botones{
   background-color: #DE9929;
   color: white;
+  transition: 0.5s;
 }
 .botones:hover{
   background-color: #b37a20;
