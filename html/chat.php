@@ -117,6 +117,7 @@ if ($chat_id) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chat</title>
+<<<<<<< HEAD
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap">
     <style>
         /* Estilos generales */
@@ -431,6 +432,16 @@ if ($chat_id) {
 <body>
     <div class="paTras">
         <a href="../index.php" class="tornar">&#8592; Volver al Inicio</a>
+=======
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap">
+    <link rel="stylesheet" href="../css/cssChat.css" />
+
+</head>
+<body>
+<div class="paTras">
+        <a href="./chat.php" class="tornar">&#8592; Chats</a>
+        <a href="../index.php" class="tornar">&#8592; Inicio</a>
+>>>>>>> 27edadb419a83d3a777ff9c6f016aa0b9d4ee6d4
     </div>
     <div class="chat-container">
         <?php if ($chat_id && $chat != null): ?>
@@ -533,6 +544,7 @@ if ($chat_id) {
         // Llamar a la función scrollToBottom() al cargar la página y después de agregar nuevos mensajes
         window.onload = scrollToBottom;
     </script>
+    <script src="../js/script2.js"></script>
 </body>
 </html>
 
