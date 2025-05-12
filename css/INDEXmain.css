@@ -56,7 +56,8 @@ header {
 }
 
 .user-icon {
-  font-size: 24px;
+  height: 2.5em;
+  width: 2.5em;
 }
 
 .arrow {
@@ -66,7 +67,7 @@ header {
 
 .dropdown {
   position: absolute;
-  top: 2.3em;
+  top: 3em;
   right: 0;
   background-color: #fff;
   color: #000;
@@ -77,7 +78,7 @@ header {
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   display: none;
-  min-width: 11.5em;
+  min-width: 12em;
 }
 .dropdown.visible {
   display: block;
@@ -97,12 +98,14 @@ header {
   border-radius: 5px;
   transition: all 0.3s ease;
   display: inline-block;
+  width: 7em;
 }
 
 .dropdown li a:hover {
   background-color: #ffc107;
   color: #fff;
   border-color: #ffc107;
+  width: 7em;
 }
 
 

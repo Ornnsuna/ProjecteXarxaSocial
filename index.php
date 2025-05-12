@@ -16,15 +16,14 @@ $sesionIniciada = isset($_SESSION['user_id']);
         <div class="logo">CARDCAPTURE</div>
         <div class="user-menu">
             <div class="iconx" id="userIcon">
-                <span class="user-icon">👤</span>
-                <span class="arrow">▼</span>
+                <img src="./img/user.png" class="user-icon" alt="">
             </div>
             <ul class="dropdown" id="dropdownMenu">
                 <?php if (!$sesionIniciada): ?>
                     <li><a href="./html/InicioSesion.html">Iniciar Sesión</a></li>
                 <?php else: ?>
                     <li><a href="./html/perfil.php">Perfil</a></li>
-                    <li><a href="#">Compra</a></li>
+                    <li><a href="#">Me gusta</a></li>
                     <li><a href="./html/publicaciones.html">Venda</a></li>
                     <li><a href="./html/chat.php">Bústia</a></li>
                     <li><a href="./php/logout.php">Cerrar Sesión</a></li>

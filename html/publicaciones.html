@@ -3,10 +3,86 @@
 <head>
     <title>Subir Publicación</title>
     <meta charset="UTF-8">
-
     <link rel="stylesheet" href="../css/publicaciones.css">
+    <style>
+        .image-preview-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .image-preview {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border: 1px solid #ccc;
+            cursor: pointer; /* Indicar que la imagen es clickeable */
+        }
+        .file-input-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            background-color: #f0f0f0;
+            color: #333;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .file-input-wrapper input[type=file] {
+            font-size: 100px;
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+        }
+        .error-message {
+            color: red;
+            margin-top: 5px;
+        }
 
-    
+        /* Estilos para la ventana modal de la imagen ampliada */
+        .image-modal {
+            display: none; /* Oculto por defecto */
+            position: fixed; /* Cubre toda la ventana */
+            z-index: 1; /* Estar por encima de todo */
+            left: 0;
+            top: 0;
+            width: 100%; /* Ancho completo */
+            height: 100%; /* Alto completo */
+            overflow: auto; /* Habilitar scroll si la imagen es muy grande */
+            background-color: rgba(0,0,0,0.9); /* Fondo oscuro y semitransparente */
+        }
+
+        .image-modal-content {
+            margin: auto; /* Centrar la imagen */
+            display: block;
+            max-width: 90%; /* Ancho máximo de la imagen */
+            max-height: 90%; /* Alto máximo de la imagen */
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        /* Botón para cerrar la ventana modal */
+        .close-button {
+            position: absolute;
+            top: 15px;
+            right: 35px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: bold;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+        .close-button:hover,
+        .close-button:focus {
+            color: #bbb;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -43,27 +119,79 @@
                     <option value="mal_estado">Mal Estado</option>
                 </select><br><br>
 
-                <label for="imagen">Imagen:</label><br>
-                <input type="file" id="imagen" name="imagen" accept="image/*" required><br><br>
+                <label for="imagenes">Imágenes (máximo 12):</label><br>
+                <div class="file-input-wrapper">
+                    <span>Seleccionar Imágenes</span>
+                    <input type="file" id="imagenes" name="imagenes[]" accept="image/*" multiple>
+                </div>
+                <div id="imagePreviewContainer" class="image-preview-container">
+                    </div>
+                <p id="imageLimitError" class="error-message"></p>
+                <br><br>
 
                 <input type="submit" value="Publicar">
             </form>
         </div>
         <div class="right-side">
-            <h2>Vista Previa de la Imagen</h2>
-            <img id="imagePreview" src="#" alt="Vista Previa" class="image-preview">
+            <h2>Vista Previa de Imágenes</h2>
+            <div id="multipleImagePreview" class="image-preview-container">
+                </div>
         </div>
     </div>
 
+    <div id="imageModal" class="image-modal">
+        <span class="close-button">&times;</span>
+        <img class="image-modal-content" id="modalImage">
+    </div>
+
     <script>
-        document.getElementById('imagen').addEventListener('change', function(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    document.getElementById('imagePreview').src = e.target.result;
+        const maxImages = 12;
+        const imageInput = document.getElementById('imagenes');
+        const previewContainer = document.getElementById('multipleImagePreview');
+        const imageLimitError = document.getElementById('imageLimitError');
+        const imageModal = document.getElementById('imageModal');
+        const modalImage = document.getElementById('modalImage');
+        const closeButton = document.querySelector('.close-button');
+
+        imageInput.addEventListener('change', function(event) {
+            const files = event.target.files;
+            previewContainer.innerHTML = '';
+            imageLimitError.textContent = '';
+
+            if (files.length > maxImages) {
+                imageLimitError.textContent = `Solo se pueden seleccionar un máximo de ${maxImages} imágenes.`;
+                imageInput.value = '';
+                return;
+            }
+
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const img = document.createElement('img');
+                        img.src = e.target.result;
+                        img.classList.add('image-preview');
+                        img.addEventListener('click', function() {
+                            modalImage.src = this.src;
+                            imageModal.style.display = "block";
+                        });
+                        previewContainer.appendChild(img);
+                    }
+                    reader.readAsDataURL(file);
                 }
-                reader.readAsDataURL(file);
+            }
+        });
+
+        // Cerrar la ventana modal al hacer clic en la 'x'
+        closeButton.addEventListener('click', function() {
+            imageModal.style.display = "none";
+        });
+
+        // Cerrar la ventana modal al hacer clic fuera de la imagen
+        window.addEventListener('click', function(event) {
+            if (event.target == imageModal) {
+                imageModal.style.display = "none";
             }
         });
     </script>

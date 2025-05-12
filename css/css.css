@@ -8,98 +8,46 @@ body {
   min-height: 100vh;
 }
 
-header {
-  background-color: black;
-  color: white;
-  text-align: center;
-  padding: 10px;
-}
 
-.search-bar {
-  padding: 15px;
-  width: 60%;
-  border-radius: 30px;
-  border: none;
-  font-size: 18px;
-  text-align: center;
-  margin-bottom: 1em;
-}
 
-h1 {
-  margin-top: 1.5em;
-  font-size: 4em;
-}
-
-.main-nav {
-  justify-content: center;
-
-}
-.menu {
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  list-style: none;
-  padding: 0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 15px;
-}
-.menu li {
-  background: gray;
-  padding: 10px 20px;
-  margin: .5em;
-  border-radius: 5px;
-  transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
-  cursor: pointer;
-}
-.menu li:hover {
-  transform: scale(1.2) rotate(5deg);
-  background: #ffc107;
-  box-shadow: 0 0 15px rgba(255, 193, 7, 0.8);
-}
-.menu a {
-  text-decoration: none;
-  color: white;
-  font-weight: bold;
-}
-.menu-buy-sell {
-  transform: translateY(-50px);
-  transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
-}
-.menu-buy-sell.active {
-  opacity: 1;
-  transform: translateY(0);
-}
-.menu-buy-sell li {
-  animation: bounceIn 0.8s ease-in-out;
-}
 @keyframes bounceIn {
-  0% { transform: scale(0.5); opacity: 0; }
-  50% { transform: scale(1.1); opacity: 0.7; }
+  0% { transform: scale(0.7); opacity: 0; }
+  60% { transform: scale(1.05); opacity: 0.8; }
   100% { transform: scale(1); opacity: 1; }
 }
 
-.paTras{
-  margin: 2em;
+.paTras {
+  margin: 1.5em; /* Reducir un poco el margen */
+  text-align: left; /* Alinear a la izquierda por defecto */
 }
+
 .tornar {
   text-decoration: none;
   color: black;
-  font-size: 1.2em;
-  margin-bottom: 0.5em;
-  margin-left: 10%;
+  font-size: 1em; /* Reducir tamaño de fuente */
+  margin-bottom: 0.3em; /* Reducir margen inferior */
+  margin-left: 1em; /* Reducir margen izquierdo */
+  display: inline-block; /* Para que el margen funcione correctamente */
+  padding: 0.5em 0.8em; /* Añadir un poco de padding */
+  border-radius: 5px;
+  background-color: rgba(0, 0, 0, 0.05); /* Fondo muy claro */
+  transition: background-color 0.3s ease;
+}
+
+.tornar:hover {
+  background-color: rgba(0, 0, 0, 0.1);
 }
 
 @media screen and (max-width: 1024px) {
   .paTras {
-    text-align: center;
-    margin-top: 1em;
-    margin-right: 5em;
-    margin-bottom: 1em;
+      text-align: center; /* Centrar en pantallas medianas */
+      margin-right: auto; /* Centrar horizontalmente */
+      margin-left: auto;
+  }
+  .tornar {
+      margin-left: auto;
   }
 }
-
-
 
 main {
   flex: 1;
@@ -107,65 +55,225 @@ main {
   flex-direction: column;
   align-items: center;
   padding: 20px;
-  width: 80%;
+  width: 95%; /* Aumentar el ancho del main */
   margin: 0 auto;
+  border-radius: 10px; /* Añadir un borde redondeado al main */
 }
 
 .anuncios {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Ajusta el ancho mínimo */
-  gap: 20px;
-  padding: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); /* Ajusta el minmax según necesites */
+  gap: 10px; /* Ajusta el espacio entre los anuncios */
+  padding: 10px;
+  margin-left: 20px;
+  transition: margin-left 0.3s ease-in-out;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Añadir sombra al main */
+
+}
+
+.anuncios.open-filter {
+  margin-left: 320px;
 }
 
 .anuncio {
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  padding: 20px;
+  background-color: #fff; /* Fondo blanco */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Una ligera sombra al pasar el ratón */
+  border-radius: 15px; /* Sin bordes redondeados */
+  padding: 5px; /* Espacio interno pequeño */
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  transition: transform 0.3s ease;
-  text-decoration: none;
+  transition: transform 0.2s ease-in-out;
+  position: relative; /* Para el posicionamiento absoluto del corazón */
 }
 
 .anuncio:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+  transform: scale(1.01);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Una ligera sombra al pasar el ratón */
 }
 
-.anuncio img {
-  max-width: 100%;
-  height: auto;
+.anuncio-link {
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.anuncio-imagen {
+  width: 80%; /* Ajusta el tamaño de la imagen */
+  height: 17em;
   margin-bottom: 15px;
-  border-radius: 4px;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+}
+
+.anuncio-imagen img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: contain; /* Ajusta según necesites: contain, cover, etc. */
 }
 
 .anuncio h3 {
-  margin-top: 0;
-  margin-bottom: 10px;
-  font-size: 1.2em;
-  color: #333;
+  margin-top: 5px;
+  margin-bottom: 3px;
+  font-size: 0.9em;
+  color: white;
 }
 
 .anuncio .precio {
   font-weight: bold;
   color: #DE9929;
-  font-size: 1.1em;
+  font-size: 0.8em;
+  margin-bottom: 5px;
 }
 
-/* Media query para pantallas grandes (1200px o más) */
-@media (min-width: 1200px) {
+.like-button {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  outline: none;
+  z-index: 10;
+}
+
+.heart-icon {
+  fill: #aaa;
+  width: 2em;
+  height: 2em;
+  transition: fill 0.3s ease-in-out;
+}
+
+.like-button.liked .heart-icon {
+  fill: red;
+}
+
+.no-anuncios {
+  padding: 20px;
+  text-align: center;
+  color: #777;
+  font-size: 1em;
+}
+
+.anuncio-info {
+  width: 100%;
+  padding-top: 7px;
+  background-color: black;
+  border-radius: 10px;
+}
+
+/* Media queries para hacerlo más responsivo */
+@media (max-width: 600px) {
   .anuncios {
-      grid-template-columns: repeat(5, 1fr); /* 5 columnas en pantallas grandes */
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  }
+
+  .anuncio-imagen {
+      width: 95%;
+  }
+
+  .anuncio h3 {
+      font-size: 0.8em;
+  }
+
+  .anuncio .precio {
+      font-size: 0.7em;
+  }
+
+  .heart-icon {
+      width: 0.9em;
+      height: 0.9em;
   }
 }
 
+/* Estilos para el footer (puedes moverlos a PAGINIcssHeaderFooter.css si prefieres) */
+#footer {
+  background-color: black;
+  color: white;
+  padding: 20px;
+  text-align: center;
+  margin-top: 2em;
+  position: relative;
+  overflow: hidden;
+}
 
+#footerCanvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.15;
+  z-index: -1;
+}
 
+.footer-container {
+  position: relative;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-wrap: wrap;
+  max-width: 1200px;
+  margin: 0 auto;
+}
 
+.footer-logo h2 {
+  font-size: 1.5em;
+  margin-bottom: 0.5em;
+}
 
+.footer-logo p {
+  font-size: 0.9em;
+}
 
-  
+.footer-social h3 {
+  font-size: 1.1em;
+  margin-bottom: 0.5em;
+}
+
+.social-icons a {
+  display: inline-block;
+  margin: 0 0.5em;
+}
+
+.social-icons img {
+  width: 30px;
+  height: 30px;
+  opacity: 0.7;
+  transition: opacity 0.3s ease;
+}
+
+.social-icons img:hover {
+  opacity: 1;
+}
+
+.footer-bottom {
+  margin-top: 1em;
+  padding-top: 1em;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  font-size: 0.8em;
+}
+
+#footerText {
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .footer-container {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+  }
+  .footer-logo, .footer-social {
+      margin-bottom: 1em;
+  }
+}
