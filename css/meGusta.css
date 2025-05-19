@@ -1,0 +1,326 @@
+/* Estilos base para la página de favoritos (podrías tener otros estilos aquí) */
+.contenido-principal {
+    padding: 20px;
+    margin-top: 80px; /* Ajusta según la altura de tu header */
+}
+
+.hero {
+    text-align: center;
+    padding: 30px 0;
+    background-color: #f9f9f9;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 20px;
+}
+
+.hero h1 {
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.hero p {
+    color: #666;
+}
+
+.sin-favoritos {
+    text-align: center;
+    color: #777;
+    padding: 20px;
+    font-size: 1.1em;
+}
+
+.anuncios {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); /* Ajusta el minmax según necesites */
+  gap: 10px; /* Ajusta el espacio entre los anuncios */
+  padding: 10px;
+  margin-left: 20px;
+  transition: margin-left 0.3s ease-in-out;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Añadir sombra al main */
+
+}
+
+.anuncios.open-filter {
+  margin-left: 320px;
+}
+
+.anuncio {
+  background-color: #fff; /* Fondo blanco */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Una ligera sombra al pasar el ratón */
+  border-radius: 15px; /* Sin bordes redondeados */
+  padding: 5px; /* Espacio interno pequeño */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  transition: transform 0.2s ease-in-out;
+  position: relative; /* Para el posicionamiento absoluto del corazón */
+}
+
+.anuncio:hover {
+  transform: scale(1.01);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Una ligera sombra al pasar el ratón */
+}
+
+.anuncio-link {
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.anuncio-imagen {
+  width: 80%; /* Ajusta el tamaño de la imagen */
+  height: 17em;
+  margin-bottom: 15px;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+}
+
+.anuncio-imagen img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: contain; /* Ajusta según necesites: contain, cover, etc. */
+}
+
+.anuncio h3 {
+  margin-top: 5px;
+  margin-bottom: 3px;
+  font-size: 0.9em;
+  color: white;
+}
+
+.anuncio .precio {
+  font-weight: bold;
+  color: #DE9929;
+  font-size: 0.8em;
+  margin-bottom: 5px;
+}
+
+.like-button {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  outline: none;
+  z-index: 0;
+}
+
+.heart-icon {
+  fill: #aaa;
+  width: 2em;
+  height: 2em;
+  transition: fill 0.3s ease-in-out;
+  z-index: 0;
+}
+
+.like-button.liked .heart-icon {
+  fill: red;
+    z-index: 0;
+
+}
+
+.no-anuncios {
+  padding: 20px;
+  text-align: center;
+  color: #777;
+  font-size: 1em;
+}
+
+.anuncio-info {
+  width: 100%;
+  padding-top: 7px;
+  background-color: black;
+  border-radius: 10px;
+}
+
+/* Media queries para hacerlo más responsivo */
+@media (max-width: 600px) {
+  .anuncios {
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  }
+
+  .anuncio-imagen {
+      width: 95%;
+  }
+
+  .anuncio h3 {
+      font-size: 0.8em;
+  }
+
+  .anuncio .precio {
+      font-size: 0.7em;
+  }
+
+  .heart-icon {
+      width: 0.9em;
+      height: 0.9em;
+  }
+}
+
+     .anuncios {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 20px;
+        padding: 20px;
+        margin-left: 20px; /* Espacio inicial */
+        transition: margin-left 0.3s ease-in-out;
+    }
+
+        .anuncios.open-filter {
+            margin-left: 320px; /* Espacio para el panel de filtros abierto */
+        }
+
+        .filter-container .filter-toggle-btn {
+        display: none;
+    }
+
+        .anuncio {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            transition: transform 0.3s ease;
+            cursor: pointer;
+            position: relative; /* Para posicionar el icono de me gusta */
+        }
+
+        .anuncio:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Estilos para la imagen del anuncio */
+        .anuncio-imagen-container {
+            width: 150px; /* Ancho fijo para todas las imágenes */
+            height: 150px; /* Alto fijo para todas las imágenes */
+            overflow: hidden; /* Recortar si la imagen no coincide con las dimensiones */
+            margin-bottom: 10px;
+            border-radius: 4px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .anuncio-imagen-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Cubrir el contenedor manteniendo la proporción */
+        }
+
+        .anuncio h3 {
+            margin-top: 0;
+            margin-bottom: 8px;
+            font-size: 1.1em;
+            color: white;
+        }
+
+        .anuncio .precio {
+            font-weight: bold;
+            color: #DE9929;
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+
+        /* Estilos para el icono de me gusta y la animación */
+        .like-icon {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            font-size: 1.5em;
+            color: #aaa;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .like-icon:hover {
+            color: red;
+        }
+
+        .like-icon.liked {
+            color: red;
+        }
+
+        .like-icon::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background-color: rgba(255, 0, 0, 0.5);
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(0);
+            transition: width 0.3s ease-out, height 0.3s ease-out, opacity 0.3s ease-out;
+        }
+
+        .like-icon.liked::before {
+            width: 20px;
+            height: 20px;
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        @media (max-width: 480px) {
+        .anuncios {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            padding: 10px;
+        }
+
+        .anuncio-imagen {
+            height: 8em; /* Reducir altura de la imagen */
+        }
+
+        .anuncio h3 {
+            font-size: 0.8em;
+        }
+
+        .anuncio .precio {
+            font-size: 0.7em;
+        }
+
+        .heart-icon {
+            width: 1em;
+            height: 1em;
+        }
+    }
+
+    /* Pantallas pequeñas: ajustar un poco el tamaño */
+    @media (min-width: 481px) and (max-width: 768px) {
+        .anuncios {
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 12px;
+            padding: 12px;
+        }
+
+        .anuncio-imagen {
+            height: 10em;
+        }
+
+        .anuncio h3 {
+            font-size: 0.85em;
+        }
+
+        .anuncio .precio {
+            font-size: 0.75em;
+        }
+
+        .heart-icon {
+            width: 1.1em;
+            height: 1.1em;
+        }
+    }

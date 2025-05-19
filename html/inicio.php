@@ -85,6 +85,8 @@ $result = $conn->query($sql);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CardCapture - Anuncios de <?php echo $categoria; ?></title>
+        <link rel="shortcut icon" href="../img/logo.png" />
+
     <link rel="stylesheet" href="../css/css.css">
     <link rel="stylesheet" href="../css/PAGINIcssHeaderFooter.css">
     <style>
@@ -116,17 +118,17 @@ $result = $conn->query($sql);
             background-color: #f5b854;
         }
         .filter-tab.open {
-        left: 300px; /* Ancho del panel de filtro */
+        left: 340px; /* Ancho del panel de filtro */
     }
         .filter-panel {
             position: fixed;
             top: 80px; /* Ajuste: Disminuí el valor de top */
-            left: -320px; /* Oculto inicialmente */
+            left: -350px; /* Oculto inicialmente */
             width: 300px;
             background-color: white;
             color: black;
             border-right: 1px solid #DE9929;
-            padding: 20px;
+            padding: 40px;
             border-radius: 10px;
             box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
             transition: left 0.3s ease-in-out;
@@ -136,6 +138,12 @@ $result = $conn->query($sql);
             border: none;
             background-color: white;
             margin-left: -.9em;
+        }
+
+        .filter-tab-btn img {
+            width: 20px;
+            height: 20px;
+            margin-left: 10px;
         }
 
 
@@ -430,110 +438,13 @@ $result = $conn->query($sql);
         }
     }
 
-        /* Estilos para las sugerencias de búsqueda */
-        #suggestions {
-        position: absolute;
-        top: calc(100% + 5px); /* Ajustar la distancia */
-        left: 0;
-        width: 100%;
-        background-color: #fff; /* Fondo blanco para coincidir con los anuncios */
-        border: 1px solid #ddd; /* Borde sutil */
-        border-top: none;
-        border-radius: 8px; /* Bordes ligeramente redondeados */
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra suave */
-        z-index: 10;
-        list-style: none;
-        padding: 0;
-        margin: 0;
-        font-size: 0.9em; /* Tamaño de fuente un poco más pequeño */
-    }
 
-    #suggestions li {
-        padding: 8px 12px; /* Espacio interior reducido */
-        cursor: pointer;
-        transition: background-color 0.2s ease-in-out;
-        color: #333; /* Color de texto oscuro */
-            border-radius: 8px; /* Bordes ligeramente redondeados */
-
-    }
-
-    #suggestions li:hover {
-        background-color: #f5f5f5; /* Gris muy claro al pasar el ratón */
-    border-radius: 8px; /* Bordes ligeramente redondeados */
-
-    }
-
-    .divSearch {
-        position: relative;
-        width: 40%; /* Mantener el ancho */
-        margin-left: -5em; /* Mantener el margen */
-    }
-    .divSearch input[type=text] {
-        padding: 8px; /* Reducir el padding */
-        border: 1px solid #ccc;
-        border-radius: 8px; /* Bordes ligeramente redondeados */
-        margin: 0;
-        width: 100%;
-        height: 2.2em; /* Reducir la altura */
-        font-size: 0.9em; /* Reducir el tamaño de la fuente */
-        background-color: #f9f9f9; /* Fondo claro */
-        color: #333;
-    }
-
-    .divSearch input[type=text]:focus {
-        outline: none;
-        border-color: #DE9929; /* Usar tu color amarillo/dorado al enfocar */
-        box-shadow: 0 0 5px rgba(222, 153, 41, 0.5); /* Sombra suave con tu color */
-    }
-
-    .divSearch .lupa {
-        position: absolute;
-        right: 5px;
-        top: 50%;
-        transform: translateY(-50%);
-        width: 1.5em; /* Reducir el tamaño de la lupa */
-        height: auto;
-        cursor: pointer;
-        opacity: 0.6; /* Lupa un poco más sutil */
-        transition: opacity 0.2s ease-in-out;
-    }
-
-    .divSearch .lupa:hover {
-        opacity: 1;
-
-    }
-
-    @media (max-width: 800px) {
-        .divSearch {
-            width: 80%;
-            margin-left: -20em;
-            margin-top: 5em;
-        }
-        .divSearch input[type=text] {
-            /* Los estilos base ya están definidos */
-        }
-        .divSearch .lupa {
-            margin-left: 93%;
-            width: 1.8em; /* Ajustar tamaño en pantallas pequeñas */
-        }
-    }
-
-    @media (max-width: 1300px) {
-        .divSearch .lupa {
-            margin-left: 90%;
-        }
-    }
     </style>
 </head>
 <body>
 <header class="headerx">
-        <div class="logo">CARDCAPTURE</div>
-        <div class="divSearch">
-            <input type="text" class="search" id="searchInput" placeholder="Buscar anuncios...">
-            <img src="../img/lupa.png" alt="" class="lupa">
-            <ul id="suggestions"></ul>
-            <input type="hidden" id="hiddenSearchInput" name="search">
-        </div >
+        <div class="logo" id="logoInicio">CARDCAPTURE</div>
+        
         <div class="user-menu">
             <div class="iconx" id="userIcon">
                 <img src="../img/user.png" class="user-icon" alt="">
@@ -543,7 +454,7 @@ $result = $conn->query($sql);
                     <li><a href="../html/InicioSesion.html">Iniciar Sesión</a></li>
                 <?php else: ?>
                     <li><a href="../html/perfil.php">Perfil</a></li>
-                    <li><a href="#">Me gusta</a></li>
+                    <li><a href="../html/meGusta.php">Me gusta</a></li>
                     <li><a href="../html/publicaciones.html">Venda</a></li>
                     <li><a href="../html/chat.php">Bústia</a></li>
                     <li><a href="../php/logout.php">Cerrar Sesión</a></li>
@@ -551,20 +462,19 @@ $result = $conn->query($sql);
             </ul>
         </div>
     </header>
+    <div class="divSearch">
+            <input type="text" class="search" id="searchInput" placeholder="Buscar anuncios...">
+            <ul id="suggestions"></ul>
+            <input type="hidden" id="hiddenSearchInput" name="search">
+    </div >
+
     <script src="../js/scriptHeader.js"></script>
-
-    <div class="paTras">
-        <a href="../index.php" class="tornar">&#8592; Volver al Inicio</a>
-    </div>
-
     <div class="filter-container">
         <button class="filter-toggle-btn">Mostrar Filtros</button>
     </div>
     <div class="filter-tab">
     <button class="filter-tab-btn">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="filter-icon">
-    <path fill-rule="evenodd" d="M15.97 16.78a.75.75 0 01-1.06 0l-5.75-5.75a.75.75 0 011.06-1.06L15.44 15.94l5.75-5.75a.75.75 0 011.06 1.06l-5.75 5.75z" clip-rule="evenodd" />
-</svg>
+        <img src="../img/filtro.png" alt="">
     </button>
 </div>
     <div class="filter-panel">
@@ -676,231 +586,257 @@ $result = $conn->query($sql);
 <div class="footer-bottom">
 <p id="footerText">&copy; 2025 CardCapture. Todos los derechos reservados.</p>
 </div>
-<canvas id="footerCanvas"></canvas> <script src="../js/footerAnimation.js"></script>
 </footer>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const filterTabBtn = document.querySelector('.filter-tab-btn');
-        const filterPanel = document.querySelector('.filter-panel');
-        const anunciosSection = document.querySelector('.anuncios');
-        const filterTab = document.querySelector('.filter-tab'); // Nueva referencia
-        const rangeInput = document.querySelectorAll('.range-input input');
-        const priceInput = document.querySelectorAll('.price-inputs input');
-        const range = document.querySelector('.range-slider');
-        const rangeSelected = document.querySelector('.range-selected');
-        const precioMinHidden = document.querySelector('#precio_min_hidden');
-        const precioMaxHidden = document.querySelector('#precio_max_hidden');
-        let priceGap = 1;
-        let isFilterOpen = false;
-        const mobileBreakpoint = 768;
-        const likeButtons = document.querySelectorAll('.like-button');
-        const searchInput = document.getElementById('searchInput');
-        const suggestionsList = document.getElementById('suggestions');
-        const hiddenSearchInput = document.getElementById('hiddenSearchInput');
-        let searchTimeout; // Para controlar las peticiones AJAX
+    const filterTabBtn = document.querySelector('.filter-tab-btn');
+    const filterPanel = document.querySelector('.filter-panel');
+    const anunciosSection = document.querySelector('.anuncios');
+    const filterTab = document.querySelector('.filter-tab');
+    const rangeInput = document.querySelectorAll('.range-input input');
+    const priceInput = document.querySelectorAll('.price-inputs input');
+    const range = document.querySelector('.range-slider');
+    const rangeSelected = document.querySelector('.range-selected');
+    const precioMinHidden = document.querySelector('#precio_min_hidden');
+    const precioMaxHidden = document.querySelector('#precio_max_hidden');
+    let priceGap = 1;
+    let isFilterOpen = false;
+    const mobileBreakpoint = 768;
+    const likeButtons = document.querySelectorAll('.like-button');
+    const searchInput = document.getElementById('searchInput');
+    const suggestionsList = document.getElementById('suggestions');
+    const hiddenSearchInput = document.getElementById('hiddenSearchInput');
+    const logoInicio = document.getElementById('logoInicio');
+    const header = document.querySelector('.headerx'); // Selecciona el header
+    const searchMenu = document.querySelector('.divSearch'); // Selecciona la barra de búsqueda
+    const mainContent = document.querySelector('main'); // Selecciona el elemento main
 
-        // Establecer el máximo del slider
-        const maxRange = <?php echo $maxSlider; ?>;
-        rangeInput.forEach(input => {
-            input.max = maxRange;
+    let isSticky = false; // Variable para rastrear si la barra de búsqueda es sticky
+    let searchTimeout; // Para controlar las peticiones AJAX
+
+    // Establecer el máximo del slider
+    const maxRange = <?php echo $maxSlider; ?>;
+    rangeInput.forEach(input => {
+        input.max = maxRange;
+    });
+    priceInput[0].max = maxRange;
+    priceInput[1].max = maxRange;
+
+    // Establecer valores iniciales
+    rangeInput[0].value = <?php echo $precioMin; ?>;
+    rangeInput[1].value = <?php echo $precioMax; ?>;
+
+    if (logoInicio) {
+        logoInicio.addEventListener('click', function() {
+            window.location.href = '../index.php';
         });
-        priceInput[0].max = maxRange;
-        priceInput[1].max = maxRange;
+        // Añadir un estilo para indicar que es clickable (opcional)
+        logoInicio.style.cursor = 'pointer';
+    }
 
-        // Establecer valores iniciales
-        rangeInput[0].value = <?php echo $precioMin; ?>;
-        rangeInput[1].value = <?php echo $precioMax; ?>;
-
-        function updateRange() {
-            const minVal = parseInt(rangeInput[0].value);
-            const maxVal = parseInt(rangeInput[1].value);
-            if (maxVal - minVal < priceGap) {
-                if (this.className === "min-price-slider") {
-                    rangeInput[0].value = maxVal - priceGap;
-                } else {
-                    rangeInput[1].value = minVal + priceGap;
-                }
-            }
-            priceInput[0].value = minVal;
-            priceInput[1].value = maxVal;
-            precioMinHidden.value = minVal;
-            precioMaxHidden.value = maxVal;
-
-            const progressStart = (minVal / maxRange) * 100;
-            const progressEnd = (maxVal / maxRange) * 100;
-            rangeSelected.style.left = progressStart + "%";
-            rangeSelected.style.right = (100 - progressEnd) + "%";
-        }
-
-        rangeInput.forEach(input => {
-            input.addEventListener('input', updateRange);
-        });
-
-        priceInput.forEach(input => {
-            input.addEventListener('input', function() {
-                let minPrice = parseInt(priceInput[0].value);
-                let maxPrice = parseInt(priceInput[1].value);
-
-                if (maxPrice - minPrice < priceGap) {
-                    if (this.id === "price-min-input") {
-                        priceInput[0].value = maxPrice - priceGap;
-                    } else {
-                        priceInput[1].value = minPrice + priceGap;
-                    }
-                }
-
-                rangeInput[0].value = minPrice;
-                rangeInput[1].value = maxPrice;
-                precioMinHidden.value = minPrice;
-                precioMaxHidden.value = maxPrice;
-                updateRange();
-            });
-        });
-
-        updateRange(); // Inicializar el rango visual
-
-        if (filterTabBtn && filterPanel && anunciosSection && filterTab) {
-            filterTabBtn.addEventListener('click', function() {
-                isFilterOpen = !isFilterOpen;
-                filterPanel.classList.toggle('open');
-                anunciosSection.classList.toggle('open-filter');
-                filterTab.classList.toggle('open');
-            });
-        }
-
-        function checkMobileView() {
-            if (window.innerWidth <= mobileBreakpoint && isFilterOpen) {
-                anunciosSection.classList.add('filter-open-mobile');
+    function updateRange() {
+        const minVal = parseInt(rangeInput[0].value);
+        const maxVal = parseInt(rangeInput[1].value);
+        if (maxVal - minVal < priceGap) {
+            if (this.className === "min-price-slider") {
+                rangeInput[0].value = maxVal - priceGap;
             } else {
-                anunciosSection.classList.remove('filter-open-mobile');
+                rangeInput[1].value = minVal + priceGap;
             }
         }
+        priceInput[0].value = minVal;
+        priceInput[1].value = maxVal;
+        precioMinHidden.value = minVal;
+        precioMaxHidden.value = maxVal;
 
-        window.addEventListener('resize', checkMobileView);
-        checkMobileView();
+        const progressStart = (minVal / maxRange) * 100;
+        const progressEnd = (maxVal / maxRange) * 100;
+        rangeSelected.style.left = progressStart + "%";
+        rangeSelected.style.right = (100 - progressEnd) + "%";
+    }
 
-        likeButtons.forEach(button => {
-            button.addEventListener('click', function(event) {
-                event.preventDefault();
-                this.classList.toggle('liked');
-                const publicacionId = this.dataset.publicacionId;
-                const isLiked = this.classList.contains('liked');
+    rangeInput.forEach(input => {
+        input.addEventListener('input', updateRange);
+    });
 
-                fetch('../php/favoritos.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded'
-                    },
-                    body: `publicacion_id=${publicacionId}&accion=${isLiked ? 'agregar' : 'eliminar'}`
-                })
-                .then(response => response.text())
-                .then(data => {
-                    console.log(data);
-                })
-                .catch(error => {
-                    console.error('Error al actualizar favoritos:', error);
-                });
-            });
-        });
+    priceInput.forEach(input => {
+        input.addEventListener('input', function() {
+            let minPrice = parseInt(priceInput[0].value);
+            let maxPrice = parseInt(priceInput[1].value);
 
-        function cargarEstadoFavoritos() {
-            fetch('../php/favoritos.php?accion=obtener_favoritos')
-            .then(response => response.json())
-            .then(favoritos => {
-                likeButtons.forEach(button => {
-                    const publicacionId = button.dataset.publicacionId;
-                    if (favoritos.includes(publicacionId)) {
-                        button.classList.add('liked');
-                    }
-                });
-            })
-            .catch(error => {
-                console.error('Error al cargar favoritos:', error);
-            });
-        }
-
-        cargarEstadoFavoritos();
-
-        // Funcionalidad de búsqueda con sugerencias INSTANTÁNEAS
-        searchInput.addEventListener('input', function() {
-            const query = this.value.trim();
-            hiddenSearchInput.value = query;
-
-            // Limpiar el timeout anterior para evitar peticiones innecesarias
-            clearTimeout(searchTimeout);
-
-            if (query.length >= 2) {
-                // Establecer un pequeño delay antes de hacer la petición
-                searchTimeout = setTimeout(function() {
-                    fetchSuggestions(query);
-                }, 200); // 200 milisegundos de espera
-            } else {
-                suggestionsList.innerHTML = '';
-            }
-        });
-
-        function fetchSuggestions(query) {
-            fetch(`../php/buscar_sugerencias.php?categoria=<?php echo $categoria; ?>&term_inicio=${query}`)
-            .then(response => response.json())
-            .then(data => {
-                suggestionsList.innerHTML = '';
-                if (data.length > 0) {
-                    data.forEach(suggestion => {
-                        const li = document.createElement('li');
-                        li.textContent = suggestion;
-                        li.addEventListener('click', function() {
-                            searchInput.value = suggestion;
-                            hiddenSearchInput.value = suggestion;
-                            suggestionsList.innerHTML = '';
-                            // Enviar el formulario al seleccionar una sugerencia
-                            const form = this.closest('form');
-                            if (form) {
-                                form.submit();
-                            } else {
-                                window.location.href = `?categoria=<?php echo $categoria; ?>&search=${suggestion}`;
-                            }
-                        });
-                        suggestionsList.appendChild(li);
-                    });
-                }
-            })
-            .catch(error => {
-                console.error('Error al obtener sugerencias:', error);
-            });
-        }
-
-        // Mantener el término de búsqueda al cargar la página
-        const initialSearchTerm = "<?php echo $searchTerm; ?>";
-        if (initialSearchTerm) {
-            searchInput.value = initialSearchTerm;
-            hiddenSearchInput.value = initialSearchTerm;
-        }
-
-        // Enviar el formulario al hacer clic en la lupa
-        const searchButton = document.querySelector('.divSearch .lupa');
-        if (searchButton) {
-            searchButton.addEventListener('click', function() {
-                const form = this.closest('form');
-                if (form) {
-                    form.submit();
+            if (maxPrice - minPrice < priceGap) {
+                if (this.id === "price-min-input") {
+                    priceInput[0].value = maxPrice - priceGap;
                 } else {
-                    window.location.href = `?categoria=<?php echo $categoria; ?>&search=${searchInput.value}`;
-                }
-            });
-        }
-
-        // Enviar el formulario al presionar Enter en el input de búsqueda
-        searchInput.addEventListener('keypress', function(event) {
-            if (event.key === 'Enter') {
-                event.preventDefault();
-                const form = this.closest('form');
-                if (form) {
-                    form.submit();
-                } else {
-                    window.location.href = `?categoria=<?php echo $categoria; ?>&search=${this.value}`;
+                    priceInput[1].value = minPrice + priceGap;
                 }
             }
+
+            rangeInput[0].value = minPrice;
+            rangeInput[1].value = maxPrice;
+            precioMinHidden.value = minPrice;
+            precioMaxHidden.value = maxPrice;
+            updateRange();
         });
     });
+
+    updateRange(); // Inicializar el rango visual
+
+    if (filterTabBtn && filterPanel && anunciosSection && filterTab) {
+        filterTabBtn.addEventListener('click', function() {
+            isFilterOpen = !isFilterOpen;
+            filterPanel.classList.toggle('open');
+            filterTab.classList.toggle('open');
+        });
+    }
+
+    function checkMobileView() {
+        if (window.innerWidth <= mobileBreakpoint && isFilterOpen) {
+            anunciosSection.classList.add('filter-open-mobile');
+        } else {
+            anunciosSection.classList.remove('filter-open-mobile');
+        }
+    }
+
+    window.addEventListener('resize', checkMobileView);
+    checkMobileView();
+
+    likeButtons.forEach(button => {
+        button.addEventListener('click', function(event) {
+            event.preventDefault();
+            this.classList.toggle('liked');
+            const publicacionId = this.dataset.publicacionId;
+            const isLiked = this.classList.contains('liked');
+
+            fetch('../php/favoritos.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: `publicacion_id=${publicacionId}&accion=${isLiked ? 'agregar' : 'eliminar'}`
+            })
+            .then(response => response.text())
+            .then(data => {
+                console.log(data);
+            })
+            .catch(error => {
+                console.error('Error al actualizar favoritos:', error);
+            });
+        });
+    });
+
+    function cargarEstadoFavoritos() {
+        fetch('../php/favoritos.php?accion=obtener_favoritos')
+        .then(response => response.json())
+        .then(favoritos => {
+            likeButtons.forEach(button => {
+                const publicacionId = button.dataset.publicacionId;
+                if (favoritos.includes(publicacionId)) {
+                    button.classList.add('liked');
+                }
+            });
+        })
+        .catch(error => {
+            console.error('Error al cargar favoritos:', error);
+        });
+    }
+
+    cargarEstadoFavoritos();
+
+    // Funcionalidad de búsqueda con sugerencias INSTANTÁNEAS
+    searchInput.addEventListener('input', function() {
+        const query = this.value.trim();
+        hiddenSearchInput.value = query;
+
+        // Limpiar el timeout anterior para evitar peticiones innecesarias
+        clearTimeout(searchTimeout);
+
+        if (query.length >= 2) {
+            // Establecer un pequeño delay antes de hacer la petición
+            searchTimeout = setTimeout(function() {
+                fetchSuggestions(query);
+            }, 200); // 200 milisegundos de espera
+        } else {
+            suggestionsList.innerHTML = '';
+        }
+    });
+
+    function fetchSuggestions(query) {
+        fetch(`../php/buscar_sugerencias.php?categoria=<?php echo $categoria; ?>&term_inicio=${query}`)
+        .then(response => response.json())
+        .then(data => {
+            suggestionsList.innerHTML = '';
+            if (data.length > 0) {
+                data.forEach(suggestion => {
+                    const li = document.createElement('li');
+                    li.textContent = suggestion;
+                    li.addEventListener('click', function() {
+                        searchInput.value = suggestion;
+                        hiddenSearchInput.value = suggestion;
+                        suggestionsList.innerHTML = '';
+                        // Enviar el formulario al seleccionar una sugerencia
+                        const form = this.closest('form');
+                        if (form) {
+                            form.submit();
+                        } else {
+                            window.location.href = `?categoria=<?php echo $categoria; ?>&search=${suggestion}`;
+                        }
+                    });
+                    suggestionsList.appendChild(li);
+                });
+            }
+        })
+        .catch(error => {
+            console.error('Error al obtener sugerencias:', error);
+        });
+    }
+
+    // Mantener el término de búsqueda al cargar la página
+    const initialSearchTerm = "<?php echo $searchTerm; ?>";
+    if (initialSearchTerm) {
+        searchInput.value = initialSearchTerm;
+        hiddenSearchInput.value = initialSearchTerm;
+    }
+
+    // Enviar el formulario al hacer clic en la lupa
+    const searchButton = document.querySelector('.divSearch .lupa');
+    if (searchButton) {
+        searchButton.addEventListener('click', function() {
+            const form = this.closest('form');
+            if (form) {
+                form.submit();
+            } else {
+                window.location.href = `?categoria=<?php echo $categoria; ?>&search=${searchInput.value}`;
+            }
+        });
+    }
+
+    // Enviar el formulario al presionar Enter en el input de búsqueda
+    searchInput.addEventListener('keypress', function(event) {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            const form = this.closest('form');
+            if (form) {
+                form.submit();
+            } else {
+                window.location.href = `?categoria=<?php echo $categoria; ?>&search=${this.value}`;
+            }
+        }
+    });
+
+    // **NUEVO:** Código para hacer la barra de búsqueda sticky y desplazar la ventana
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > header.offsetHeight && !isSticky) {
+            searchMenu.classList.add('sticky');
+            document.body.classList.add('sticky-search');
+            window.scrollTo(0, header.offsetHeight); // Desplaza la ventana hacia abajo
+            isSticky = true;
+        } else if (window.scrollY <= header.offsetHeight && isSticky) {
+            searchMenu.classList.remove('sticky');
+            document.body.classList.remove('sticky-search');
+            isSticky = false;
+        }
+    });
+});
 </script>
