@@ -126,8 +126,8 @@ $categorias = [
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo ($chat_id) ? 'Chat con ' . htmlspecialchars($otro_usuario_nombre) : 'Bústia'; ?></title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap">.
+    <title><?php echo ($chat_id) ? 'Chat con ' . htmlspecialchars($otro_usuario_nombre) : 'Buzón'; ?></title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap">
             <link rel="shortcut icon" href="../img/logo.png" />
 
     <link rel="stylesheet" href="../css/INDEXmain.css">
@@ -145,9 +145,9 @@ $categorias = [
                     <li><a href="./InicioSesion.html">Iniciar Sesión</a></li>
                 <?php else: ?>
                     <li><a href="./perfil.php">Perfil</a></li>
-                    <li><a href="#">Me gusta</a></li>
-                    <li><a href="./publicaciones.html">Venda</a></li>
-                    <li><a href="./chat.php">Bústia</a></li>
+                    <li><a href="#">Favoritos</a></li>
+                    <li><a href="./publicaciones.php">Venta</a></li>
+                    <li><a href="./chat.php">Buzón</a></li>
                     <li><a href="../php/logout.php">Cerrar Sesión</a></li>
                 <?php endif; ?>
             </ul>
@@ -214,7 +214,7 @@ $categorias = [
             </div>
         <?php else: ?>
             <div class="chat-list">
-                <h2>Bústia
+                <h2>Buzón
                             <img src="../img/buzon.png" alt="Icono Buzón"> 
 
                 </h2>

@@ -14,6 +14,7 @@
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
+
 .chat-list {
     width: 100%;
     padding: 0;
@@ -279,24 +280,24 @@
 
 .chat-principal .mensaje-propio {
     align-self: flex-end;
-    background-color: #dcf8c6;
-    color: #1a1a1a;
+    background-color: #6a93bd ;
+    color: white;
 }
 
 .chat-principal .mensaje-ajeno {
-    background-color: #e0e0e0;
+    background-color: #fbd782 ;
     color: #1a1a1a;
 }
 
 .chat-principal .mensaje-fecha {
     font-size: 0.7em;
-    color: #757575;
+    color: black;
     margin-top: 3px;
 }
 
 .chat-principal .mensaje-leido {
     font-size: 0.7em;
-    color: #757575;
+    color: black;
     align-self: flex-end;
     margin-top: 3px;
 }

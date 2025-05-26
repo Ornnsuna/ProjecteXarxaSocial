@@ -3,10 +3,31 @@ session_start();
 $sesionIniciada = isset($_SESSION['user_id']);
 
 // Incluir el archivo de conexión a la base de datos
-include '../php/db.php';
+include '../php/db.php'; // Asegúrate de que $conn está inicializado
 
-// Obtener la categoría de la URL
-$categoria = $_GET['categoria'];
+// --- Nuevas constantes para la escala del slider ---
+define('SLIDER_SCALE_MIN', 0);
+define('SLIDER_SCALE_MAX', 3000); // Precisión de la escala interna del slider
+define('SLIDER_EXPONENT', 2.0);   // Exponente para la curva (2.0 para cuadrática, >1 para acelerar al final)
+define('PRICE_MIN_GAP', 1);       // Diferencia mínima de precio en euros
+
+// --- Función helper en PHP para mapear precio a valor de slider ---
+function phpMapPriceToSlider($price, $actualMin, $actualMax, $sliderMin, $sliderMax, $exp) {
+    if ($exp == 0) return $sliderMin;
+    if ($actualMax <= $actualMin) { // Si el rango de precios es inválido o cero
+        return ($price <= $actualMin) ? $sliderMin : $sliderMax;
+    }
+    $price = max($actualMin, min($actualMax, $price)); // Asegurar que el precio está dentro de los límites reales
+    $normalizedPrice = ($price - $actualMin) / ($actualMax - $actualMin);
+    if ($normalizedPrice < 0) $normalizedPrice = 0; // Por si acaso con floats
+    if ($normalizedPrice > 1) $normalizedPrice = 1;
+
+    $powerVal = pow($normalizedPrice, 1 / $exp);
+    return round($sliderMin + ($sliderMax - $sliderMin) * $powerVal);
+}
+
+// Obtener la categoría de la URL y sanitizarla
+$categoria = isset($_GET['categoria']) ? $conn->real_escape_string($_GET['categoria']) : '';
 
 // Consulta SQL base
 $sql = "SELECT p.* FROM publicacions p WHERE p.categoria = '$categoria'";
@@ -14,69 +35,87 @@ $sql = "SELECT p.* FROM publicacions p WHERE p.categoria = '$categoria'";
 // Si hay una sesión iniciada, filtrar los anuncios del usuario actual
 if ($sesionIniciada) {
     $usuario_id = $_SESSION['user_id'];
-    $sql .= " AND p.usuario_id != $usuario_id";
+    $sql .= " AND p.usuario_id != " . intval($usuario_id);
 }
 
 // Variables para los filtros
 $orderBy = isset($_GET['orden']) ? $_GET['orden'] : 'fecha_actualizacion_desc';
-$precioMin = isset($_GET['precio_min']) ? $_GET['precio_min'] : 0;
-$precioMax = isset($_GET['precio_max']) ? $_GET['precio_max'] : 20000;
+
+// Obtener el rango de precios máximo real de la base de datos
+$sqlMaxPrecio = "SELECT MAX(precio) AS max_precio FROM publicacions WHERE categoria = '$categoria'";
+$resultMaxPrecio = $conn->query($sqlMaxPrecio);
+$maxPrecioDB = 0;
+if ($resultMaxPrecio && $resultMaxPrecio->num_rows > 0) {
+    $rowMaxPrecio = $resultMaxPrecio->fetch_assoc();
+    $maxPrecioDB = $rowMaxPrecio['max_precio'] ?? 20000;
+} else {
+    $maxPrecioDB = 20000; // Valor por defecto si no hay anuncios o error
+}
+$maxSliderActual = max(20000, floatval($maxPrecioDB)); // Precio máximo REAL que se usará en los sliders y filtros
+
+// Obtener precioMin y precioMax de GET, con defaults
+$precioMin = isset($_GET['precio_min']) ? floatval($_GET['precio_min']) : 0;
+$precioMax = isset($_GET['precio_max']) ? floatval($_GET['precio_max']) : $maxSliderActual;
+
+// Validar y ajustar precioMin y precioMax
+$precioMin = max(0, min($precioMin, $maxSliderActual));
+$precioMax = max(0, min($precioMax, $maxSliderActual));
+if ($precioMin > $precioMax) {
+    $precioMin = $precioMax; // O $temp = $precioMin; $precioMin = $precioMax; $precioMax = $temp;
+}
+// Aplicar PRICE_MIN_GAP en PHP para los valores iniciales
+if ($precioMax - $precioMin < PRICE_MIN_GAP && !($precioMin == 0 && $precioMax == 0) ) {
+    if ($precioMax == $maxSliderActual) { // Si max está al tope, ajustar min
+        $precioMin = max(0, $precioMax - PRICE_MIN_GAP);
+    } else { // Ajustar max
+        $precioMax = min($maxSliderActual, $precioMin + PRICE_MIN_GAP);
+    }
+}
+
+
 $fechaFiltro = isset($_GET['fecha_filtro']) ? $_GET['fecha_filtro'] : '';
-$searchTerm = isset($_GET['search']) ? $_GET['search'] : ''; // Nuevo: término de búsqueda
+$searchTerm = isset($_GET['search']) ? $_GET['search'] : '';
 
 // Función para añadir filtros de fecha a la consulta SQL
-function aplicarFiltroFecha($sql, $fechaFiltro) {
+function aplicarFiltroFecha($sql_query, $fecha_filtro_val) {
     $hoy = date("Y-m-d H:i:s");
-    if ($fechaFiltro === 'dia') {
+    if ($fecha_filtro_val === 'dia') {
         $ayer = date("Y-m-d 00:00:00", strtotime("-1 day"));
-        $sql .= " AND p.fecha_actualizacion >= '$ayer' AND p.fecha_actualizacion <= '$hoy'";
-    } elseif ($fechaFiltro === 'semana') {
+        $sql_query .= " AND p.fecha_actualizacion >= '$ayer' AND p.fecha_actualizacion <= '$hoy'";
+    } elseif ($fecha_filtro_val === 'semana') {
         $semanaPasada = date("Y-m-d 00:00:00", strtotime("-7 days"));
-        $sql .= " AND p.fecha_actualizacion >= '$semanaPasada' AND p.fecha_actualizacion <= '$hoy'";
-    } elseif ($fechaFiltro === 'mes') {
+        $sql_query .= " AND p.fecha_actualizacion >= '$semanaPasada' AND p.fecha_actualizacion <= '$hoy'";
+    } elseif ($fecha_filtro_val === 'mes') {
         $mesPasado = date("Y-m-d 00:00:00", strtotime("-1 month"));
-        $sql .= " AND p.fecha_actualizacion >= '$mesPasado' AND p.fecha_actualizacion <= '$hoy'";
+        $sql_query .= " AND p.fecha_actualizacion >= '$mesPasado' AND p.fecha_actualizacion <= '$hoy'";
     }
-    return $sql;
+    return $sql_query;
 }
 
 // Aplicar filtro de búsqueda por nombre
 if (!empty($searchTerm)) {
-    $searchTerm = $conn->real_escape_string($searchTerm);
-    $sql .= " AND p.titulo LIKE '%$searchTerm%'";
+    $escapedSearchTerm = $conn->real_escape_string($searchTerm);
+    $sql .= " AND p.titulo LIKE '%$escapedSearchTerm%'";
 }
 
-// Aplicar filtros a la consulta SQL
+// Aplicar filtros de fecha a la consulta SQL
+$sql = aplicarFiltroFecha($sql, $fechaFiltro);
+
+// Aplicar filtros de precio a la consulta SQL (usando $precioMin y $precioMax ya validados)
+$sql .= " AND p.precio >= " . floatval($precioMin);
+$sql .= " AND p.precio <= " . floatval($precioMax);
+
+
+// Aplicar el ordenamiento DESPUÉS de todos los filtros WHERE
 if ($orderBy === 'precio_asc') {
     $sql .= " ORDER BY p.precio ASC";
 } elseif ($orderBy === 'precio_desc') {
     $sql .= " ORDER BY p.precio DESC";
+} elseif ($orderBy === 'fecha_actualizacion_desc') {
+    $sql .= " ORDER BY p.fecha_actualizacion DESC";
 }
-
-$sql = aplicarFiltroFecha($sql, $fechaFiltro);
-
-if ($precioMin !== null && $precioMin !== '') {
-    $sql .= " AND p.precio >= $precioMin";
-} else {
-    $sql .= " AND p.precio >= 0"; // Asegurar un mínimo de 0 si no se establece
-}
-
-if ($precioMax !== null && $precioMax !== '') {
-    $sql .= " AND p.precio <= $precioMax";
-} else {
-    $sql .= " AND p.precio <= 20000"; // Asegurar un máximo de 20000 si no se establece
-}
-
-// Obtener el rango de precios máximo real de la base de datos (opcional, para un slider más dinámico)
-$sqlMaxPrecio = "SELECT MAX(precio) AS max_precio FROM publicacions WHERE categoria = '$categoria'";
-$resultMaxPrecio = $conn->query($sqlMaxPrecio);
-$maxPrecioDB = $resultMaxPrecio->fetch_assoc()['max_precio'] ?? 20000; // Valor por defecto si no hay anuncios
-
-$maxSlider = max(20000, $maxPrecioDB); // Usar 20000 o el máximo de la DB
 
 $result = $conn->query($sql);
-
-// Consulta para sugerencias de búsqueda (no se usa directamente aquí, se usa en buscar_sugerencias.php)
 ?>
 
 <!DOCTYPE html>
@@ -84,378 +123,25 @@ $result = $conn->query($sql);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CardCapture - Anuncios de <?php echo $categoria; ?></title>
-        <link rel="shortcut icon" href="../img/logo.png" />
-
+    <title>CardCapture - Anuncios de <?php echo htmlspecialchars($categoria); ?></title>
+    <link rel="shortcut icon" href="../img/logo.png" />
     <link rel="stylesheet" href="../css/css.css">
     <link rel="stylesheet" href="../css/PAGINIcssHeaderFooter.css">
-    <style>
-        .filter-container {
-            position: fixed;
-            top: 80px; /* Ajuste: Disminuí el valor de top */
-            left: 10px;
-            z-index: 1001;
-        }
-        .filter-tab {
-        position: fixed;
-        top: 90px; /* Ajusta la posición vertical según necesites */
-        left: 0;
-        z-index: 1002; /* Asegura que esté por encima del contenido */
-        transition: left 0.3s ease-in-out;
-    }
-
-        .filter-toggle-btn {
-            background-color: #DE9929;
-            color: black;
-            border: 1px solid black;
-            padding: 10px 15px;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .filter-toggle-btn:hover {
-            background-color: #f5b854;
-        }
-        .filter-tab.open {
-        left: 340px; /* Ancho del panel de filtro */
-    }
-        .filter-panel {
-            position: fixed;
-            top: 80px; /* Ajuste: Disminuí el valor de top */
-            left: -350px; /* Oculto inicialmente */
-            width: 300px;
-            background-color: white;
-            color: black;
-            border-right: 1px solid #DE9929;
-            padding: 40px;
-            border-radius: 10px;
-            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
-            transition: left 0.3s ease-in-out;
-            z-index: 1000;
-        }
-        .filter-tab-btn {
-            border: none;
-            background-color: white;
-            margin-left: -.9em;
-        }
-
-        .filter-tab-btn img {
-            width: 20px;
-            height: 20px;
-            margin-left: 10px;
-        }
-
-
-        .filter-icon {
-            width: 1.5em;
-            height: 1.5em;
-        }
-
-        .filter-panel.open {
-            left: 0;
-        }
-
-        .filter-group {
-            margin-bottom: 25px;
-        }
-
-        .filter-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
-            color: black;
-        }
-
-        .filter-group select {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            box-sizing: border-box;
-            background-color: white;
-            color: black;
-        }
-
-        /* Estilos para el slider de rango */
-        .range-slider-container {
-            position: relative;
-            width: 100%;
-            height: 40px;
-        }
-
-        .range-slider {
-            position: absolute;
-            width: 100%;
-            height: 5px;
-            background: #ddd;
-            border-radius: 3px;
-            top: 50%;
-            transform: translateY(-50%);
-            z-index: 1;
-        }
-
-        .range-selected {
-            position: absolute;
-            height: 5px;
-            background: #DE9929;
-            border-radius: 3px;
-            top: 50%;
-            transform: translateY(-50%);
-            z-index: 2;
-        }
-
-        .range-input {
-            position: relative;
-        }
-
-        .range-input input {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 100%;
-            height: 5px;
-            background: transparent;
-            pointer-events: none;
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            z-index: 3;
-        }
-
-        .range-input input::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 20px;
-            height: 20px;
-            background: white;
-            border: 1px solid #DE9929;
-            border-radius: 50%;
-            cursor: pointer;
-            pointer-events: auto;
-        }
-
-        .range-input input::-moz-range-thumb {
-            width: 20px;
-            height: 20px;
-            background: white;
-            border: 1px solid #DE9929;
-            border-radius: 50%;
-            cursor: pointer;
-            pointer-events: auto;
-        }
-
-        .price-inputs {
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .price-inputs input[type="number"] {
-            width: 45%;
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            box-sizing: border-box;
-            background-color: white;
-            color: black;
-        }
-
-        .filter-panel button[type="submit"],
-        .filter-panel button.filter-toggle-btn {
-            background-color: #DE9929;
-            color: black;
-            border: 1px solid black;
-            padding: 10px 15px;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            width: 100%;
-            margin-top: 10px;
-            box-sizing: border-box;
-        }
-
-        .filter-panel button[type="submit"]:hover,
-        .filter-panel button.filter-toggle-btn:hover {
-            background-color: #f5b854;
-        }
-
-       .anuncios {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-        gap: 20px;
-        padding: 20px;
-        margin-left: 20px; /* Espacio inicial */
-        transition: margin-left 0.3s ease-in-out;
-    }
-
-        .anuncios.open-filter {
-            margin-left: 320px; /* Espacio para el panel de filtros abierto */
-        }
-
-        .filter-container .filter-toggle-btn {
-        display: none;
-    }
-
-        .anuncio {
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            padding: 15px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            transition: transform 0.3s ease;
-            cursor: pointer;
-            position: relative; /* Para posicionar el icono de me gusta */
-        }
-
-        .anuncio:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-        }
-
-        /* Estilos para la imagen del anuncio */
-        .anuncio-imagen-container {
-            width: 150px; /* Ancho fijo para todas las imágenes */
-            height: 150px; /* Alto fijo para todas las imágenes */
-            overflow: hidden; /* Recortar si la imagen no coincide con las dimensiones */
-            margin-bottom: 10px;
-            border-radius: 4px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .anuncio-imagen-container img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover; /* Cubrir el contenedor manteniendo la proporción */
-        }
-
-        .anuncio h3 {
-            margin-top: 0;
-            margin-bottom: 8px;
-            font-size: 1.1em;
-            color: white;
-        }
-
-        .anuncio .precio {
-            font-weight: bold;
-            color: #DE9929;
-            font-size: 1.5em;
-            margin-bottom: 10px;
-        }
-
-        /* Estilos para el icono de me gusta y la animación */
-        .like-icon {
-            position: absolute;
-            bottom: 10px;
-            right: 10px;
-            font-size: 1.5em;
-            color: #aaa;
-            cursor: pointer;
-            transition: color 0.3s ease;
-        }
-
-        .like-icon:hover {
-            color: red;
-        }
-
-        .like-icon.liked {
-            color: red;
-        }
-
-        .like-icon::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            border-radius: 50%;
-            background-color: rgba(255, 0, 0, 0.5);
-            opacity: 0;
-            transform: translate(-50%, -50%) scale(0);
-            transition: width 0.3s ease-out, height 0.3s ease-out, opacity 0.3s ease-out;
-        }
-
-        .like-icon.liked::before {
-            width: 20px;
-            height: 20px;
-            opacity: 1;
-            transform: translate(-50%, -50%) scale(1);
-        }
-
-        @media (max-width: 480px) {
-        .anuncios {
-            grid-template-columns: repeat(2, 1fr);
-            minmax(100px, 1fr); /* Asegurar un ancho mínimo */
-            gap: 10px;
-            padding: 10px;
-        }
-
-        .anuncio-imagen {
-            height: 8em; /* Reducir altura de la imagen */
-        }
-
-        .anuncio h3 {
-            font-size: 0.8em;
-        }
-
-        .anuncio .precio {
-            font-size: 0.7em;
-        }
-
-        .heart-icon {
-            width: 1em;
-            height: 1em;
-        }
-    }
-
-    /* Pantallas pequeñas: ajustar un poco el tamaño */
-    @media (min-width: 481px) and (max-width: 768px) {
-        .anuncios {
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 12px;
-            padding: 12px;
-        }
-
-        .anuncio-imagen {
-            height: 10em;
-        }
-
-        .anuncio h3 {
-            font-size: 0.85em;
-        }
-
-        .anuncio .precio {
-            font-size: 0.75em;
-        }
-
-        .heart-icon {
-            width: 1.1em;
-            height: 1.1em;
-        }
-    }
-
-
-    </style>
 </head>
 <body>
-<header class="headerx">
+    <header class="headerx">
         <div class="logo" id="logoInicio">CARDCAPTURE</div>
-        
         <div class="user-menu">
             <div class="iconx" id="userIcon">
                 <img src="../img/user.png" class="user-icon" alt="">
             </div>
             <ul class="dropdown" id="dropdownMenu">
                 <?php if (!$sesionIniciada): ?>
-                    <li><a href="../html/InicioSesion.html">Iniciar Sesión</a></li>
+                    <li><a href="../html/InicioSesion.php">Iniciar Sesión</a></li>
                 <?php else: ?>
                     <li><a href="../html/perfil.php">Perfil</a></li>
                     <li><a href="../html/meGusta.php">Me gusta</a></li>
-                    <li><a href="../html/publicaciones.html">Venda</a></li>
+                    <li><a href="../html/publicaciones.php">Venda</a></li>
                     <li><a href="../html/chat.php">Bústia</a></li>
                     <li><a href="../php/logout.php">Cerrar Sesión</a></li>
                 <?php endif; ?>
@@ -463,24 +149,25 @@ $result = $conn->query($sql);
         </div>
     </header>
     <div class="divSearch">
-            <input type="text" class="search" id="searchInput" placeholder="Buscar anuncios...">
-            <ul id="suggestions"></ul>
-            <input type="hidden" id="hiddenSearchInput" name="search">
-    </div >
+        <input type="text" class="search" id="searchInput" placeholder="Buscar anuncios..." value="<?php echo htmlspecialchars($searchTerm); ?>">
+        <ul id="suggestions"></ul>
+        <input type="hidden" id="hiddenSearchInput" name="search" value="<?php echo htmlspecialchars($searchTerm); ?>">
+    </div>
 
     <script src="../js/scriptHeader.js"></script>
     <div class="filter-container">
         <button class="filter-toggle-btn">Mostrar Filtros</button>
     </div>
     <div class="filter-tab">
-    <button class="filter-tab-btn">
-        <img src="../img/filtro.png" alt="">
-    </button>
-</div>
+        <button class="filter-tab-btn">
+            <img src="../img/filtro.png" alt="">
+        </button>
+    </div>
     <div class="filter-panel">
         <h3>Filtrar Anuncios</h3>
         <form action="" method="GET">
-            <input type="hidden" name="categoria" value="<?php echo $categoria; ?>">
+            <input type="hidden" name="categoria" value="<?php echo htmlspecialchars($categoria); ?>">
+            <input type="hidden" name="search" id="formSearchInput" value="<?php echo htmlspecialchars($searchTerm); ?>">
 
             <div class="filter-group">
                 <label for="fecha_filtro">Fecha de Actualización:</label>
@@ -495,348 +182,396 @@ $result = $conn->query($sql);
             <div class="filter-group">
                 <label for="orden">Ordenar por Precio:</label>
                 <select name="orden" id="orden">
-                    <option value="fecha_actualizacion_desc">Sin ordenar por precio</option>
+                    <option value="fecha_actualizacion_desc" <?php if ($orderBy === 'fecha_actualizacion_desc') echo 'selected'; ?>>Sin ordenar por precio</option>
                     <option value="precio_desc" <?php if ($orderBy === 'precio_desc') echo 'selected'; ?>>Más caro primero</option>
                     <option value="precio_asc" <?php if ($orderBy === 'precio_asc') echo 'selected'; ?>>Más barato primero</option>
                 </select>
+            </div>
+
+            <div class="filter-group">
+                <label for="price-range">Rango de Precio (0 - <?php echo number_format($maxSliderActual, 0, ',', '.'); ?> €):</label>
+                <div class="range-slider-container">
+                    <div class="range-slider"></div>
+                    <div class="range-selected"></div>
+                    <div class="range-input">
+                        <input type="range" 
+                               min="<?php echo SLIDER_SCALE_MIN; ?>" 
+                               max="<?php echo SLIDER_SCALE_MAX; ?>" 
+                               value="<?php echo phpMapPriceToSlider($precioMin, 0, $maxSliderActual, SLIDER_SCALE_MIN, SLIDER_SCALE_MAX, SLIDER_EXPONENT); ?>" 
+                               id="min-price-slider">
+                        <input type="range" 
+                               min="<?php echo SLIDER_SCALE_MIN; ?>" 
+                               max="<?php echo SLIDER_SCALE_MAX; ?>" 
+                               value="<?php echo phpMapPriceToSlider($precioMax, 0, $maxSliderActual, SLIDER_SCALE_MIN, SLIDER_SCALE_MAX, SLIDER_EXPONENT); ?>" 
+                               id="max-price-slider">
+                    </div>
                 </div>
+                <div class="price-inputs">
+                    <input type="number" id="price-min-input" value="<?php echo floatval($precioMin); ?>" min="0" max="<?php echo floatval($maxSliderActual); ?>">
+                    <input type="number" id="price-max-input" value="<?php echo floatval($precioMax); ?>" min="0" max="<?php echo floatval($maxSliderActual); ?>">
+                </div>
+                <input type="hidden" name="precio_min" id="precio_min_hidden" value="<?php echo floatval($precioMin); ?>">
+                <input type="hidden" name="precio_max" id="precio_max_hidden" value="<?php echo floatval($precioMax); ?>">
+            </div>
 
-<div class="filter-group">
-    <label for="price-range">Rango de Precio (0 - <?php echo number_format($maxSlider, 0, ',', '.'); ?> €):</label>
-    <div class="range-slider-container">
-        <div class="range-slider"></div>
-        <div class="range-selected"></div>
-        <div class="range-input">
-            <input type="range" min="0" max="<?php echo $maxSlider; ?>" value="<?php echo $precioMin; ?>" id="min-price-slider">
-            <input type="range" min="0" max="<?php echo $maxSlider; ?>" value="<?php echo $precioMax; ?>" id="max-price-slider">
+            <button type="submit">Aplicar Filtros</button>
+        </form>
+    </div>
+
+    <main>
+   <section class="anuncios">
+    <?php
+    if ($result && $result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $sql_primera_imagen = "SELECT imagen FROM galeria_fotos WHERE publicacion_id = " . intval($row['publicacion_id']) . " LIMIT 1";
+            $result_primera_imagen = $conn->query($sql_primera_imagen);
+            $ruta_primera_imagen = '';
+            if ($result_primera_imagen && $result_primera_imagen->num_rows > 0) {
+                $ruta_primera_imagen = $result_primera_imagen->fetch_assoc()['imagen'];
+            }
+
+            echo "<div class='anuncio'>";
+            echo "<a href='detalle_publicacion.php?id=" . intval($row['publicacion_id']) . "' class='anuncio-link'>";
+            echo "<div class='anuncio-imagen-container'>"; // INICIA contenedor de imagen
+
+            if ($ruta_primera_imagen) {
+                echo "<img src='" . htmlspecialchars($ruta_primera_imagen) . "' alt='Imagen del anuncio'>";
+            } else {
+                echo "<img src='../img/placeholder.png' alt='Sin imagen'>";
+            }
+
+            // AHORA EL BOTÓN DE ME GUSTA VA AQUÍ, DENTRO DEL CONTENEDOR DE LA IMAGEN
+            if (isset($_SESSION['user_id'])) {
+                // Tendrías que consultar si el usuario ya le dio like a esta publicación
+                // Por ahora, solo muestra el botón
+                $isLiked = false; // Asume falso por defecto, luego consulta DB si es necesario
+                // Ejemplo: $sql_is_liked = "SELECT COUNT(*) FROM likes WHERE user_id = " . intval($_SESSION['user_id']) . " AND publicacion_id = " . intval($row['publicacion_id']);
+                // $result_is_liked = $conn->query($sql_is_liked);
+                // if ($result_is_liked && $result_is_liked->fetch_row()[0] > 0) { $isLiked = true; }
+
+                echo "<button class='like-button " . ($isLiked ? 'liked' : '') . "' data-publicacion-id='" . intval($row['publicacion_id']) . "'>";
+                // SVG del corazón
+                echo "<svg class='heart-icon' viewBox='0 0 32 29.6'><path d='M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2c6.1-9.3,16-11.8,16-21.2C32,3.8,28.2,0,23.6,0z'/></svg>";
+                echo "</button>";
+            }
+
+            echo "</div>"; // CIERRA contenedor de imagen
+
+            echo "<div class='anuncio-info'>";
+            echo "<h3>" . htmlspecialchars($row['titulo']) . "</h3>";
+            echo "<p class='precio'>" . number_format(floatval($row['precio']), 0, ',', '.') . " €</p>";
+            echo "</div>"; // Cierra anuncio-info
+
+            echo "<p class='fecha-publicacion'>Publicado el: " . (isset($row['fecha_actualizacion']) && $row['fecha_actualizacion'] != '0000-00-00 00:00:00' ? date('d/m/Y', strtotime($row['fecha_actualizacion'])) : 'Fecha no disponible') . "</p>";
+
+            echo "</a>"; // Cierra anuncio-link
+            echo "</div>"; // Cierra anuncio
+        }
+    } else {
+        echo "<p class='no-anuncios'>No hay anuncios disponibles con los filtros seleccionados.</p>";
+    }
+    ?>
+</section>
+    </main>
+    <footer id="footer" class="footer">
+        <div class="footer-container">
+            <div class="footer-logo">
+                <h2 id="footerTitle">CardCapture</h2>
+                <p>Explora, compra y vende cartas de colección fácilmente.</p>
+            </div>
+            <div class="footer-social">
+                <h3>Síguenos</h3>
+                <div class="social-icons">
+                    <a href="https://www.facebook.com/" target="_blank"><img class="icon" src="../img/facebook.png" alt="Facebook"></a>
+                    <a href="https://x.com/home?lang=es" target="_blank"><img class="icon" src="../img/twitter.png" alt="Twitter"></a>
+                    <a href="https://www.instagram.com/" target="_blank"><img class="icon" src="../img/instagram.png" alt="Instagram"></a>
+                </div>
+            </div>
         </div>
-    </div>
-    <div class="price-inputs">
-        <input type="number" id="price-min-input" value="<?php echo $precioMin; ?>">
-        <input type="number" id="price-max-input" value="<?php echo $precioMax; ?>">
-    </div>
-    <input type="hidden" name="precio_min" id="precio_min_hidden" value="<?php echo $precioMin; ?>">
-    <input type="hidden" name="precio_max" id="precio_max_hidden" value="<?php echo $precioMax; ?>">
-</div>
+        <div class="footer-bottom">
+            <p id="footerText">&copy; <?php echo date("Y"); ?> CardCapture. Todos los derechos reservados.</p>
+        </div>
+    </footer>
 
-<button type="submit">Aplicar Filtros</button>
-
-</form>
-</div>
-
-<main>
-    <section class="anuncios">
-        <?php
-        if ($result->num_rows > 0) {
-            while ($row = $result->fetch_assoc()) {
-                $sql_primera_imagen = "SELECT imagen FROM galeria_fotos WHERE publicacion_id = " . $row['publicacion_id'] . " LIMIT 1";
-                $result_primera_imagen = $conn->query($sql_primera_imagen);
-                $ruta_primera_imagen = '';
-                if ($result_primera_imagen && $result_primera_imagen->num_rows > 0) {
-                    $ruta_primera_imagen = $result_primera_imagen->fetch_assoc()['imagen'];
-                }
-
-                echo "<div class='anuncio'>";
-                echo "<a href='detalle_publicacion.php?id=" . $row['publicacion_id'] . "' class='anuncio-link'>";
-                echo "<div class='anuncio-imagen'>";
-                if ($ruta_primera_imagen) {
-                    echo "<img src='" . $ruta_primera_imagen . "' alt='Imagen del anuncio'>";
-                } else {
-                    echo "<img src='../img/placeholder.png' alt='Sin imagen'>";
-                }
-                echo "</div>";
-                echo "<div class='anuncio-info'>";
-                echo "<h3>" . $row['titulo'] . "</h3>";
-                echo "<p class='precio'>" . number_format($row['precio'], 0, ',', '.') . " €</p>";
-                echo "</div>";
-                echo "</a>";
-
-                // Verificar si la sesión del usuario está iniciada
-                if (isset($_SESSION['user_id'])) {
-                    echo "<button class='like-button' data-publicacion-id='" . $row['publicacion_id'] . "'>";
-                    echo "<svg class='heart-icon' viewBox='0 0 32 29.6'>";
-                    echo "<path d='M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2c6.1-9.3,16-11.8,16-21.2C32,3.8,28.2,0,23.6,0z'/>";
-                    echo "</svg>";
-                    echo "</button>";
-                }
-
-                echo "</div>";
-            }
-        } else {
-            echo "<p class='no-anuncios'>No hay anuncios disponibles con los filtros seleccionados.</p>";
-        }
-        ?>
-    </section>
-</main>
-<footer id="footer" class="footer">
-<div class="footer-container">
-<div class="footer-logo">
-    <h2 id="footerTitle">CardCapture</h2>
-    <p>Explora, compra y vende cartas de colección fácilmente.</p>
-</div>
-<div class="footer-social">
-    <h3>Síguenos</h3>
-    <div class="social-icons">
-        <a href="https://www.facebook.com/" target="_blank"><img class="icon" src="../img/facebook.png" alt="Facebook"></a>
-        <a href="https://x.com/home?lang=es" target="_blank"><img class="icon" src="../img/twitter.png" alt="Twitter"></a>
-        <a href="https://www.instagram.com/" target="_blank"><img class="icon" src="../img/instagram.png" alt="Instagram"></a>
-    </div>
-</div>
-</div>
-<div class="footer-bottom">
-<p id="footerText">&copy; 2025 CardCapture. Todos los derechos reservados.</p>
-</div>
-</footer>
-
-<script>
+    <script>
     document.addEventListener('DOMContentLoaded', function() {
-    const filterTabBtn = document.querySelector('.filter-tab-btn');
-    const filterPanel = document.querySelector('.filter-panel');
-    const anunciosSection = document.querySelector('.anuncios');
-    const filterTab = document.querySelector('.filter-tab');
-    const rangeInput = document.querySelectorAll('.range-input input');
-    const priceInput = document.querySelectorAll('.price-inputs input');
-    const range = document.querySelector('.range-slider');
-    const rangeSelected = document.querySelector('.range-selected');
-    const precioMinHidden = document.querySelector('#precio_min_hidden');
-    const precioMaxHidden = document.querySelector('#precio_max_hidden');
-    let priceGap = 1;
-    let isFilterOpen = false;
-    const mobileBreakpoint = 768;
-    const likeButtons = document.querySelectorAll('.like-button');
-    const searchInput = document.getElementById('searchInput');
-    const suggestionsList = document.getElementById('suggestions');
-    const hiddenSearchInput = document.getElementById('hiddenSearchInput');
-    const logoInicio = document.getElementById('logoInicio');
-    const header = document.querySelector('.headerx'); // Selecciona el header
-    const searchMenu = document.querySelector('.divSearch'); // Selecciona la barra de búsqueda
-    const mainContent = document.querySelector('main'); // Selecciona el elemento main
+        const filterTabBtn = document.querySelector('.filter-tab-btn');
+        const filterPanel = document.querySelector('.filter-panel');
+        const anunciosSection = document.querySelector('.anuncios');
+        const filterTab = document.querySelector('.filter-tab');
+        
+        const rangeInput = document.querySelectorAll('.range-input input');
+        const priceInput = document.querySelectorAll('.price-inputs input');
+        const rangeSelected = document.querySelector('.range-selected');
+        const precioMinHidden = document.querySelector('#precio_min_hidden');
+        const precioMaxHidden = document.querySelector('#precio_max_hidden');
+        
+        const likeButtons = document.querySelectorAll('.like-button');
+        const searchInput = document.getElementById('searchInput');
+        const suggestionsList = document.getElementById('suggestions');
+        const hiddenSearchInput = document.getElementById('hiddenSearchInput');
+        const formSearchInput = document.getElementById('formSearchInput');
+        const logoInicio = document.getElementById('logoInicio');
+        const header = document.querySelector('.headerx'); 
+        const searchMenu = document.querySelector('.divSearch'); 
 
-    let isSticky = false; // Variable para rastrear si la barra de búsqueda es sticky
-    let searchTimeout; // Para controlar las peticiones AJAX
+        let searchTimeout;
+        let isFilterOpen = false;
 
-    // Establecer el máximo del slider
-    const maxRange = <?php echo $maxSlider; ?>;
-    rangeInput.forEach(input => {
-        input.max = maxRange;
-    });
-    priceInput[0].max = maxRange;
-    priceInput[1].max = maxRange;
+        // --- Constantes para la escala no lineal del slider de precios ---
+        const ACTUAL_MIN_PRICE = 0;
+        const ACTUAL_MAX_PRICE = parseFloat(<?php echo json_encode($maxSliderActual); ?>);
+        const SLIDER_SCALE_MIN = parseInt(<?php echo json_encode(SLIDER_SCALE_MIN); ?>);
+        const SLIDER_SCALE_MAX = parseInt(<?php echo json_encode(SLIDER_SCALE_MAX); ?>);
+        const SLIDER_EXPONENT = parseFloat(<?php echo json_encode(SLIDER_EXPONENT); ?>);
+        const PRICE_GAP = parseInt(<?php echo json_encode(PRICE_MIN_GAP); ?>); // Diferencia mínima en euros
 
-    // Establecer valores iniciales
-    rangeInput[0].value = <?php echo $precioMin; ?>;
-    rangeInput[1].value = <?php echo $precioMax; ?>;
+        // --- Funciones de mapeo para el slider de precios ---
+        function mapSliderToPrice(sliderValue) {
+            if (ACTUAL_MAX_PRICE <= ACTUAL_MIN_PRICE) return ACTUAL_MIN_PRICE;
+            sliderValue = Math.max(SLIDER_SCALE_MIN, Math.min(SLIDER_SCALE_MAX, sliderValue)); // Clamp sliderValue
 
-    if (logoInicio) {
-        logoInicio.addEventListener('click', function() {
-            window.location.href = '../index.php';
-        });
-        // Añadir un estilo para indicar que es clickable (opcional)
-        logoInicio.style.cursor = 'pointer';
-    }
+            if (sliderValue === SLIDER_SCALE_MIN) return ACTUAL_MIN_PRICE;
+            if (sliderValue === SLIDER_SCALE_MAX) return ACTUAL_MAX_PRICE;
 
-    function updateRange() {
-        const minVal = parseInt(rangeInput[0].value);
-        const maxVal = parseInt(rangeInput[1].value);
-        if (maxVal - minVal < priceGap) {
-            if (this.className === "min-price-slider") {
-                rangeInput[0].value = maxVal - priceGap;
-            } else {
-                rangeInput[1].value = minVal + priceGap;
-            }
+            const normalizedSliderValue = (sliderValue - SLIDER_SCALE_MIN) / (SLIDER_SCALE_MAX - SLIDER_SCALE_MIN);
+            let price = ACTUAL_MIN_PRICE + (ACTUAL_MAX_PRICE - ACTUAL_MIN_PRICE) * Math.pow(normalizedSliderValue, SLIDER_EXPONENT);
+            return Math.round(price);
         }
-        priceInput[0].value = minVal;
-        priceInput[1].value = maxVal;
-        precioMinHidden.value = minVal;
-        precioMaxHidden.value = maxVal;
 
-        const progressStart = (minVal / maxRange) * 100;
-        const progressEnd = (maxVal / maxRange) * 100;
-        rangeSelected.style.left = progressStart + "%";
-        rangeSelected.style.right = (100 - progressEnd) + "%";
-    }
+        function mapPriceToSlider(priceValue) {
+            if (ACTUAL_MAX_PRICE <= ACTUAL_MIN_PRICE) {
+                 return (priceValue <= ACTUAL_MIN_PRICE) ? SLIDER_SCALE_MIN : SLIDER_SCALE_MAX;
+            }
+            priceValue = Math.max(ACTUAL_MIN_PRICE, Math.min(ACTUAL_MAX_PRICE, priceValue)); // Clamp priceValue
 
-    rangeInput.forEach(input => {
-        input.addEventListener('input', updateRange);
-    });
+            if (priceValue === ACTUAL_MIN_PRICE) return SLIDER_SCALE_MIN;
+            if (priceValue === ACTUAL_MAX_PRICE) return SLIDER_SCALE_MAX;
+            
+            const normalizedPriceValue = (priceValue - ACTUAL_MIN_PRICE) / (ACTUAL_MAX_PRICE - ACTUAL_MIN_PRICE);
+            const sliderValue = SLIDER_SCALE_MIN + (SLIDER_SCALE_MAX - SLIDER_SCALE_MIN) * Math.pow(normalizedPriceValue, 1 / SLIDER_EXPONENT);
+            return Math.round(sliderValue);
+        }
 
-    priceInput.forEach(input => {
-        input.addEventListener('input', function() {
-            let minPrice = parseInt(priceInput[0].value);
-            let maxPrice = parseInt(priceInput[1].value);
+        function updatePriceSliderUI(sourceEvent) {
+            if (!rangeInput[0] || !rangeInput[1] || !priceInput[0] || !priceInput[1] || !precioMinHidden || !precioMaxHidden || !rangeSelected) return;
 
-            if (maxPrice - minPrice < priceGap) {
-                if (this.id === "price-min-input") {
-                    priceInput[0].value = maxPrice - priceGap;
+            let minSliderVal = parseInt(rangeInput[0].value);
+            let maxSliderVal = parseInt(rangeInput[1].value);
+            
+            // 1. Sincronizar valores de slider (asegurar min <= max)
+            if (minSliderVal > maxSliderVal) {
+                if (sourceEvent && sourceEvent.target.id === "min-price-slider") {
+                    maxSliderVal = minSliderVal;
                 } else {
-                    priceInput[1].value = minPrice + priceGap;
+                    minSliderVal = maxSliderVal;
                 }
             }
+            // Clampear valores del slider a su rango definido
+            minSliderVal = Math.max(SLIDER_SCALE_MIN, Math.min(minSliderVal, SLIDER_SCALE_MAX));
+            maxSliderVal = Math.max(SLIDER_SCALE_MIN, Math.min(maxSliderVal, SLIDER_SCALE_MAX));
+            if (minSliderVal > maxSliderVal) { // Re-check post clamp
+                 if (sourceEvent && sourceEvent.target.id === "min-price-slider")  maxSliderVal = minSliderVal; else minSliderVal = maxSliderVal;
+            }
 
-            rangeInput[0].value = minPrice;
-            rangeInput[1].value = maxPrice;
-            precioMinHidden.value = minPrice;
-            precioMaxHidden.value = maxPrice;
-            updateRange();
-        });
-    });
 
-    updateRange(); // Inicializar el rango visual
+            // 2. Convertir a precios reales
+            let actualMinPrice = mapSliderToPrice(minSliderVal);
+            let actualMaxPrice = mapSliderToPrice(maxSliderVal);
 
-    if (filterTabBtn && filterPanel && anunciosSection && filterTab) {
-        filterTabBtn.addEventListener('click', function() {
-            isFilterOpen = !isFilterOpen;
-            filterPanel.classList.toggle('open');
-            filterTab.classList.toggle('open');
-        });
-    }
-
-    function checkMobileView() {
-        if (window.innerWidth <= mobileBreakpoint && isFilterOpen) {
-            anunciosSection.classList.add('filter-open-mobile');
-        } else {
-            anunciosSection.classList.remove('filter-open-mobile');
-        }
-    }
-
-    window.addEventListener('resize', checkMobileView);
-    checkMobileView();
-
-    likeButtons.forEach(button => {
-        button.addEventListener('click', function(event) {
-            event.preventDefault();
-            this.classList.toggle('liked');
-            const publicacionId = this.dataset.publicacionId;
-            const isLiked = this.classList.contains('liked');
-
-            fetch('../php/favoritos.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                },
-                body: `publicacion_id=${publicacionId}&accion=${isLiked ? 'agregar' : 'eliminar'}`
-            })
-            .then(response => response.text())
-            .then(data => {
-                console.log(data);
-            })
-            .catch(error => {
-                console.error('Error al actualizar favoritos:', error);
-            });
-        });
-    });
-
-    function cargarEstadoFavoritos() {
-        fetch('../php/favoritos.php?accion=obtener_favoritos')
-        .then(response => response.json())
-        .then(favoritos => {
-            likeButtons.forEach(button => {
-                const publicacionId = button.dataset.publicacionId;
-                if (favoritos.includes(publicacionId)) {
-                    button.classList.add('liked');
-                }
-            });
-        })
-        .catch(error => {
-            console.error('Error al cargar favoritos:', error);
-        });
-    }
-
-    cargarEstadoFavoritos();
-
-    // Funcionalidad de búsqueda con sugerencias INSTANTÁNEAS
-    searchInput.addEventListener('input', function() {
-        const query = this.value.trim();
-        hiddenSearchInput.value = query;
-
-        // Limpiar el timeout anterior para evitar peticiones innecesarias
-        clearTimeout(searchTimeout);
-
-        if (query.length >= 2) {
-            // Establecer un pequeño delay antes de hacer la petición
-            searchTimeout = setTimeout(function() {
-                fetchSuggestions(query);
-            }, 200); // 200 milisegundos de espera
-        } else {
-            suggestionsList.innerHTML = '';
-        }
-    });
-
-    function fetchSuggestions(query) {
-        fetch(`../php/buscar_sugerencias.php?categoria=<?php echo $categoria; ?>&term_inicio=${query}`)
-        .then(response => response.json())
-        .then(data => {
-            suggestionsList.innerHTML = '';
-            if (data.length > 0) {
-                data.forEach(suggestion => {
-                    const li = document.createElement('li');
-                    li.textContent = suggestion;
-                    li.addEventListener('click', function() {
-                        searchInput.value = suggestion;
-                        hiddenSearchInput.value = suggestion;
-                        suggestionsList.innerHTML = '';
-                        // Enviar el formulario al seleccionar una sugerencia
-                        const form = this.closest('form');
-                        if (form) {
-                            form.submit();
-                        } else {
-                            window.location.href = `?categoria=<?php echo $categoria; ?>&search=${suggestion}`;
+            // 3. Aplicar PRICE_GAP a los precios reales
+            //    (Solo si el rango total es mayor que el gap)
+            if (ACTUAL_MAX_PRICE - ACTUAL_MIN_PRICE >= PRICE_GAP) {
+                if (actualMaxPrice - actualMinPrice < PRICE_GAP) {
+                    if (sourceEvent && sourceEvent.target.id === "min-price-slider") { // Min slider se movió
+                        actualMinPrice = actualMaxPrice - PRICE_GAP;
+                        if (actualMinPrice < ACTUAL_MIN_PRICE) {
+                            actualMinPrice = ACTUAL_MIN_PRICE;
+                            actualMaxPrice = Math.min(ACTUAL_MAX_PRICE, actualMinPrice + PRICE_GAP);
                         }
-                    });
-                    suggestionsList.appendChild(li);
+                    } else { // Max slider se movió o fue un input de texto/programático
+                        actualMaxPrice = actualMinPrice + PRICE_GAP;
+                        if (actualMaxPrice > ACTUAL_MAX_PRICE) {
+                            actualMaxPrice = ACTUAL_MAX_PRICE;
+                            actualMinPrice = Math.max(ACTUAL_MIN_PRICE, actualMaxPrice - PRICE_GAP);
+                        }
+                    }
+                }
+            } else { // El rango total es menor que el PRICE_GAP, así que los precios deben ser los extremos
+                actualMinPrice = ACTUAL_MIN_PRICE;
+                actualMaxPrice = ACTUAL_MAX_PRICE;
+            }
+            
+            // Re-clampear precios por si acaso
+            actualMinPrice = Math.max(ACTUAL_MIN_PRICE, Math.min(actualMinPrice, ACTUAL_MAX_PRICE));
+            actualMaxPrice = Math.max(actualMinPrice, Math.min(actualMaxPrice, ACTUAL_MAX_PRICE)); // Asegurar max >= min
+
+
+            // 4. Actualizar los inputs de texto y los campos ocultos con los precios finales
+            priceInput[0].value = actualMinPrice;
+            priceInput[1].value = actualMaxPrice;
+            precioMinHidden.value = actualMinPrice;
+            precioMaxHidden.value = actualMaxPrice;
+
+            // 5. Actualizar los sliders con los valores mapeados desde los precios finales (para sincronización)
+            rangeInput[0].value = mapPriceToSlider(actualMinPrice);
+            rangeInput[1].value = mapPriceToSlider(actualMaxPrice);
+
+            // 6. Actualizar la barra de progreso visual usando los valores finales del slider
+            const finalMinSliderForBar = parseInt(rangeInput[0].value);
+            const finalMaxSliderForBar = parseInt(rangeInput[1].value);
+
+            const progressStart = ((finalMinSliderForBar - SLIDER_SCALE_MIN) / (SLIDER_SCALE_MAX - SLIDER_SCALE_MIN)) * 100;
+            const progressEnd = ((finalMaxSliderForBar - SLIDER_SCALE_MIN) / (SLIDER_SCALE_MAX - SLIDER_SCALE_MIN)) * 100;
+            rangeSelected.style.left = Math.max(0, Math.min(100, progressStart)) + "%";
+            rangeSelected.style.right = Math.max(0, Math.min(100, (100 - progressEnd))) + "%";
+        }
+
+        rangeInput.forEach(input => {
+            input.addEventListener('input', function(event) {
+                updatePriceSliderUI(event);
+            });
+        });
+
+        priceInput.forEach(input => {
+            input.addEventListener('input', function(event) {
+                let minPrice = parseInt(priceInput[0].value);
+                let maxPrice = parseInt(priceInput[1].value);
+
+                if (isNaN(minPrice)) minPrice = ACTUAL_MIN_PRICE;
+                if (isNaN(maxPrice)) maxPrice = ACTUAL_MAX_PRICE;
+                
+                // Validar y clampear precios ingresados
+                minPrice = Math.max(ACTUAL_MIN_PRICE, Math.min(minPrice, ACTUAL_MAX_PRICE));
+                maxPrice = Math.max(ACTUAL_MIN_PRICE, Math.min(maxPrice, ACTUAL_MAX_PRICE));
+                
+                if (minPrice > maxPrice) {
+                    if (event.target.id === "price-min-input") maxPrice = minPrice;
+                    else minPrice = maxPrice;
+                }
+                
+                // Asignar a los sliders y llamar a updatePriceSliderUI para recalcular y sincronizar todo
+                rangeInput[0].value = mapPriceToSlider(minPrice);
+                rangeInput[1].value = mapPriceToSlider(maxPrice);
+                updatePriceSliderUI(event); // El evento aquí ayuda a la lógica del PRICE_GAP
+            });
+        });
+        
+        // Inicializar la UI del slider de precios al cargar la página
+        updatePriceSliderUI();
+
+
+        // --- Resto de tu JavaScript (logo, filtros, likes, búsqueda, etc.) ---
+        if (logoInicio) {
+            logoInicio.addEventListener('click', function() { window.location.href = '../index.php'; });
+            logoInicio.style.cursor = 'pointer';
+        }
+
+        if (filterTabBtn && filterPanel && anunciosSection && filterTab) {
+            filterTabBtn.addEventListener('click', function() {
+                isFilterOpen = !isFilterOpen;
+                filterPanel.classList.toggle('open');
+                filterTab.classList.toggle('open');
+                anunciosSection.classList.toggle('open-filter', isFilterOpen);
+            });
+        }
+        
+        likeButtons.forEach(button => {
+            button.addEventListener('click', function(event) {
+                event.preventDefault(); 
+                this.classList.toggle('liked');
+                const publicacionId = this.dataset.publicacionId;
+                const isLiked = this.classList.contains('liked');
+                fetch('../php/favoritos.php', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                    body: `publicacion_id=${publicacionId}&accion=${isLiked ? 'agregar' : 'eliminar'}`
+                })
+                .then(response => response.text())
+                .then(data => { console.log(data); })
+                .catch(error => { console.error('Error al actualizar favoritos:', error); });
+            });
+        });
+
+        function cargarEstadoFavoritos() {
+            fetch('../php/favoritos.php?accion=obtener_favoritos')
+            .then(response => response.json())
+            .then(favoritos => {
+                likeButtons.forEach(button => {
+                    const publicacionId = button.dataset.publicacionId;
+                    if (favoritos.includes(publicacionId)) button.classList.add('liked');
                 });
-            }
-        })
-        .catch(error => {
-            console.error('Error al obtener sugerencias:', error);
-        });
-    }
+            })
+            .catch(error => { console.error('Error al cargar favoritos:', error); });
+        }
+        <?php if ($sesionIniciada): ?>
+        cargarEstadoFavoritos();
+        <?php endif; ?>
 
-    // Mantener el término de búsqueda al cargar la página
-    const initialSearchTerm = "<?php echo $searchTerm; ?>";
-    if (initialSearchTerm) {
-        searchInput.value = initialSearchTerm;
-        hiddenSearchInput.value = initialSearchTerm;
-    }
-
-    // Enviar el formulario al hacer clic en la lupa
-    const searchButton = document.querySelector('.divSearch .lupa');
-    if (searchButton) {
-        searchButton.addEventListener('click', function() {
-            const form = this.closest('form');
-            if (form) {
-                form.submit();
+        searchInput.addEventListener('input', function() {
+            const query = this.value.trim();
+            if(hiddenSearchInput) hiddenSearchInput.value = query;
+            if(formSearchInput) formSearchInput.value = query;
+            clearTimeout(searchTimeout);
+            if (query.length >= 2) {
+                searchTimeout = setTimeout(() => fetchSuggestions(query), 200); 
             } else {
-                window.location.href = `?categoria=<?php echo $categoria; ?>&search=${searchInput.value}`;
+                if(suggestionsList) suggestionsList.innerHTML = '';
             }
         });
-    }
 
-    // Enviar el formulario al presionar Enter en el input de búsqueda
-    searchInput.addEventListener('keypress', function(event) {
-        if (event.key === 'Enter') {
-            event.preventDefault();
-            const form = this.closest('form');
-            if (form) {
-                form.submit();
-            } else {
-                window.location.href = `?categoria=<?php echo $categoria; ?>&search=${this.value}`;
+        function fetchSuggestions(query) {
+            if(!suggestionsList) return;
+            fetch(`../php/buscar_sugerencias.php?categoria=<?php echo urlencode($categoria); ?>&term_inicio=${encodeURIComponent(query)}`)
+            .then(response => response.json())
+            .then(data => {
+                suggestionsList.innerHTML = '';
+                if (data.length > 0) {
+                    data.forEach(suggestion => {
+                        const li = document.createElement('li');
+                        li.textContent = suggestion;
+                        li.addEventListener('click', function() {
+                            searchInput.value = suggestion;
+                            if(hiddenSearchInput) hiddenSearchInput.value = suggestion;
+                            if(formSearchInput) formSearchInput.value = suggestion;
+                            suggestionsList.innerHTML = '';
+                            const form = document.querySelector('.filter-panel form');
+                            if (form) form.submit();
+                            else window.location.href = `?categoria=<?php echo urlencode($categoria); ?>&search=${encodeURIComponent(suggestion)}`;
+                        });
+                        suggestionsList.appendChild(li);
+                    });
+                }
+            })
+            .catch(error => { console.error('Error al obtener sugerencias:', error); });
+        }
+
+        const initialSearchTerm = <?php echo json_encode($searchTerm); ?>;
+        if (initialSearchTerm) {
+            searchInput.value = initialSearchTerm;
+            if(hiddenSearchInput) hiddenSearchInput.value = initialSearchTerm;
+            if(formSearchInput) formSearchInput.value = initialSearchTerm;
+        }
+
+        searchInput.addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                const form = document.querySelector('.filter-panel form');
+                if(formSearchInput) formSearchInput.value = this.value.trim();
+                if (form) form.submit();
+                else window.location.href = `?categoria=<?php echo urlencode($categoria); ?>&search=${encodeURIComponent(this.value.trim())}`;
             }
-        }
-    });
+        });
 
-    // **NUEVO:** Código para hacer la barra de búsqueda sticky y desplazar la ventana
-    window.addEventListener('scroll', () => {
-        if (window.scrollY > header.offsetHeight && !isSticky) {
-            searchMenu.classList.add('sticky');
-            document.body.classList.add('sticky-search');
-            window.scrollTo(0, header.offsetHeight); // Desplaza la ventana hacia abajo
-            isSticky = true;
-        } else if (window.scrollY <= header.offsetHeight && isSticky) {
-            searchMenu.classList.remove('sticky');
-            document.body.classList.remove('sticky-search');
-            isSticky = false;
-        }
+        window.addEventListener('scroll', () => {
+            if (!header || !searchMenu) return;
+            if (window.scrollY > header.offsetHeight && !searchMenu.classList.contains('sticky')) {
+                searchMenu.classList.add('sticky');
+            } else if (window.scrollY <= header.offsetHeight && searchMenu.classList.contains('sticky')) {
+                searchMenu.classList.remove('sticky');
+            }
+        });
     });
-});
-</script>
+    </script>
+</body>
+</html>

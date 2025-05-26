@@ -109,11 +109,11 @@ $categorias = [
             </div>
             <ul class="dropdown" id="dropdownMenu">
                 <?php if (!$sesionIniciada): ?>
-                    <li><a href="./InicioSesion.html">Iniciar Sesión</a></li>
+                    <li><a href="./InicioSesion.php">Iniciar Sesión</a></li>
                 <?php else: ?>
                     <li><a href="./perfil.php">Perfil</a></li>
-                    <li><a href="#">Me gusta</a></li>
-                    <li><a href="./publicaciones.html">Venda</a></li>
+                    <li><a href="./meGusta.php">Me gusta</a></li>
+                    <li><a href="./publicaciones.php">Venda</a></li>
                     <li><a href="./chat.php">Bústia</a></li>
                     <li><a href="../php/logout.php">Cerrar Sesión</a></li>
                 <?php endif; ?>
@@ -204,7 +204,8 @@ $categorias = [
     <script src="../js/script.js"></script>
     <script src="../js/footer_animation.js"></script>
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
+
+        document.addEventListener('DOMContentLoaded', function() {
         // *** Lógica para el Dropdown de Usuario ***
         const userIcon = document.getElementById('userIcon');
         const dropdownMenu = document.getElementById('dropdownMenu');

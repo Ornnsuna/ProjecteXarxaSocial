@@ -36,8 +36,8 @@ header {
 #userIcon {
   position: absolute; 
   right: 1%;
-  margin-top: -1em;
-  margin-right: 1em;
+  margin-top: -1.55em;
+  margin-right: .65em;
   z-index: 1000;
 }
 #dropdownMenu{
@@ -154,7 +154,7 @@ header {
       justify-content: center;
      
      width: 100%;
-      background-color: #343a40; /* Mantenemos el azul oscuro siempre */
+      background-color: #294e73; /* Mantenemos el azul oscuro siempre */
       color: #fff;
       padding: 15px 20px;
       box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);

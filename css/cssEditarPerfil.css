@@ -1,410 +1,236 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+/* css/cssEditarPerfil.css */
+
+/* Variables de color (Idealmente estarían en un archivo de variables global como common.css o variables.css) */
+:root {
+    --primary-accent: #ff9100; /* Naranja fuerte */
+    --secondary-accent: #2b5f8c; /* Azul oscuro */
+    --background-dark: #1a1a1a; /* Fondo muy oscuro */
+    --card-bg-light: #2c2c2c; /* Fondo para tarjetas/formularios */
+    --text-light: #f0f0f0; /* Texto claro */
+    --border-color-dark: #444; /* Borde oscuro */
+    --shadow-color-dark: rgba(0, 0, 0, 0.4); /* Sombra oscura */
+    --border-radius: 10px;
+    --spacing-small: 10px;
+    --spacing-medium: 20px;
+    --spacing-large: 30px;
 }
 
-body {
-    font-family: 'Inter', sans-serif;
-    background-color: #DE9929;
-    color: #333;
-    text-align: center;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-}
-
-header {
-    background-color: black;
-    color: white;
-    padding: 1rem;
-    font-size: 1.5rem;
-    font-weight: bold;
-}
-
-main {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 2rem;
-    width: 100%;
-}
-
-.back-link {
-    text-align: left;
-    margin-bottom: 1rem;
-    width: 100%;
-    max-width: 800px;
-}
-
-.back-link a {
-    text-decoration: none;
-    color: black;
-    font-size: 1.2rem;
-    display: inline-block;
-    padding: 0.5rem 1rem;
-    transition: color 0.2s ease;
-}
-
-.back-link a:hover {
-    color: #555;
-}
-
+/* Estilos de la página de edición de perfil */
 .edit-profile-container {
-    background: black;
-    color: white;
-    padding: 2rem;
-    border-radius: 1rem;
-    width: 100%;
+    padding: var(--spacing-medium);
     max-width: 800px;
-    text-align: left;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin-bottom: 2rem;
+    margin: 40px auto;
+    background-color: var(--background-dark); /* Fondo del contenedor principal de edición */
+    border-radius: var(--border-radius);
+    box-shadow: 0 8px 25px var(--shadow-color-dark);
+    color: var(--text-light);
 }
 
 .edit-profile-title {
-    font-size: 2.2rem;
-    margin-bottom: 1.5rem;
-    color: #fff;
     text-align: center;
+    color: var(--primary-accent);
+    margin-bottom: var(--spacing-large);
+    font-size: 2.5em;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.6);
 }
 
-.error-message {
-    background-color: #f8d7da;
-    color: #721c24;
-    padding: 1rem;
-    margin-bottom: 1.5rem;
-    border: 1px solid #f5c6cb;
-    border-radius: 0.5rem;
-    font-size: 1.1rem;
-}
-
-.edit-profile-form {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 1.5rem;
-}
-
-.form-group {
-    margin-bottom: 1.5rem;
-}
-
-.form-group label {
-    display: block;
-    font-size: 1.2rem;
-    font-weight: bold;
-    color: #ddd;
-    margin-bottom: 0.5rem;
-}
-
-.form-group input,
-.form-group textarea,
-.form-group input[type="file"] {
-    width: 100%;
-    padding: 0.75rem;
-    border: 1px solid #555;
-    border-radius: 0.5rem;
-    background-color: #222;
-    color: #eee;
-    font-family: 'Inter', sans-serif;
-    transition: border-color 0.3s ease;
-    font-size: 1.1rem;
-}
-
-.form-group input:focus,
-.form-group textarea:focus,
-.form-group input[type="file"]:focus {
-    outline: none;
-    border-color: #777;
-    box-shadow: 0 0 0 2px rgba(128, 128, 128, 0.2);
-}
-
-.form-group textarea {
-    height: 10rem;
-    resize: none;
-}
-
-.form-group input[type="file"] {
-    padding: 0.25rem;
-    border: none;
-    background-color: transparent;
-}
-
-
-.save-button {
-    padding: 0.75rem 1.5rem;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 0.5rem;
-    font-size: 1.2rem;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    align-self: center;
-    width: 200px;
-    margin-top: 1rem;
-}
-
-.save-button:hover {
-    background-color: #45a049;
-}
-
-.change-password-link {
-    text-align: center;
-    margin-top: 1rem;
-}
-
-.change-password-link a {
-    display: inline-block;
-    font-size: 1.1rem;
-    color: #fff;
-    text-decoration: none;
-    padding: 0.5rem 1rem;
-    border-radius: 0.5rem;
-    background-color: #007BFF;
-    transition: background-color 0.3s ease;
-    margin-top: 1rem;
-}
-
-.change-password-link a:hover {
-    background-color: #0056b3;
-}
-
-/* Estilos para la imagen de perfil */
 .profile-image-container {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 1rem;
-    position: relative; /* Para posicionar el overlay */
+    display: flex; /* Usar flexbox para centrar contenido */
+    flex-direction: column; /* Apilar elementos verticalmente */
+    align-items: center; /* Centrar horizontalmente */
+    margin-bottom: var(--spacing-large);
 }
 
 .profile-image {
-    width: 180px;
-    height: 180px;
+    width: 150px;
+    height: 150px;
     border-radius: 50%;
     object-fit: cover;
-    border: 4px solid #666;
-    cursor: pointer; /* Indica que es clickable */
-    transition: transform 0.2s ease;
+    border: 4px solid var(--primary-accent); /* Borde naranja */
+    box-shadow: 0 0 15px var(--primary-accent); /* Sombra de color naranja */
+    transition: transform 0.3s ease;
+    margin-bottom: 15px; /* Espacio entre la imagen y el botón */
 }
 
 .profile-image:hover {
     transform: scale(1.05);
 }
 
-.image-upload-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
+.upload-buttons label {
+    padding: 10px 20px;
+    background-color: var(--secondary-accent); /* Azul oscuro de tu paleta */
+    color: var(--text-light); /* Texto blanco */
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    display: inline-block;
+}
+
+.upload-buttons label:hover {
+    background-color: #203f5e; /* Tono más oscuro de azul */
+    transform: translateY(-2px);
+}
+
+#nueva_imagen {
+    display: none;
+}
+
+.image-changed {
+    animation: pixelateImage 0.5s ease;
+}
+
+@keyframes pixelateImage {
+    0% { filter: blur(20px); opacity: 0; }
+    50% { filter: blur(0px); opacity: 1; }
+    100% { filter: blur(0px); opacity: 1; }
+}
+
+/* Estilos del formulario de edición de perfil */
+.edit-profile-form {
+    background-color: var(--card-bg-light); /* Fondo oscuro para el formulario */
+    padding: var(--spacing-large);
+    border-radius: var(--border-radius);
+    box-shadow: 0 4px 15px var(--shadow-color-dark);
+    max-width: 700px;
+    margin: 30px auto; /* Centrar y espacio arriba */
+    border: 1px solid var(--border-color-dark);
+    color: var(--text-light); /* Texto blanco por defecto en el formulario */
+}
+
+.form-group {
+    margin-bottom: 25px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: var(--primary-accent); /* Naranja para los labels */
+    font-size: 1.1em;
+}
+
+.form-group input[type="text"],
+.form-group input[type="date"],
+.form-group textarea {
+    width: calc(100% - 20px); /* Ajusta el ancho para el padding */
+    padding: 12px;
+    border: 1px solid var(--border-color-dark); /* Borde oscuro */
+    border-radius: 8px;
+    background-color: #2a2a2a; /* Fondo más oscuro para inputs */
+    color: var(--text-light); /* Asegura que el texto dentro de los inputs sea blanco */
+    font-size: 1em;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-group input[type="text"]:focus,
+.form-group input[type="date"]:focus,
+.form-group textarea:focus {
+    border-color: var(--primary-accent); /* Borde naranja al enfocar */
+    box-shadow: 0 0 8px rgba(222, 153, 41, 0.5); /* Sombra naranja */
+    outline: none;
+}
+
+.form-group textarea {
+    min-height: 120px; /* Tamaño mínimo de la imagen */
+    max-height: 300px; /* Tamaño máximo para que no sea demasiado grande */
+    resize: vertical; /* Permite redimensionar verticalmente */
+}
+
+.save-button {
+    display: block;
     width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    background-color: rgba(0, 0, 0, 0.5); /* Fondo oscuro semi-transparente */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0; /* Inicialmente oculto */
-    transition: opacity 0.2s ease; /* Transición suave para la opacidad */
+    padding: 15px;
+    background-color: var(--primary-accent); /* Naranja principal */
+    color: #000; /* Texto oscuro para el botón naranja */
+    border: none;
+    border-radius: 8px;
+    font-size: 1.2em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin-top: 30px; /* Espacio arriba del botón */
 }
 
-.profile-image-container:hover .image-upload-overlay {
-    opacity: 1; /* Mostrar el overlay al pasar el ratón */
+.save-button:hover {
+    background-color: #fca000; /* Un naranja ligeramente más claro */
+    transform: translateY(-3px);
 }
 
-.image-upload-overlay i {
-    font-size: 2rem; /* Tamaño del icono de la cámara */
-    color: white; /* Color del icono */
-}
-
-.profile-image.image-loaded {
-    animation: fadeIn 0.5s ease;
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
-}
-
-
-/* FOOTER */
-.footer {
-    background: #1a1a1a;
-    color: white;
-    padding: 2rem 0;
-    font-family: Arial, sans-serif;
-    text-align: center;
-    position: relative;
+/* Estilos del iframe de Google Maps */
+.map-container {
+    margin-top: 25px;
+    margin-bottom: 25px;
+    border: 1px solid var(--border-color-dark);
+    border-radius: var(--border-radius);
     overflow: hidden;
-    margin-top: 4rem;
+    box-shadow: 0 4px 15px var(--shadow-color-dark);
 }
 
-.footer-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+#map-iframe {
     width: 100%;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 1rem;
+    height: 400px; /* Altura fija para el mapa */
+    border: none;
 }
 
-.footer-logo {
-    margin-bottom: 1rem;
+/* Mensaje de ayuda para el mapa */
+.map-help-text {
+    color: #ccc;
+    font-size: 0.9em;
+    text-align: center;
+    margin-top: -15px;
+    margin-bottom: 20px;
 }
 
-.footer-logo h2 {
-    font-size: 2rem;
-    font-weight: bold;
-    margin-bottom: 0.5rem;
-}
-
-.footer-logo p {
-    font-size: 0.9rem;
-    color: #ddd;
-}
-
-.footer-social {
-    margin-top: 1rem;
-}
-
-.footer-social h3 {
-    font-size: 1.1rem;
-    font-weight: bold;
-    margin-bottom: 1rem;
-}
-
-.social-icons {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-}
-
-.social-icons .icon {
-    width: 2.5rem;
-    transition: transform 0.3s ease-in-out;
-}
-
-.social-icons .icon:hover {
-    transform: scale(1.2);
-}
-
-#footerCanvas {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    opacity: 0.3;
-}
-
-#footerTitle {
-    font-size: 2rem;
-    background: linear-gradient(45deg, #ff6b6b, #ffdd57, #48dbfb);
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    animation: shine 4s infinite alternate ease-in-out;
-}
-
-@keyframes shine {
-    0% {
-        background-position: 0%;
-    }
-
-    100% {
-        background-position: 100%;
-    }
-}
-
-.footer-bottom {
-    margin-top: 2rem;
-    padding-top: 1rem;
-    border-top: 1px solid #333;
-    font-size: 0.8rem;
-    color: #aaa;
-}
-
-/* Ajustes para móviles */
+/* Media queries para responsividad */
 @media (max-width: 768px) {
-    body {
-        padding: 0;
-    }
-
-    header {
-        padding: 1rem;
-        font-size: 1.2rem;
-    }
-
-    main {
-        padding: 1rem;
-    }
-
-    .back-link {
-        margin-bottom: 1rem;
-    }
-
-    .edit-profile-container {
-        padding: 1.5rem;
-        border-radius: 0.75rem;
-        max-width: 95%;
-    }
-
-    .edit-profile-title {
-        font-size: 1.8rem;
+    .edit-profile-form {
+        padding: var(--spacing-medium);
     }
 
     .form-group label {
-        font-size: 1rem;
+        font-size: 1em;
     }
 
-    .form-group input,
-    .form-group textarea,
-    .form-group input[type="file"] {
-        font-size: 1rem;
-        padding: 0.75rem;
+    .form-group input, .form-group textarea {
+        padding: 10px;
     }
 
     .save-button {
-        font-size: 1.1rem;
-        width: 100%;
+        padding: 12px;
+        font-size: 1.1em;
     }
 
-    .change-password-link a {
-        font-size: 1rem;
-    }
-
-    .footer-container {
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-    }
-
-    .footer-logo {
-        margin-bottom: 1rem;
-    }
-
-    .footer-social {
-        margin-top: 1rem;
-    }
-
-    .footer-bottom {
-        margin-top: 1rem;
-        padding-top: 1rem;
-        font-size: 0.7rem;
-    }
-
-    .profile-image {
-        width: 150px;
-        height: 150px;
-    }
-
-    .image-upload-overlay i {
-        font-size: 1.5rem;
+    #map-iframe {
+        height: 300px;
     }
 }
+
+/* ... otros estilos existentes ... */
+
+/* Estilos para el mapa de ubicación */
+#map {
+    height: 300px; /* Altura del mapa */
+    width: 100%; /* Ancho completo */
+    margin-bottom: 20px;
+    border-radius: var(--border-radius);
+    box-shadow: 0 2px 5px var(--shadow-color-dark);
+    border: 1px solid var(--border-color-dark); /* Borde para que se vea integrado */
+}
+
+/* Estilos para el campo de texto de ubicación con error */
+input#localizacion.error {
+    border-color: red;
+    background-color: #ffe0e0;
+}
+
+/* Mensaje de ayuda para el mapa */
+.map-help-text {
+    color: #ccc;
+    font-size: 0.9em;
+    text-align: center;
+    margin-top: -10px; /* Ajusta el margen superior para acercarlo al mapa */
+    margin-bottom: 20px;
+}
+
+/* ... el resto de tus media queries y otros estilos ... */

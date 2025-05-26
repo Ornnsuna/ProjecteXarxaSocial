@@ -4,11 +4,13 @@
     // Para más información, visite: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
+        
+
         {
             "type": "chrome",
             "request": "launch",
             "name": "Iniciar Chrome para localhost",
-            "url": "http://localhost:80",
+            "url": "http://localhost/CardCapture/ProjecteXarxaSocial/html/editarPublicacion.php?id=6",
             "webRoot": "${workspaceFolder}"
         }
     ]

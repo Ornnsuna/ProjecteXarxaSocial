@@ -4,7 +4,8 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
-require '../vendor/autoload.php'; // PHPMailer instalado con Composer
+// Asegúrate de que este require no se duplique si ya está en otro lugar
+// require '../vendor/autoload.php'; // Removido si ya está en la línea 2
 
 function sendVerificationEmail($to, $subject, $body) {
     $mail = new PHPMailer(true);
@@ -12,12 +13,13 @@ function sendVerificationEmail($to, $subject, $body) {
     try {
         // Configuración del servidor SMTP de Gmail
         $mail->isSMTP();
-        $mail->Host = 'smtp.gmail.com'; // Cambiado a Gmail
+        $mail->Host = 'smtp.gmail.com';
         $mail->SMTPAuth = true;
         $mail->Username = 'cardcapture0@gmail.com';
         $mail->Password = 'ndfk dlte kaag aesa'; // Usa App Password
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port = 587;
+        $mail->CharSet = 'UTF-8'; // Asegura la codificación correcta
 
         // Configuración del correo
         $mail->setFrom('cardcapture0@gmail.com', 'CardCapture');
@@ -25,10 +27,13 @@ function sendVerificationEmail($to, $subject, $body) {
         $mail->isHTML(true);
         $mail->Subject = $subject;
         $mail->Body = $body;
+        $mail->AltBody = strip_tags($body); // ¡Añadido! Versión de texto plano
 
         return $mail->send();
     } catch (Exception $e) {
-        error_log("Error al enviar correo: " . $mail->ErrorInfo); // Guarda errores en log
+        error_log("Error al enviar correo: " . $mail->ErrorInfo);
+        // Puedes añadir aquí un mensaje de error más explícito para depuración
+        // echo "Mailer Error: " . $mail->ErrorInfo;
         return false;
     }
 }

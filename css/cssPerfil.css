@@ -1,341 +1,486 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+/* Variables CSS para colores (Actualizadas según tu paleta) */
+:root {
+    --main-bg-color: #DE9929; /* Fondo principal oscuro */
+    --text-light: #fff; /* Texto claro para fondos oscuros */
+    --primary-accent: #DE9929; /* Tu naranja principal */
+    --secondary-accent: #DE9929; /* Tu azul oscuro principal (confirmado de tu código) */
+    --card-bg-light: #1a1a1a; /* Fondo para tarjetas en modo oscuro - AHORA SOLO PARA LA TARJETA DE PERFIL */
+    --card-bg-white: #ffffff; /* NUEVA: Fondo blanco para las tarjetas de publicación */
+    --text-dark: #333; /* NUEVA: Texto oscuro para fondos claros */
+    --border-color-dark: #333; /* Borde sutil para elementos oscuros */
+    --shadow-color-dark: rgba(255, 255, 255, 0.05); /* Sombra clara en fondo oscuro */
+    --border-radius: 12px;
+    --spacing-medium: 20px;
+    --spacing-large: 30px;
 }
 
+/* Estilos globales */
 body {
-    font-family: 'Inter', sans-serif; /* Cambio de fuente para mejor lectura */
-    background-color: #DE9929;
-    color: #333; /* Color de texto más oscuro para mejor contraste */
-    text-align: center;
-    min-height: 100vh;
-    display: flex; /* Para centrar verticalmente el contenido principal */
-    flex-direction: column;
-}
-
-header {
-    background-color: black;
-    color: white;
-    padding: 1rem;
-    font-size: 1.5rem;
-    font-weight: bold;
-}
-
-main {
-    flex: 1; /* El main ocupa el espacio restante */
+    font-family: 'Inter', sans-serif;
+    background-color: var(--main-bg-color);
+    color: var(--text-light);
+    margin: 0;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    padding: 2rem;
-    width: 100%; /* Asegura que el main ocupe el ancho completo */
+    min-height: 100vh;
 }
 
-.back-link {
-    text-align: left;
-    margin-bottom: 1rem;
+.contenido-principal {
+    flex: 1;
+    padding: var(--spacing-large) var(--spacing-medium);
+    max-width: 1200px;
+    margin: 5em auto;
     width: 100%;
-    max-width: 800px; /* Limita el ancho del contenido principal */
+    background-color: black;
+    color: var(--text-light);
+    border-radius: var(--border-radius);
 }
-
-.back-link a {
-    text-decoration: none;
-    color: black;
-    font-size: 1.2rem;
-    display: inline-block; /* Para poder aplicar padding y margin */
-    padding: 0.5rem 1rem;
-    /* border-radius: 0.5rem;  Se ve mejor sin borde en este caso*/
-    transition: color 0.2s ease; /* Transición suave para el color */
-}
-
-.back-link a:hover {
-    color: #555; /* Cambia el color al pasar el ratón */
-}
-
 
 .profile-container {
-    background: black;
-    color: white;
-    padding: 2rem;
-    border-radius: 1rem; /* Bordes redondeados más modernos */
-    width: 100%;
-    max-width: 800px; /* Ancho máximo para el contenedor del perfil */
-    text-align: left;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra suave para destacar el contenedor */
-    margin-bottom: 2rem;
-}
-
-.profile-header {
+    background-color: var(--card-bg-light); /* Este sigue siendo oscuro para la tarjeta de perfil */
+    border-radius: var(--border-radius);
+    box-shadow: 0 4px 15px var(--shadow-color-dark);
+    padding: 25px;
+    margin-bottom: 40px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-bottom: 1.5rem;
-    padding-bottom: 1.5rem;
-    border-bottom: 1px solid #444; /* Separador visual */
+    text-align: center;
+    border: 1px solid var(--border-color-dark);
 }
 
-.profile-image {
-    width: 180px; /* Tamaño de la imagen de perfil */
-    height: 180px;
-    border-radius: 50%; /* Hace que la imagen sea un círculo */
-    object-fit: cover; /* Asegura que la imagen se ajuste al círculo sin distorsión */
-    margin-bottom: 1rem;
-    border: 4px solid #666; /* Borde opcional para la imagen */
+.profile-summary {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    width: 100%;
+    margin-bottom: 25px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border-color-dark);
+}
+
+.profile-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid var(--primary-accent);
+    box-shadow: 0 0 15px var(--primary-accent);
+    transition: transform 0.3s ease;
+    flex-shrink: 0;
+}
+
+.profile-avatar:hover {
+    transform: scale(1.05);
+}
+
+.profile-info {
+    flex-grow: 1;
+    text-align: left;
+    min-width: 150px;
 }
 
 .profile-name {
-    font-size: 2.2rem; /* Tamaño de la fuente del nombre */
-    margin-bottom: 0.5rem;
-    color: #fff;
+    font-size: 2.2em;
+    color: var(--text-light);
+    margin-bottom: 2px;
+    font-weight: 700;
 }
 
 .profile-fullname {
-    font-size: 1.4rem;
-    color: #eee;
+    font-size: 1.1em;
+    color: #bbb;
     margin-bottom: 0;
 }
 
-.profile-details {
-    margin-bottom: 1.5rem;
-}
-
-.detail-section {
-    margin-bottom: 1rem;
-}
-
-.detail-title {
-    font-size: 1.2rem;
-    font-weight: bold;
-    color: #ddd;
-    margin-bottom: 0.5rem;
-}
-
-.detail-text {
-    font-size: 1.1rem;
-    color: #eee;
-    line-height: 1.6; /* Mejora la legibilidad del texto */
-}
-
-.detail-text.description{
-    white-space: pre-line;  /* respetamos los saltos de linea*/
-}
-/* Caja de texto */
-.profile-container textarea {
-    width: 100%;
-    height: 10rem;
-    padding: 1rem;
-    border: 1px solid #555;
-    border-radius: 0.5rem;
-    margin-top: 0.5rem;
-    background-color: #222;
-    color: #eee;
-    font-family: 'Inter', sans-serif;
-    resize: none; /* Evita que el usuario redimensione el textarea */
-    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2); /* Sombra interna */
-}
-
-.profile-container textarea:focus {
-    outline: none;
-    border-color: #777; /* Cambia el color del borde al enfocar */
-    box-shadow: 0 0 0 2px rgba(128, 128, 128, 0.2); /* Añade un resplandor al enfocar */
-}
-
-
-.edit-profile-link {
-    text-align: right;
-    margin-top: 1rem;
-}
-
-.edit-profile-link a {
-    display: inline-block;
-    font-size: 1.1rem;
-    color: black;
+.profile-summary .edit-profile {
+    background-color: var(--secondary-accent); /* Utiliza la variable */
+    color: var(--text-light);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: 600;
     text-decoration: none;
-    padding: 0.5rem 1rem;
-    border-radius: 0.5rem;
-    background-color: #fff;
-    transition: background-color 0.3s ease, color 0.3s ease;
+    display: inline-block;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    flex-shrink: 0;
 }
 
-.edit-profile-link a:hover {
-    background-color: #ddd;
-    color: #333;
+.profile-summary .edit-profile:hover {
+    background-color: #315b84; /* Tono más oscuro de secondary-accent */
+    transform: translateY(-2px);
 }
 
-
-
-/* FOOTER */
-.footer {
-    background: #1a1a1a;
-    color: white;
-    padding: 2rem 0;
-    font-family: Arial, sans-serif;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-    margin-top: 4rem; /* Empuja el footer hacia abajo */
-}
-
-.footer-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center; /* Centra el contenido del footer */
+.profile-details-compact {
     width: 100%;
-    max-width: 1200px; /* Ancho máximo del contenedor del footer */
-    margin: 0 auto; /* Centra el contenedor del footer */
-    padding: 0 1rem;
+    text-align: center;
+    padding: 0 20px;
+    color: var(--text-light);
 }
 
-
-.footer-logo {
-    margin-bottom: 1rem;
+.profile-bio {
+    font-size: 1em;
+    color: #ccc;
+    line-height: 1.5;
+    max-width: 700px;
+    margin: 0 auto 20px auto;
+    white-space: pre-line;
 }
 
-.footer-logo h2 {
-    font-size: 2rem;
-    font-weight: bold;
-    margin-bottom: 0.5rem;
-}
-
-.footer-logo p {
-    font-size: 0.9rem;
-    color: #ddd;
-}
-
-.footer-social {
-    margin-top: 1rem;
-}
-
-.footer-social h3 {
-    font-size: 1.1rem;
-    font-weight: bold;
-    margin-bottom: 1rem;
-}
-
-.social-icons {
+.detail-group {
     display: flex;
     justify-content: center;
-    gap: 1rem;
+    align-items: baseline;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
 }
 
-.social-icons .icon {
-    width: 2.5rem;
-    transition: transform 0.3s ease-in-out;
+.detail-label {
+    font-size: 1em;
+    font-weight: bold;
+    color: var(--primary-accent);
+    margin-right: 5px;
 }
 
-.social-icons .icon:hover {
-    transform: scale(1.2);
+.detail-value {
+    font-size: 1em;
+    color: var(--text-light);
 }
 
-#footerCanvas {
-    position: absolute;
-    top: 0;
-    left: 0;
+/* --- Publicaciones del Usuario --- */
+.user-posts-section {
     width: 100%;
-    height: 100%;
-    pointer-events: none;
-    opacity: 0.3;
+    margin-top: 40px;
+    padding-top: 30px;
+    border-top: 1px solid var(--border-color-dark);
+    position: relative;
 }
 
-#footerTitle {
-    font-size: 2rem;
-    background: linear-gradient(45deg, #ff6b6b, #ffdd57, #48dbfb);
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    animation: shine 4s infinite alternate ease-in-out;
+.user-posts-section h2 {
+    text-align: center;
+    font-size: 2em;
+    color: var(--text-light);
+    margin-bottom: 30px;
 }
 
-@keyframes shine {
-    0% {
-        background-position: 0%;
+.posts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 25px;
+    padding-bottom: 80px;
+}
+
+.post-card {
+    background-color: var(--card-bg-white); /* CAMBIO: Fondo blanco para las tarjetas de publicación */
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Sombra oscura para contraste en fondo blanco */
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+    border: 1px solid #ddd; /* CAMBIO: Borde más claro para el fondo blanco */
+    display: flex; /* Para controlar el contenido interno */
+    flex-direction: column; /* Apilar imagen y contenido */
+}
+
+.post-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3); /* Sombra más pronunciada */
+}
+
+.post-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-bottom: 1px solid #f0f0f0; /* CAMBIO: Borde claro para la imagen */
+}
+
+.post-card-content {
+    padding: 15px;
+    text-align: left;
+    flex-grow: 1; /* Permite que el contenido ocupe el espacio restante */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Espacio entre título, precio, fecha */
+}
+
+.post-card-content h3 {
+    font-size: 1.3em;
+    color: var(--text-dark); /* CAMBIO: Texto oscuro para los títulos en fondo blanco */
+    margin-bottom: 8px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.post-card-content .post-price { /* Nuevo estilo para el precio */
+    font-size: 1.1em;
+    font-weight: bold;
+    color: var(--primary-accent); /* Color naranja para el precio */
+    margin-bottom: 5px;
+}
+
+.post-card-content p {
+    font-size: 0.9em;
+    color: #666; /* CAMBIO: Texto más oscuro para la fecha en fondo blanco */
+    margin-top: 0;
+}
+
+.no-posts-message {
+    text-align: center;
+    grid-column: 1 / -1;
+    color: #bbb;
+    padding: 30px;
+    font-style: italic;
+}
+
+/* Botón flotante para añadir publicación */
+.add-post-button {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 60px;
+    height: 60px;
+    background-color: #315b84; /* Utiliza la variable */
+    color: var(--text-light); /* Texto blanco */
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2.5em;
+    font-weight: bold;
+    text-decoration: none;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Sombra más oscura para destacar sobre fondo claro */
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    z-index: 1000;
+}
+
+.add-post-button:hover {
+    background-color: #4881b9; /* Tono más oscuro de secondary-accent */
+    transform: scale(1.05);
+}
+
+
+/* --- Responsive Design (se mantienen los mismos ajustes) --- */
+@media (min-width: 769px) {
+    .profile-summary {
+        justify-content: flex-start;
+        text-align: left;
+        padding-left: 20px;
     }
 
-    100% {
-        background-position: 100%;
+    .profile-summary .profile-avatar {
+        margin-right: 20px;
+    }
+
+    .profile-summary .edit-profile {
+        margin-left: auto;
+        margin-right: 20px;
     }
 }
 
-.footer-bottom {
-    margin-top: 2rem;
-    padding-top: 1rem;
-    border-top: 1px solid #333;
-    font-size: 0.8rem;
-    color: #aaa;
-}
 
-
-/* Ajustes para móviles */
 @media (max-width: 768px) {
-    body {
-        padding: 0;
-    }
-
-    header {
-        padding: 1rem;
-        font-size: 1.2rem;
-    }
-
-    main {
-        padding: 1rem;
-    }
-
-    .back-link {
-        margin-bottom: 1rem;
+    .contenido-principal {
+        padding: 20px 15px;
     }
 
     .profile-container {
-        padding: 1.5rem;
-        border-radius: 0.75rem;
-        max-width: 95%;
+        padding: 20px;
     }
 
-    .profile-header {
+    .profile-summary {
         flex-direction: column;
-        align-items: center;
         text-align: center;
+        gap: 15px;
     }
 
-    .profile-image {
-        width: 150px;
-        height: 150px;
-        margin-bottom: 1rem;
+    .profile-summary .profile-avatar {
+        margin-bottom: 10px;
+        width: 100px;
+        height: 100px;
+    }
+
+    .profile-info {
+        text-align: center;
     }
 
     .profile-name {
-        font-size: 1.8rem;
+        font-size: 1.8em;
     }
 
     .profile-fullname {
-        font-size: 1.2rem;
+        font-size: 1em;
     }
 
-    .detail-text {
-        font-size: 1rem;
+    .profile-summary .edit-profile {
+        width: auto;
+        margin-top: 15px;
     }
 
-    .edit-profile-link {
-        text-align: center;
-        margin-top: 1rem;
+    .profile-bio {
+        font-size: 0.95em;
+        padding: 0 10px;
     }
 
-    .footer-container {
+    .detail-group {
         flex-direction: column;
         align-items: center;
-        text-align: center;
+        margin-bottom: 10px;
     }
 
-    .footer-logo {
-        margin-bottom: 1rem;
+    .detail-label {
+        margin-right: 0;
+        margin-bottom: 3px;
     }
 
-    .footer-social {
-        margin-top: 1rem;
+    .user-posts-section h2 {
+        font-size: 1.8em;
     }
 
-    .footer-bottom {
-        margin-top: 1rem;
-        padding-top: 1rem;
-        font-size: 0.7rem;
+    .posts-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
     }
+
+    .post-card img {
+        height: 180px;
+    }
+
+    .add-post-button {
+        width: 50px;
+        height: 50px;
+        font-size: 2em;
+        bottom: 20px;
+        right: 20px;
+    }
+}
+
+/* popup.css */
+
+/* Contenedor principal del popup */
+.popup-container {
+    display: none; /* Oculto por defecto */
+    position: fixed; /* Fijo en la pantalla */
+    z-index: 1000; /* Asegura que esté por encima de todo */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto; /* Habilita scroll si el contenido es demasiado grande */
+    background-color: rgba(0, 0, 0, 0.7); /* Fondo oscuro semitransparente */
+    /* display: flex; REMOVIDO: Se añade con JS cuando se muestra */
+    justify-content: center; /* Centrar horizontalmente */
+    align-items: center; /* Centrar verticalmente */
+    opacity: 0; /* Inicialmente transparente para la animación */
+    transition: opacity 0.3s ease-in-out;
+}
+
+/* Clase para mostrar el popup */
+.popup-container.show {
+    display: flex; /* Mostrar cuando tenga la clase 'show' */
+    opacity: 1;
+}
+
+/* Contenido del popup */
+.popup-content {
+    background-color: var(--card-bg-light); /* Fondo del popup, oscuro para tu tema */
+    margin: auto; /* Centrado */
+    padding: 30px;
+    border-radius: var(--border-radius);
+    box-shadow: 0 5px 25px rgba(0, 0, 0, 0.5);
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+    position: relative;
+    transform: scale(0.9); /* Para la animación de aparición */
+    transition: transform 0.3s ease-in-out;
+    color: var(--text-light); /* Texto claro */
+    border: 1px solid var(--border-color-dark);
+}
+
+/* Animación de aparición para el contenido del popup */
+.popup-container.show .popup-content {
+    transform: scale(1); /* Escala normal al aparecer */
+}
+
+/* Icono dentro del popup */
+.popup-icon {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 20px;
+}
+
+/* Título del popup */
+.popup-content h2 {
+    color: var(--primary-accent); /* Título naranja */
+    margin-top: 0;
+    font-size: 1.8em;
+}
+
+/* Mensaje del popup */
+.popup-content p {
+    font-size: 1.1em;
+    line-height: 1.5;
+    margin-bottom: 25px;
+}
+
+/* Botón de cerrar (la 'x') */
+.close-button {
+    color: var(--text-light);
+    font-size: 35px;
+    font-weight: bold;
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: var(--primary-accent);
+}
+
+/* Botón "Aceptar" del popup */
+.popup-button {
+    background-color: var(--primary-accent); /* Botón naranja */
+    color: #000; /* Texto oscuro */
+    padding: 12px 25px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1.1em;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.popup-button:hover {
+    background-color: #fca000; /* Un naranja ligeramente más claro */
+    transform: translateY(-2px);
+}
+
+/* Estilos específicos para el popup de error */
+.popup-container.error .popup-content h2 {
+    color: #dc3545; /* Rojo para el título de error */
+}
+
+.popup-container.error .popup-button {
+    background-color: #dc3545; /* Botón rojo para errores */
+    color: var(--text-light); /* Texto blanco para botón de error */
+}
+
+.popup-container.error .popup-button:hover {
+    background-color: #c82333; /* Rojo más oscuro al pasar el ratón */
+}
+
+.popup-container.error .close-button {
+    color: #dc3545; /* 'X' roja para errores */
+}
+
+.popup-container.error .close-button:hover {
+    color: #c82333;
 }

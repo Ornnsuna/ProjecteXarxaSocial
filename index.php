@@ -1,6 +1,23 @@
 <?php
-session_start();
+// index.php
+session_start(); // Inicia la sesión para acceder a las variables $_SESSION
+
 $sesionIniciada = isset($_SESSION['user_id']);
+
+// --- NUEVO CÓDIGO PARA EL POPUP DE ÉXITO ---
+$flash_status_index = null;
+$flash_message_index = null;
+
+// Comprueba si hay un mensaje flash en la sesión y lo recupera
+if (isset($_SESSION['flash_status']) && isset($_SESSION['flash_message'])) {
+    $flash_status_index = $_SESSION['flash_status'];
+    $flash_message_index = $_SESSION['flash_message'];
+    // IMPORTANTE: Limpia las variables de sesión inmediatamente después de leerlas
+    // para que el popup no aparezca de nuevo al recargar la página.
+    unset($_SESSION['flash_status']);
+    unset($_SESSION['flash_message']);
+}
+// --- FIN NUEVO CÓDIGO ---
 
 $categorias = [
     'Magic' => 'Magic: The Gathering',
@@ -38,30 +55,34 @@ $carouselImages = [
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" type="image/png" sizes="32x32" href="./img/logo.png"/>
     <link rel="stylesheet" href="./css/INDEXmain.css">
-    <link rel="stylesheet" href="./css/nuevo_diseno.css"> </head>
+    
+    </head>
 <body>
+    <div id="statusPopup" class="status-popup"></div>
     <header class="headerx">
-    <div class="logo">CARDCAPTURE</div>
-    <div class="header-icons">
-        <img src="./img/fuego.png" alt="Icono de fuego" class="fuego-icon">
-        <div class="user-menu">
-            <div class="iconx" id="userIcon">
-                <img src="./img/user.png" class="user-icon" alt="">
+        <div class="logo">CARDCAPTURE</div>
+        <div class="header-icons">
+            <a href="./html/mas_visitadas.php"> 
+                <img src="./img/fuego.png" alt="Icono de fuego" class="fuego-icon">
+            </a>
+            <div class="user-menu">
+                <div class="iconx" id="userIcon">
+                    <img src="./img/user.png" class="user-icon" alt="">
+                </div>
+                <ul class="dropdown" id="dropdownMenu">
+                    <?php if (!$sesionIniciada): ?>
+                        <li><a href="./html/InicioSesion.php">Iniciar Sesión</a></li>
+                    <?php else: ?>
+                        <li><a href="./html/perfil.php">Perfil</a></li>
+                        <li><a href="./html/meGusta.php">Favoritos</a></li>
+                        <li><a href="./html/publicaciones.php">Venta</a></li>
+                        <li><a href="./html/chat.php">Buzón</a></li>
+                        <li><a href="./php/logout.php">Cerrar Sesión</a></li>
+                    <?php endif; ?>
+                </ul>
             </div>
-            <ul class="dropdown" id="dropdownMenu">
-                <?php if (!$sesionIniciada): ?>
-                    <li><a href="./html/InicioSesion.html">Iniciar Sesión</a></li>
-                <?php else: ?>
-                    <li><a href="./html/perfil.php">Perfil</a></li>
-                    <li><a href="./html/meGusta.php">Me gusta</a></li>
-                    <li><a href="./html/publicaciones.html">Venda</a></li>
-                    <li><a href="./html/chat.php">Bústia</a></li>
-                    <li><a href="./php/logout.php">Cerrar Sesión</a></li>
-                <?php endif; ?>
-            </ul>
         </div>
-    </div>
-</header>
+    </header>
     <nav class="menu-categorias" id="menuCategorias">
         <button class="hamburger-btn" id="hamburgerBtn">
             <div class="bar"></div>
@@ -76,37 +97,37 @@ $carouselImages = [
     </nav>
 
     <section class="hero">
-    <div class="hero-content">
-        <h1>El Mercado Definitivo para Coleccionistas de Cartas</h1>
-        <p>CardCapture es tu plataforma ideal para comprar, vender e intercambiar cartas coleccionables de tus juegos favoritos. Sumérgete en un universo de Magic: The Gathering, Pokémon, Yu-Gi-Oh!, One Piece, My Little Pony e Invizimals. Conecta con otros apasionados, descubre cartas raras y expande tu colección.</p>
-        <a href="./html/explorar.php" class="explore-button">Explora</a>
-    </div>
-    <div class="hero-image">
+        <div class="hero-content">
+            <h1>El Mercado Definitivo para Coleccionistas de Cartas TCG</h1>
+            <p>CardCapture es tu plataforma ideal para comprar, vender e intercambiar cartas coleccionables de tus juegos favoritos. Sumérgete en un universo de Magic: The Gathering, Pokémon, Yu-Gi-Oh!, One Piece, My Little Pony e Invizimals. Conecta con otros apasionados, descubre cartas raras y expande tu colección.</p>
+            <a href="./html/explorar.php" class="explore-button">Explora</a>
         </div>
-</section>
+        <div class="hero-image">
+        </div>
+    </section>
 
-<script src="./js/animacionCarta.js"></script>
+    <script src="./js/animacionCarta.js"></script>
 
     <div class="carousel-container">
-    <div class="carousel-wrapper" id="carouselWrapper">
-        <?php foreach ($carouselImages as $image): ?>
-            <div class="carousel-item">
-                <a href="<?php echo $image['link']; ?>">
-                    <img src="<?php echo $image['src']; ?>" alt="<?php echo $image['alt']; ?>">
-                </a>
-            </div>
-        <?php endforeach; ?>
+        <div class="carousel-wrapper" id="carouselWrapper">
+            <?php foreach ($carouselImages as $image): ?>
+                <div class="carousel-item">
+                    <a href="<?php echo $image['link']; ?>">
+                        <img src="<?php echo $image['src']; ?>" alt="<?php echo $image['alt']; ?>">
+                    </a>
+                </div>
+            <?php endforeach; ?>
+        </div>
+        <div class="carousel-controls">
+            <button class="prev-btn" onclick="prevSlide()">&#10094;</button>
+            <button class="next-btn" onclick="nextSlide()">&#10095;</button>
+        </div>
+        <div class="carousel-indicators" id="carouselIndicators">
+            <?php foreach ($carouselImages as $index => $image): ?>
+                <button class="<?php echo $index === 0 ? 'active' : ''; ?>" onclick="goToSlide(<?php echo $index; ?>)"></button>
+            <?php endforeach; ?>
+        </div>
     </div>
-    <div class="carousel-controls">
-        <button class="prev-btn" onclick="prevSlide()">&#10094;</button>
-        <button class="next-btn" onclick="nextSlide()">&#10095;</button>
-    </div>
-    <div class="carousel-indicators" id="carouselIndicators">
-        <?php foreach ($carouselImages as $index => $image): ?>
-            <button class="<?php echo $index === 0 ? 'active' : ''; ?>" onclick="goToSlide(<?php echo $index; ?>)"></button>
-        <?php endforeach; ?>
-    </div>
-</div>
 
     <div class="content">
         <h2>Únete a la Comunidad CardCapture</h2>
@@ -133,8 +154,39 @@ $carouselImages = [
         </div>
     </footer>
 
-   <script>
+    <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // --- NUEVO CÓDIGO PARA EL POPUP DE ÉXITO (JavaScript) ---
+            const statusPopup = document.getElementById('statusPopup');
+
+            // Función para mostrar el popup
+            function showPopup(message, type) {
+                statusPopup.textContent = message;
+                statusPopup.className = `status-popup active ${type}`; // Añade active y type (success/error)
+
+                // El popup se oculta solo después de 3 segundos
+                setTimeout(() => {
+                    statusPopup.classList.add('exit'); // *** AÑADIDO: Añade la clase 'exit' para iniciar la animación de salida ***
+                    statusPopup.classList.remove('active'); // Remueve la clase 'active'
+
+                    setTimeout(() => {
+                        statusPopup.textContent = ''; // Limpia el texto
+                        statusPopup.classList.remove('exit', type); // *** MODIFICADO: Remueve 'exit' y 'type' después de la transición ***
+                    }, 500); // Espera la duración de la transición de salida (debe coincidir con tu CSS: 0.5s)
+                }, 3000); // Muestra el popup por 3 segundos
+            }
+
+            // Recupera los mensajes flash de PHP (pasan a ser variables JS aquí)
+            const flashStatusIndex = "<?php echo $flash_status_index; ?>";
+            const flashMessageIndex = "<?php echo $flash_message_index; ?>";
+
+            // Si hay un mensaje de éxito, mostrar el popup
+            if (flashStatusIndex === 'success' && flashMessageIndex) {
+                showPopup(flashMessageIndex, flashStatusIndex);
+            }
+            // --- FIN NUEVO CÓDIGO ---
+
+
             // Menu Categorías
             const hamburgerBtn = document.getElementById('hamburgerBtn');
             const menuLista = document.getElementById('menuLista');

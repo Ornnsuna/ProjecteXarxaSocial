@@ -29,7 +29,7 @@ if (isset($_GET['token'])) {
 
             echo "<script>
                     alert('✅ Cuenta verificada correctamente. Ahora puedes iniciar sesión.');
-                    window.location.href = '../html/InicioSesion.html';
+                    window.location.href = '../html/InicioSesion.php';
                   </script>";
         }
     } else {
